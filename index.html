@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Other AI tools generate apps from a prompt. Entrophy operates like a real product team — drafting specs with you, surfacing tradeoffs, building continuously to deployment. The first agentic workflow real enough to ship a production app — even if you've never written code.">
+<title>Entrophy — Production software. By anyone.</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Inter:wght@200..800&family=Manrope:wght@200..800&family=Sora:wght@200..800&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Space+Grotesk:wght@300..700&family=Outfit:wght@200..900&family=Geist:wght@100..900&family=Onest:wght@100..900&family=Public+Sans:ital,wght@0,100..900;1,100..900&family=Fraunces:ital,opsz,wght,SOFT,WONK@1,9..144,100..900,0..100,0..1&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    /* Dia tokens — colors */
+    --color-ink-black: #000000;
+    --color-snow: #ffffff;
+    --color-canvas: #f8f8f8;
+    --color-fog: #efefef;
+    --color-pebble: #d9d9d9;
+    --color-graphite: #636363;
+    --color-slate: #959595;
+    --color-steel: #aeaeae;
+    --color-ash: #7c7c7c;
+    --color-rose-quartz: #c679c4;
+    --color-marigold: #ffb005;
+    --color-signal-blue: #0358f7;
+    --color-hot-pink: #fd02f5;
+    --gradient-spectrum: linear-gradient(90deg,
+      rgb(198, 121, 196) 0%,
+      rgb(250, 61, 29)  25%,
+      rgb(255, 176, 5)  50%,
+      rgb(225, 225, 254) 75%,
+      rgb(3, 88, 247)  100%);
+
+    /* Typography */
+    --font-display: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-body:    'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+    /* Surface, shape, motion */
+    --shadow-card: rgba(0, 0, 0, 0.08) 0px 0px 8px 0px;
+    --radius-card: 30px;
+    --radius-pill: 9999px;
+    --radius-button: 30px;
+    --radius-nav: 16px;
+    --max-width: 1200px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--color-canvas);
+    color: var(--color-ink-black);
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.5;
+    letter-spacing: -0.025em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  ::selection { background: rgba(3, 88, 247, 0.20); color: var(--color-ink-black); }
+
+  /* ============================== SHADER LAYER ============================== */
+  /* Our exact "Noir" shader, retuned for light theme:
+     - palette = rose-quartz × signal-blue (the warm-cool span of the spectrum)
+     - accent  = canvas (#F8F8F8) instead of black, so most of screen reads
+                 as white-ish with thin pastel slits = ambient gradient glow
+     - heavy blur turns the bands into atmospheric color wash. */
+  #bgShader {
+    position: fixed; top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    filter: blur(64px) saturate(1.05);
+    -webkit-filter: blur(64px) saturate(1.05);
+    opacity: 0.85;
+  }
+  /* very subtle paper-grain to keep the shader from looking digital */
+  #bgGrain {
+    position: fixed; top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.10;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    background-size: 200px 200px;
+  }
+
+  /* ============================== HEADER ============================== */
+  .header {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    height: 64px;
+    background: rgba(239, 239, 239, 0.78);
+    backdrop-filter: blur(24px) saturate(120%);
+    -webkit-backdrop-filter: blur(24px) saturate(120%);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  }
+  .header-inner {
+    max-width: var(--max-width);
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+  }
+  .brand-mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--color-ink-black);
+  }
+  .brand-mark .logo-dot {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--gradient-spectrum);
+    flex-shrink: 0;
+  }
+  .brand-mark .logo-text {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.04em;
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+  .nav a {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--color-ink-black);
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+  .nav a:hover { opacity: 0.55; }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .announcement {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 36px;
+    padding: 0 18px;
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 16px;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.85);
+    text-decoration: none;
+    transition: background 0.2s ease;
+  }
+  .announcement:hover { background: rgba(0, 0, 0, 0.07); }
+  .announcement .pulse {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--color-marigold);
+    box-shadow: 0 0 0 3px rgba(255, 176, 5, 0.18);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 20px;
+    border: 0;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  }
+  .btn-primary {
+    background: var(--color-pebble);
+    color: rgba(0, 0, 0, 0.85);
+    border-radius: var(--radius-button);
+  }
+  .btn-primary:hover {
+    background: var(--color-ink-black);
+    color: var(--color-snow);
+  }
+  .btn-ghost {
+    background: transparent;
+    color: rgba(0, 0, 0, 0.85);
+    border-radius: var(--radius-pill);
+    padding: 0 18px;
+  }
+  .btn-ghost:hover { background: rgba(0, 0, 0, 0.04); }
+
+  /* ============================== HERO ============================== */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    padding: 160px 32px 120px;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    height: 32px;
+    padding: 0 14px;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 16px;
+    font-size: 13px;
+    color: var(--color-graphite);
+    margin-bottom: 32px;
+    box-shadow: rgba(0, 0, 0, 0.04) 0px 0px 6px 0px;
+  }
+  .eyebrow .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--color-marigold);
+    box-shadow: 0 0 0 3px rgba(255, 176, 5, 0.18);
+  }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(48px, 9vw, 84px);
+    font-weight: 500;
+    line-height: 1.02;
+    letter-spacing: -0.07em;
+    color: var(--color-ink-black);
+    max-width: 920px;
+    margin-bottom: 28px;
+  }
+  .hero h1 em {
+    font-style: normal;
+    font-weight: inherit;
+    letter-spacing: inherit;
+    color: transparent;
+    background: linear-gradient(
+      100deg,
+      #c679c4 0%,
+      #fa3d1d 12%,
+      #ff7a3d 22%,
+      #ffb005 32%,
+      #ffd9b0 42%,
+      #e1e1fe 55%,
+      #6e8bf6 68%,
+      #0358f7 80%,
+      #8a5fe6 90%,
+      #c679c4 100%
+    );
+    background-size: 200% 100%;
+    background-position: 0% 50%;
+    -webkit-background-clip: text;
+            background-clip: text;
+    text-shadow:
+      0 0 32px rgba(250, 61, 29, 0.22),
+      0 0 80px rgba(255, 176, 5, 0.16),
+      0 0 120px rgba(3, 88, 247, 0.18);
+    animation: anyoneFlow 7s linear infinite;
+  }
+  @keyframes anyoneFlow {
+    0%   { background-position: 0% 50%; }
+    100% { background-position: -200% 50%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero h1 em { animation: none; }
+  }
+  .hero .lede {
+    font-size: 18px;
+    line-height: 1.45;
+    letter-spacing: -0.035em;
+    color: var(--color-graphite);
+    max-width: 540px;
+    margin-bottom: 44px;
+  }
+  .hero .cta-row {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .play-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--color-ink-black);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 400;
+    padding: 6px 8px;
+    transition: opacity 0.2s ease;
+  }
+  .play-link:hover { opacity: 0.6; }
+  .play-link .play-circle {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--color-snow);
+    box-shadow: var(--shadow-card);
+    display: grid; place-items: center;
+  }
+  .play-link svg { width: 10px; height: 10px; }
+
+  /* ============================== HERO MOCKUP ============================== */
+  .hero-mock {
+    margin-top: 80px;
+    width: 100%;
+    max-width: 980px;
+    position: relative;
+  }
+  /* ambient gradient glow beneath the mockup */
+  .hero-mock::before {
+    content: "";
+    position: absolute;
+    inset: -60px -40px -40px;
+    background: var(--gradient-spectrum);
+    filter: blur(80px);
+    opacity: 0.30;
+    z-index: -1;
+    border-radius: 60px;
+  }
+  .browser-mock {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(24px) saturate(120%);
+    -webkit-backdrop-filter: blur(24px) saturate(120%);
+    border-radius: 20px;
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+  }
+  .browser-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  }
+  .browser-bar .dots {
+    display: flex; gap: 6px;
+  }
+  .browser-bar .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--color-pebble);
+  }
+  .browser-bar .url {
+    margin-left: 16px;
+    flex: 1;
+    height: 24px;
+    background: var(--color-fog);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    font-size: 12px;
+    color: var(--color-slate);
+    font-family: ui-monospace, "JetBrains Mono", monospace;
+  }
+  .browser-body {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    min-height: 360px;
+  }
+  .mock-side {
+    border-right: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 18px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.4);
+  }
+  .mock-side .side-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--color-graphite);
+  }
+  .mock-side .side-row.active {
+    background: rgba(0, 0, 0, 0.04);
+    color: var(--color-ink-black);
+    font-weight: 500;
+  }
+  .mock-side .side-row .ico {
+    width: 14px; height: 14px;
+    border-radius: 4px;
+    background: var(--color-pebble);
+    flex-shrink: 0;
+  }
+  .mock-main {
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .mock-main h3 {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: -0.045em;
+    color: var(--color-ink-black);
+  }
+  .mock-line {
+    height: 12px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.06);
+  }
+  .mock-line.s { width: 30%; }
+  .mock-line.m { width: 64%; }
+  .mock-line.l { width: 92%; }
+
+  .mock-thread {
+    display: flex;
+    gap: 12px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.025);
+    border-radius: 12px;
+    align-items: flex-start;
+  }
+  .mock-thread .av {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--gradient-spectrum);
+    flex-shrink: 0;
+  }
+  .mock-thread .body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .mock-thread .who {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-ink-black);
+  }
+  .mock-thread .what {
+    font-size: 13px;
+    color: var(--color-graphite);
+    line-height: 1.5;
+  }
+
+  /* ============================== SPECTRUM STRIP ============================== */
+  .spectrum-strip {
+    width: 100%;
+    max-width: var(--max-width);
+    height: 2px;
+    margin: 0 auto;
+    background: var(--gradient-spectrum);
+    position: relative;
+    z-index: 1;
+    opacity: 0.85;
+  }
+
+  /* ============================== SECTION SCAFFOLDING ============================== */
+  .section {
+    position: relative;
+    z-index: 1;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 120px 32px;
+  }
+  .section-eyebrow {
+    font-size: 14px;
+    color: var(--color-graphite);
+    text-align: center;
+    margin-bottom: 18px;
+  }
+  .section-heading {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 5vw, 54px);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -0.055em;
+    text-align: center;
+    color: var(--color-ink-black);
+    max-width: 760px;
+    margin: 0 auto 64px;
+  }
+
+  /* ============================== FEATURE CARDS ============================== */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(24px) saturate(120%);
+    -webkit-backdrop-filter: blur(24px) saturate(120%);
+    border-radius: var(--radius-card);
+    padding: 32px;
+    box-shadow: var(--shadow-card);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: rgba(0, 0, 0, 0.10) 0px 8px 24px 0px;
+  }
+  .card .feat-icon {
+    width: 44px; height: 44px;
+    border-radius: 14px;
+    background: var(--color-fog);
+    display: grid; place-items: center;
+    color: var(--color-ink-black);
+  }
+  .card .feat-icon svg { width: 20px; height: 20px; }
+  .card h3 {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    color: var(--color-ink-black);
+  }
+  .card p {
+    font-size: 16px;
+    letter-spacing: -0.03em;
+    color: var(--color-graphite);
+    line-height: 1.45;
+  }
+
+  /* ============================== SHOWCASE ============================== */
+  .showcase {
+    position: relative;
+    z-index: 1;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 60px 32px 120px;
+  }
+  .showcase-frame {
+    position: relative;
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(24px) saturate(120%);
+    -webkit-backdrop-filter: blur(24px) saturate(120%);
+    padding: 48px 32px;
+  }
+  .showcase-frame::before {
+    content: "";
+    position: absolute;
+    inset: -80px;
+    background: var(--gradient-spectrum);
+    filter: blur(120px);
+    opacity: 0.20;
+    z-index: -1;
+  }
+  .showcase-row {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 56px;
+    align-items: center;
+  }
+  .showcase-text h2 {
+    font-family: var(--font-display);
+    font-size: clamp(32px, 4.4vw, 50px);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -0.055em;
+    color: var(--color-ink-black);
+    margin-bottom: 20px;
+  }
+  .showcase-text p {
+    font-size: 18px;
+    line-height: 1.45;
+    letter-spacing: -0.035em;
+    color: var(--color-graphite);
+    margin-bottom: 28px;
+  }
+  .showcase-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .showcase-list li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 15px;
+    color: var(--color-ink-black);
+  }
+  .showcase-list .check {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--color-fog);
+    color: var(--color-ink-black);
+    display: grid; place-items: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .showcase-list .check svg { width: 10px; height: 10px; }
+
+  .showcase-mock {
+    background: var(--color-canvas);
+    border-radius: 16px;
+    padding: 24px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 380px;
+  }
+  .thread-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+  .thread-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.035em;
+  }
+  .thread-meta {
+    font-size: 12px;
+    color: var(--color-slate);
+  }
+  .thread-msg {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    background: var(--color-snow);
+  }
+  .thread-msg.maya { background: rgba(255, 255, 255, 0.7); }
+  .thread-msg .av {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .thread-msg .av.you { background: var(--color-pebble); }
+  .thread-msg .av.maya { background: var(--gradient-spectrum); }
+  .thread-msg .body {
+    flex: 1;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--color-ink-black);
+  }
+  .thread-msg .body .name {
+    font-weight: 500;
+    margin-right: 6px;
+  }
+  .thread-msg .body .ts {
+    font-size: 11px;
+    color: var(--color-slate);
+    margin-left: 6px;
+  }
+
+  /* ============================== TESTIMONIALS ============================== */
+  .testimonials {
+    position: relative;
+    z-index: 1;
+    padding: 60px 0 120px;
+    overflow: hidden;
+  }
+  .testimonials .section-eyebrow,
+  .testimonials .section-heading {
+    padding: 0 32px;
+  }
+  .testi-track {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding: 12px 32px 12px 32px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .testi-track::-webkit-scrollbar { display: none; }
+  .testi {
+    flex: 0 0 360px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(24px) saturate(120%);
+    -webkit-backdrop-filter: blur(24px) saturate(120%);
+    border-radius: var(--radius-card);
+    padding: 32px;
+    box-shadow: var(--shadow-card);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    scroll-snap-align: start;
+  }
+  .testi .quote {
+    font-size: 16px;
+    line-height: 1.45;
+    letter-spacing: -0.035em;
+    color: var(--color-ink-black);
+  }
+  .testi .person {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .testi .av {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--color-pebble);
+    flex-shrink: 0;
+  }
+  .testi .name {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    color: var(--color-ink-black);
+  }
+  .testi .role {
+    font-size: 14px;
+    letter-spacing: -0.03em;
+    color: var(--color-slate);
+  }
+
+  /* ============================== PRIVACY ============================== */
+  .privacy {
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 100px 32px;
+    text-align: center;
+  }
+  .privacy .lock {
+    width: 28px; height: 28px;
+    margin: 0 auto 28px;
+    color: var(--color-ink-black);
+  }
+  .privacy h2 {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 5vw, 54px);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -0.055em;
+    margin-bottom: 24px;
+    color: var(--color-ink-black);
+  }
+  .privacy p {
+    font-size: 16px;
+    line-height: 1.5;
+    letter-spacing: -0.03em;
+    color: var(--color-graphite);
+  }
+  .privacy a {
+    color: var(--color-ink-black);
+    text-decoration: underline;
+    text-decoration-color: rgba(0, 0, 0, 0.30);
+    transition: text-decoration-color 0.2s ease;
+  }
+  .privacy a:hover { text-decoration-color: var(--color-ink-black); }
+
+  /* ============================== FOOTER ============================== */
+  .footer {
+    position: relative;
+    z-index: 1;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 80px 32px 60px;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 32px;
+  }
+  .footer .brand-block {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .footer .brand-block .logo-row {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .footer .brand-block .logo-dot {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--gradient-spectrum);
+  }
+  .footer .brand-block .logo-text {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.04em;
+  }
+  .footer .brand-block .tagline {
+    font-size: 14px;
+    color: var(--color-slate);
+  }
+  .footer h4 {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 14px;
+    color: var(--color-ink-black);
+  }
+  .footer ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .footer a {
+    font-size: 14px;
+    color: var(--color-graphite);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .footer a:hover { color: var(--color-ink-black); }
+  .footer-bottom {
+    grid-column: 1 / -1;
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: var(--color-slate);
+  }
+
+  /* ============================== RESPONSIVE ============================== */
+  @media (max-width: 980px) {
+    .feature-grid { grid-template-columns: 1fr; }
+    .showcase-row { grid-template-columns: 1fr; gap: 32px; }
+    .browser-body { grid-template-columns: 1fr; }
+    .mock-side { display: none; }
+    .footer { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 720px) {
+    .nav { display: none; }
+    .announcement { display: none; }
+    .hero { padding-top: 120px; }
+    .footer-bottom { flex-direction: column; gap: 12px; }
+  }
+
+  /* Tight tracking is calibrated for Karla. Other fonts use native default. */
+  html:not(.font-karla) body,
+  html:not(.font-karla) .brand-mark .logo-text,
+  html:not(.font-karla) .hero h1,
+  html:not(.font-karla) .hero .lede,
+  html:not(.font-karla) .mock-main h3,
+  html:not(.font-karla) .section-heading,
+  html:not(.font-karla) .card h3,
+  html:not(.font-karla) .card p,
+  html:not(.font-karla) .showcase-text h2,
+  html:not(.font-karla) .showcase-text p,
+  html:not(.font-karla) .thread-title,
+  html:not(.font-karla) .testi .quote,
+  html:not(.font-karla) .testi .name,
+  html:not(.font-karla) .testi .role,
+  html:not(.font-karla) .privacy h2,
+  html:not(.font-karla) .privacy p,
+  html:not(.font-karla) .footer .brand-block .logo-text {
+    letter-spacing: normal;
+  }
+
+  /* ============================== FONT FAB ============================== */
+  .font-fab {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+    pointer-events: none;
+  }
+  .font-fab-button {
+    pointer-events: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    height: 44px;
+    padding: 0 18px 0 16px;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(24px) saturate(140%);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.08);
+    color: var(--color-ink-black);
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+  }
+  .font-fab-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 12px 32px rgba(0, 0, 0, 0.12);
+    background: rgba(255, 255, 255, 0.95);
+  }
+  .font-fab-button .glyph {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    background: var(--gradient-spectrum);
+    -webkit-background-clip: text;
+            background-clip: text;
+    color: transparent;
+  }
+  .font-fab-button .label {
+    color: var(--color-graphite);
+    max-width: 140px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .font-fab-menu {
+    pointer-events: auto;
+    display: none;
+    flex-direction: column;
+    padding: 6px;
+    min-width: 220px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(24px) saturate(140%);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
+    border-radius: 18px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 16px 48px rgba(0, 0, 0, 0.14);
+    transform-origin: bottom right;
+  }
+  .font-fab.open .font-fab-menu { display: flex; }
+  .font-fab-item {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 14px;
+    border: 0;
+    background: transparent;
+    border-radius: 12px;
+    cursor: pointer;
+    color: var(--color-ink-black);
+    text-align: left;
+    transition: background 0.15s ease;
+  }
+  .font-fab-item:hover { background: rgba(0, 0, 0, 0.04); }
+  .font-fab-item.active { background: rgba(0, 0, 0, 0.06); }
+  .font-fab-item .name {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--color-graphite);
+  }
+  .font-fab-item .preview {
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    color: var(--color-ink-black);
+  }
+</style>
+</head>
+
+<body>
+
+  <!-- ============================== BACKGROUND LAYERS ============================== -->
+  <canvas id="bgShader"></canvas>
+  <div id="bgGrain"></div>
+
+  <!-- ============================== HEADER ============================== -->
+  <header class="header">
+    <div class="header-inner">
+      <a href="#" class="brand-mark">
+        <span class="logo-dot"></span>
+        <span class="logo-text">Entrophy</span>
+      </a>
+      <nav class="nav">
+        <a href="#product">Product</a>
+        <a href="#why">Why Entrophy</a>
+        <a href="#voices">Voices</a>
+        <a href="#privacy">Privacy</a>
+      </nav>
+      <div class="header-actions">
+        <a href="#" class="announcement">
+          <span class="pulse"></span>
+          Now in private beta
+        </a>
+        <button class="btn btn-primary">Get early access</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================== HERO ============================== -->
+  <section class="hero">
+    <div class="eyebrow">
+      <span class="dot"></span>
+      Entrophy v0.1 · Now in private beta
+    </div>
+
+    <h1>Production software. By <em>anyone</em>.</h1>
+
+    <p class="lede">
+      Other AI tools generate apps from a single prompt. Entrophy operates like
+      a real product team — drafting specs with you, surfacing tradeoffs,
+      building continuously to deployment. For the first time, anyone can ship
+      real software. Even if you've never written code.
+    </p>
+
+    <div class="cta-row">
+      <button class="btn btn-primary">Request access</button>
+      <a href="#" class="play-link">
+        <span class="play-circle">
+          <svg viewBox="0 0 12 12" fill="currentColor"><polygon points="3,2 10,6 3,10"/></svg>
+        </span>
+        Watch the film
+      </a>
+    </div>
+
+    <!-- Hero product mock -->
+    <div class="hero-mock">
+      <div class="browser-mock">
+        <div class="browser-bar">
+          <div class="dots">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+          <div class="url">entrophy.app/maya/threads</div>
+        </div>
+        <div class="browser-body">
+          <aside class="mock-side">
+            <div class="side-row active"><span class="ico"></span>Home</div>
+            <div class="side-row"><span class="ico"></span>Threads</div>
+            <div class="side-row"><span class="ico"></span>Library</div>
+            <div class="side-row"><span class="ico"></span>People</div>
+            <div class="side-row"><span class="ico"></span>Maya</div>
+          </aside>
+          <div class="mock-main">
+            <h3>This morning's thread</h3>
+            <div class="mock-thread">
+              <div class="av"></div>
+              <div class="body">
+                <div class="who">Maya · 2 min ago</div>
+                <div class="what">
+                  Three competitors launched social-shopping in 14 days.
+                  I cross-checked your Q2 roadmap — pulling launch in to May 18
+                  hits ~80% of the value at half the schedule risk.
+                </div>
+              </div>
+            </div>
+            <div class="mock-line l"></div>
+            <div class="mock-line m"></div>
+            <div class="mock-line s"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="spectrum-strip"></div>
+
+  <!-- ============================== WHY ENTROPHY ============================== -->
+  <section class="section" id="why">
+    <div class="section-eyebrow">Why Entrophy</div>
+    <h2 class="section-heading">Not generated. Built.</h2>
+
+    <div class="feature-grid">
+      <article class="card">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+        </div>
+        <h3>No code. No jargon.</h3>
+        <p>
+          Describe what you want in plain English. Agents handle the spec, the
+          architecture, the deploy — so you stay the founder, not the engineer.
+        </p>
+      </article>
+
+      <article class="card">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
+            <path d="M14 3v6h6"/>
+            <line x1="8" y1="13" x2="16" y2="13"/>
+            <line x1="8" y1="17" x2="13" y2="17"/>
+          </svg>
+        </div>
+        <h3>A real product workflow.</h3>
+        <p>
+          Not a one-shot prompt. Agents draft real product docs, surface
+          tradeoffs, and push back when something's off — only shipping once
+          you're aligned.
+        </p>
+      </article>
+
+      <article class="card">
+        <div class="feat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12,7 12,12 15,15"/>
+          </svg>
+        </div>
+        <h3>Always shipping.</h3>
+        <p>
+          Continuous build, test, and deploy — around the clock. By the time you
+          wake up, the next version is already live.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============================== SHOWCASE ============================== -->
+  <section class="showcase" id="product">
+    <div class="showcase-frame">
+      <div class="showcase-row">
+        <div class="showcase-text">
+          <div class="section-eyebrow" style="text-align:left;margin-bottom:14px;">A real product workflow</div>
+          <h2>Maya pushes back. Like a real PM.</h2>
+          <p>
+            Tell Maya what you want. She drafts the spec, surfaces tradeoffs,
+            and only ships once you're aligned. Not a generator. A team.
+          </p>
+          <ul class="showcase-list">
+            <li>
+              <span class="check">
+                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="2,6 5,9 10,3"/>
+                </svg>
+              </span>
+              Real product docs — drafted in conversation, not from a prompt
+            </li>
+            <li>
+              <span class="check">
+                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="2,6 5,9 10,3"/>
+                </svg>
+              </span>
+              Surfaces tradeoffs and pushes back when something's off
+            </li>
+            <li>
+              <span class="check">
+                <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="2,6 5,9 10,3"/>
+                </svg>
+              </span>
+              Continuous build, test, and deploy — round the clock
+            </li>
+          </ul>
+        </div>
+
+        <div class="showcase-mock">
+          <div class="thread-header">
+            <div class="thread-title">Pull launch in to May 18?</div>
+            <div class="thread-meta">2h · 4 voices</div>
+          </div>
+          <div class="thread-msg maya">
+            <div class="av maya"></div>
+            <div class="body">
+              <span class="name">Maya</span>
+              cross-checked the last three sprints — Feed + Payments alone hits ~80% of launch value.
+              <span class="ts">2h ago</span>
+            </div>
+          </div>
+          <div class="thread-msg">
+            <div class="av you"></div>
+            <div class="body">
+              <span class="name">Lisa</span>
+              What's the risk of skipping Closet?
+              <span class="ts">1h ago</span>
+            </div>
+          </div>
+          <div class="thread-msg maya">
+            <div class="av maya"></div>
+            <div class="body">
+              <span class="name">Maya</span>
+              ~12% of beta cohort flagged it as essential. Mostly power users; everyone else cared about Feed.
+              <span class="ts">1h ago</span>
+            </div>
+          </div>
+          <div class="thread-msg">
+            <div class="av you"></div>
+            <div class="body">
+              <span class="name">Alex</span>
+              Sounds right. Approving A — ship May 18.
+              <span class="ts">just now</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== TESTIMONIALS ============================== -->
+  <section class="testimonials" id="voices">
+    <div class="section-eyebrow">From the new builders</div>
+    <h2 class="section-heading">People who never thought they'd ship a product.</h2>
+
+    <div class="testi-track">
+      <article class="testi">
+        <p class="quote">
+          "I shipped my first app this weekend. I've never written a line of code."
+        </p>
+        <div class="person">
+          <div class="av"></div>
+          <div>
+            <div class="name">Lisa Chen</div>
+            <div class="role">Founder</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="testi">
+        <p class="quote">
+          "Maya talks to me like a senior PM. We argue. Sometimes she's right."
+        </p>
+        <div class="person">
+          <div class="av"></div>
+          <div>
+            <div class="name">Maya Rosen</div>
+            <div class="role">Solo founder</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="testi">
+        <p class="quote">
+          "It's like hiring a startup. Except they don't sleep."
+        </p>
+        <div class="person">
+          <div class="av"></div>
+          <div>
+            <div class="name">Alex Park</div>
+            <div class="role">Operator</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="testi">
+        <p class="quote">
+          "I'm a marketer. I just shipped a product. To real users."
+        </p>
+        <div class="person">
+          <div class="av"></div>
+          <div>
+            <div class="name">Sam Reyes</div>
+            <div class="role">Marketing lead</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="testi">
+        <p class="quote">
+          "It pushes back. That's what makes it different from every other AI tool."
+        </p>
+        <div class="person">
+          <div class="av"></div>
+          <div>
+            <div class="name">Kai Mehta</div>
+            <div class="role">Designer</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="testi">
+        <p class="quote">
+          "I described what I wanted on Friday. By Monday it was deployed."
+        </p>
+        <div class="person">
+          <div class="av"></div>
+          <div>
+            <div class="name">Jina Park</div>
+            <div class="role">Operating partner</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============================== PRIVACY ============================== -->
+  <section class="privacy" id="privacy">
+    <svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="4" y="11" width="16" height="10" rx="2"/>
+      <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+    </svg>
+    <h2>Your thinking stays yours.</h2>
+    <p>
+      Entrophy runs in your own keystore. Nothing trains a model on your data.
+      Nothing leaks across teams. <a href="#">Read the architecture brief</a>
+      for the full story.
+    </p>
+  </section>
+
+  <!-- ============================== FOOTER ============================== -->
+  <footer class="footer">
+    <div class="brand-block">
+      <div class="logo-row">
+        <span class="logo-dot"></span>
+        <span class="logo-text">Entrophy</span>
+      </div>
+      <p class="tagline">Order, from entropy.</p>
+    </div>
+    <div>
+      <h4>Product</h4>
+      <ul>
+        <li><a href="#">Features</a></li>
+        <li><a href="#">Roadmap</a></li>
+        <li><a href="#">Changelog</a></li>
+        <li><a href="#">Download</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Manifesto</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="#">Docs</a></li>
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Terms</a></li>
+        <li><a href="#">Status</a></li>
+      </ul>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Entrophy, Inc. All rights reserved.</span>
+      <span>Made quietly, in San Francisco.</span>
+    </div>
+  </footer>
+
+  <!-- ============================== SHADER SCRIPT ============================== -->
+  <script>
+    (() => {
+      const canvas = document.getElementById('bgShader');
+      const gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: false });
+      if (!gl) return;
+
+      const VERT = `
+        attribute vec3 position;
+        varying vec3 vUv;
+        void main() {
+          vUv = position;
+          gl_Position = vec4(position, 1.0);
+        }
+      `;
+
+      // Exact "Noir" shader, retuned for light theme — accent is now CANVAS
+      // (#F8F8F8) instead of black, so most of the screen reads white-ish
+      // with thin pastel pink/blue band slits. Combined with CSS blur(64px)
+      // this becomes Dia-style ambient gradient glow, not a hard pattern.
+      const FRAG = `
+        precision mediump float;
+        varying vec3 vUv;
+
+        uniform vec3  uBaseFirstColor;
+        uniform vec3  uBaseSecondColor;
+        uniform vec3  uAccentColor;
+        uniform float uAccentOpacity;
+        uniform float uBaseFrequency;
+        uniform float uZoom;
+        uniform float uOpacityBackground;
+        uniform float uTime;
+        uniform vec2  u_res;
+        uniform vec2  uMouse;
+
+        vec4 mod289v(vec4 x){ return x - floor(x * (1.0/289.0)) * 289.0; }
+        vec4 perm(vec4 x){ return mod289v(((x*34.0)+1.0)*x); }
+
+        float vnoise(vec3 p){
+          vec3 a = floor(p);
+          vec3 d = p - a;
+          d = d * d * (3.0 - 2.0 * d);
+          vec4 b = a.xxyy + vec4(0.0, 1.0, 0.0, 1.0);
+          vec4 k1 = perm(b.xyxy);
+          vec4 k2 = perm(k1.xyxy + b.zzww);
+          vec4 c  = k2 + a.zzzz;
+          vec4 k3 = perm(c);
+          vec4 k4 = perm(c + 1.0);
+          vec4 o1 = fract(k3 * (1.0/41.0));
+          vec4 o2 = fract(k4 * (1.0/41.0));
+          vec4 o3 = o2 * d.z + o1 * (1.0 - d.z);
+          vec2 o4 = o3.yw * d.x + o3.xz * (1.0 - d.x);
+          return o4.y * d.y + o4.x * (1.0 - d.y);
+        }
+
+        mat2 rotate2d(float angle){
+          return mat2(cos(angle), -sin(angle),
+                      sin(angle),  cos(angle));
+        }
+
+        float lines(vec2 pos, float b){
+          float scale = 10.0;
+          pos *= scale;
+          return smoothstep(0.0, 0.5 + b*0.5,
+                            abs(sin(pos.x * 3.1415) + b*2.0) * 0.5);
+        }
+
+        void main() {
+          vec2 ndc = vUv.xy;
+          vec2 uv  = ndc * 0.5;
+          uv += uMouse * 0.05;
+          float t = uTime * 0.2;
+
+          vec3  noisePos  = vec3(uv, 0.0) * uBaseFrequency + t;
+          float baseNoise = vnoise(noisePos);
+
+          vec2  basePos       = rotate2d(baseNoise) * uv * uZoom;
+          float basePattern   = lines(basePos, 0.5);
+          vec2  accentPos     = rotate2d(baseNoise) * uv * uZoom;
+          float accentPattern = lines(accentPos, 0.1);
+
+          // Bias toward first color (rose) — matches the algorithm's natural
+          // amber-dominant tendency and rebalances to ~50/50 visually.
+          vec3 baseMix = mix(uBaseFirstColor, uBaseSecondColor, basePattern * 0.65);
+
+          // Accent is canvas (#F8F8F8) → most of screen reads as canvas,
+          // pastel slits show baseMix. No darken multiplier in light mode.
+          vec3 color = mix(baseMix, uAccentColor,
+                           accentPattern - (1.0 - uAccentOpacity));
+
+          gl_FragColor = vec4(color, uOpacityBackground);
+        }
+      `;
+
+      function compile(type, src) {
+        const sh = gl.createShader(type);
+        gl.shaderSource(sh, src);
+        gl.compileShader(sh);
+        if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
+          console.warn('shader error', gl.getShaderInfoLog(sh));
+          gl.deleteShader(sh);
+          return null;
+        }
+        return sh;
+      }
+
+      const v = compile(gl.VERTEX_SHADER, VERT);
+      const f = compile(gl.FRAGMENT_SHADER, FRAG);
+      if (!v || !f) return;
+
+      const program = gl.createProgram();
+      gl.attachShader(program, v);
+      gl.attachShader(program, f);
+      gl.linkProgram(program);
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+        console.warn('link error', gl.getProgramInfoLog(program));
+        return;
+      }
+      gl.useProgram(program);
+
+      const buf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER,
+        new Float32Array([-1,-1,0,  1,-1,0,  -1,1,0,   -1,1,0,  1,-1,0,  1,1,0]),
+        gl.STATIC_DRAW);
+      const aPos = gl.getAttribLocation(program, 'position');
+      gl.enableVertexAttribArray(aPos);
+      gl.vertexAttribPointer(aPos, 3, gl.FLOAT, false, 0, 0);
+
+      const u = (n) => gl.getUniformLocation(program, n);
+      const U = {
+        first:    u('uBaseFirstColor'),
+        second:   u('uBaseSecondColor'),
+        accent:   u('uAccentColor'),
+        accentOp: u('uAccentOpacity'),
+        baseFreq: u('uBaseFrequency'),
+        zoom:     u('uZoom'),
+        opacity:  u('uOpacityBackground'),
+        time:     u('uTime'),
+        res:      u('u_res'),
+        mouse:    u('uMouse'),
+      };
+
+      // Dia palette mapping (light theme):
+      //   first  = rose-quartz #c679c4 → [0.776, 0.475, 0.769]
+      //   second = signal-blue #0358f7 → [0.012, 0.345, 0.969]
+      //   accent = canvas      #f8f8f8 → [0.973, 0.973, 0.973]
+      gl.uniform3fv(U.first,  [0.776, 0.475, 0.769]);
+      gl.uniform3fv(U.second, [0.012, 0.345, 0.969]);
+      gl.uniform3fv(U.accent, [0.973, 0.973, 0.973]);
+      gl.uniform1f (U.accentOp, 1.0);
+      gl.uniform1f (U.baseFreq, 2.6);
+      gl.uniform1f (U.zoom,     0.2);
+      gl.uniform1f (U.opacity,  1.0);
+
+      const mouse = [0, 0];
+      window.addEventListener('mousemove', (e) => {
+        mouse[0] = (e.clientX / window.innerWidth)  * 2 - 1;
+        mouse[1] = (e.clientY / window.innerHeight) * 2 - 1;
+      });
+
+      function resize() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width  = window.innerWidth  * dpr;
+        canvas.height = window.innerHeight * dpr;
+        canvas.style.width  = window.innerWidth  + 'px';
+        canvas.style.height = window.innerHeight + 'px';
+        gl.viewport(0, 0, canvas.width, canvas.height);
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      const startTime = performance.now();
+      function loop() {
+        const t = (performance.now() - startTime) / 1000;
+        gl.uniform1f(U.time,  t * 2.0);
+        gl.uniform2f(U.res,   canvas.width, canvas.height);
+        gl.uniform2f(U.mouse, mouse[0], mouse[1]);
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+        requestAnimationFrame(loop);
+      }
+      loop();
+    })();
+  </script>
+
+  <!-- ============================== FONT FAB ============================== -->
+  <div class="font-fab" id="fontFab">
+    <div class="font-fab-menu" id="fontFabMenu" role="menu"></div>
+    <button class="font-fab-button" id="fontFabBtn" type="button" aria-label="Change font">
+      <span class="glyph">Aa</span>
+      <span class="label" id="fontFabLabel">Plus Jakarta Sans</span>
+    </button>
+  </div>
+
+  <script>
+    (function () {
+      const FONTS = [
+        { id: 'Plus Jakarta Sans', name: 'Plus Jakarta Sans' },
+        { id: 'Karla',             name: 'Karla' },
+        { id: 'Inter',             name: 'Inter' },
+        { id: 'Manrope',           name: 'Manrope' },
+        { id: 'Sora',              name: 'Sora' },
+        { id: 'DM Sans',           name: 'DM Sans' },
+        { id: 'Space Grotesk',     name: 'Space Grotesk' },
+        { id: 'Outfit',            name: 'Outfit' },
+        { id: 'Geist',             name: 'Geist' },
+        { id: 'Onest',             name: 'Onest' },
+        { id: 'Public Sans',       name: 'Public Sans' },
+      ];
+      const root = document.documentElement;
+      const fab = document.getElementById('fontFab');
+      const btn = document.getElementById('fontFabBtn');
+      const menu = document.getElementById('fontFabMenu');
+      const label = document.getElementById('fontFabLabel');
+
+      let active = localStorage.getItem('entrophy.font') || 'Plus Jakarta Sans';
+      const apply = (id) => {
+        active = id;
+        const stack = `'${id}', ui-sans-serif, system-ui, -apple-system, sans-serif`;
+        root.style.setProperty('--font-display', stack);
+        root.style.setProperty('--font-body', stack);
+        root.classList.toggle('font-karla', id === 'Karla');
+        label.textContent = id;
+        localStorage.setItem('entrophy.font', id);
+        [...menu.children].forEach((el) => {
+          el.classList.toggle('active', el.dataset.font === id);
+        });
+      };
+
+      FONTS.forEach((f) => {
+        const item = document.createElement('button');
+        item.type = 'button';
+        item.className = 'font-fab-item';
+        item.dataset.font = f.id;
+        item.innerHTML = `<span class="name">${f.name}</span><span class="preview" style="font-family:'${f.id}', sans-serif">Aa</span>`;
+        item.addEventListener('click', () => { apply(f.id); fab.classList.remove('open'); });
+        menu.appendChild(item);
+      });
+
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        fab.classList.toggle('open');
+      });
+      document.addEventListener('click', (e) => {
+        if (!fab.contains(e.target)) fab.classList.remove('open');
+      });
+
+      apply(active);
+    })();
+  </script>
+
+</body>
+</html>
