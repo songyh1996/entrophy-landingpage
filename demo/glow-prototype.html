@@ -1,0 +1,606 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Glow Chat — Prototype</title>
+<style>
+  :root {
+    --bg: #07060f;
+    --violet-deep: #2A1F6E;
+    --violet-mid: #3B23A8;
+    --violet-light: #5230C0;
+    --cyan: #6EE7E7;
+    --text: #F2EEFF;
+    --text-dim: #9A95B5;
+    --text-faint: #6E6989;
+
+    --bar-radius: 22px;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+    overflow: hidden;
+  }
+
+  /* Dot grid backdrop */
+  .backdrop {
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(circle at center, rgba(255,255,255,0.05) 0.8px, transparent 1.2px) 0 0 / 22px 22px,
+      radial-gradient(1200px 800px at 50% 60%, rgba(50,28,120,0.10), transparent 70%),
+      var(--bg);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Single centered stage with breathing room top + bottom */
+  .stage {
+    position: relative; z-index: 2;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    padding: 80px;
+  }
+
+  /* ============================================================ */
+  /* CHAT BAR — the only element. Glow happens on its own border.  */
+  /* ============================================================ */
+  .chat-wrap {
+    position: relative;
+    width: min(880px, 100%);
+  }
+
+  /* Outer purple bloom underneath the bar (visible in active+) */
+  .chat-wrap::before {
+    content: "";
+    position: absolute;
+    inset: -50px -30px -70px -30px;
+    background: radial-gradient(60% 70% at 50% 80%, rgba(82,48,192,0.55), rgba(82,48,192,0.16) 45%, transparent 75%);
+    filter: blur(28px);
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    pointer-events: none;
+    z-index: 0;
+  }
+  body[data-state="active"]   .chat-wrap::before,
+  body[data-state="thinking"] .chat-wrap::before {
+    opacity: 1;
+    animation: bloomBreathe 3.4s ease-in-out infinite;
+  }
+  /* Received: cyan-tinted ambient bloom underneath, much subtler */
+  body[data-state="received"] .chat-wrap::before {
+    background: radial-gradient(60% 70% at 50% 50%,
+      rgba(110, 231, 231, 0.30),
+      rgba(110, 231, 231, 0.08) 45%,
+      transparent 75%);
+    opacity: 1;
+  }
+  @keyframes bloomBreathe {
+    0%, 100% { opacity: 0.85; }
+    50%      { opacity: 1; }
+  }
+
+  .chat-bar {
+    position: relative;
+    z-index: 1;
+    height: 88px;
+    border-radius: var(--bar-radius);
+    padding: 0 22px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    background: rgba(15, 13, 30, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.02),
+      0 8px 30px rgba(0,0,0,0.35);
+    transition:
+      background 0.6s ease,
+      border-color 0.6s ease,
+      box-shadow 0.6s ease;
+  }
+
+  /* Cyan top-edge halo — fades in at active/thinking/received.
+     Wider-than-bar gradient so it can drift horizontally for ambient motion. */
+  .chat-bar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: var(--bar-radius);
+    pointer-events: none;
+    background:
+      /* horizontal "hot spot" that drifts left/right */
+      radial-gradient(60% 90% at 30% 0%,
+        rgba(180, 255, 255, 0.95) 0%,
+        rgba(110, 231, 231, 0.55) 18%,
+        rgba(110, 231, 231, 0) 42%),
+      /* base top-edge halo so the rest of the top still glows */
+      linear-gradient(180deg,
+        rgba(140, 240, 240, 0.85) 0%,
+        rgba(110, 231, 231, 0.45) 3%,
+        rgba(110, 231, 231, 0) 14%);
+    background-size: 200% 100%, 100% 100%;
+    background-position: 0% 0%, 0 0;
+    background-repeat: no-repeat;
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    padding: 1px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  /* Active / Thinking — rich violet plasma fill with two glowing blobs
+     that pass each other inside. Bounded so they never leave the bar.
+     (Received is a different state — dark interior + cyan border halo.) */
+  body[data-state="active"]   .chat-bar,
+  body[data-state="thinking"] .chat-bar {
+    background:
+      /* Blob 1 — violet glow rising from below the bar's bottom edge.
+         Center is at Y=110% so only the top half of the bloom enters the bar.
+         bg-size 180% with hot at 50% → X moves 70%→30% as pos goes 25%→75%. */
+      radial-gradient(ellipse 70% 90% at 50% 110%,
+        rgba(160, 125, 255, 0.85) 0%,
+        rgba(120, 85, 230, 0.55) 18%,
+        rgba(80, 50, 190, 0.28) 38%,
+        rgba(50, 30, 140, 0.10) 60%,
+        rgba(40, 22, 110, 0) 80%),
+      /* Blob 2 — broader, dimmer violet bleed crossing the other way */
+      radial-gradient(ellipse 80% 100% at 50% 115%,
+        rgba(140, 105, 240, 0.55) 0%,
+        rgba(100, 70, 210, 0.32) 22%,
+        rgba(70, 45, 170, 0.14) 48%,
+        rgba(40, 22, 110, 0) 75%),
+      /* Pure dark base — top half of the bar matches the page bg
+         so the violet glow reads as rising from the bottom edge. */
+      linear-gradient(180deg,
+        rgba(7, 6, 15, 1) 0%,
+        rgba(7, 6, 15, 1) 35%,
+        rgba(10, 8, 20, 1) 60%,
+        rgba(14, 10, 30, 1) 100%);
+    background-size: 180% 220%, 180% 220%, 100% 100%;
+    background-position: 25% 100%, 75% 100%, 0 0;
+    background-repeat: no-repeat;
+    border-color: rgba(110, 231, 231, 0.22);
+    box-shadow:
+      inset 0 1px 0 rgba(180, 240, 255, 0.14),
+      0 0 0 1px rgba(110, 231, 231, 0.14),
+      0 -4px 24px rgba(110, 231, 231, 0.28),
+      0 14px 50px rgba(95, 80, 220, 0.42),
+      0 36px 110px rgba(95, 80, 220, 0.34);
+  }
+  body[data-state="active"]   .chat-bar::before,
+  body[data-state="thinking"] .chat-bar::before { opacity: 1; }
+
+  /* ============================================================ */
+  /* RECEIVED — dark interior, cyan halo wrapping the border       */
+  /* ============================================================ */
+  body[data-state="received"] .chat-bar {
+    background:
+      linear-gradient(180deg,
+        rgba(12, 10, 22, 0.96) 0%,
+        rgba(10, 8, 20, 0.98) 100%);
+    border-color: rgba(110, 231, 231, 0.35);
+    box-shadow:
+      inset 0 0 0 1px rgba(110, 231, 231, 0.18),
+      0 0 0 1px rgba(110, 231, 231, 0.28),
+      0 0 22px rgba(110, 231, 231, 0.32),
+      0 0 56px rgba(110, 231, 231, 0.18),
+      0 0 110px rgba(95, 80, 220, 0.18);
+    animation: receivedBreathe 3.6s ease-in-out infinite;
+  }
+  @keyframes receivedBreathe {
+    0%, 100% {
+      box-shadow:
+        inset 0 0 0 1px rgba(110, 231, 231, 0.18),
+        0 0 0 1px rgba(110, 231, 231, 0.28),
+        0 0 22px rgba(110, 231, 231, 0.32),
+        0 0 56px rgba(110, 231, 231, 0.18),
+        0 0 110px rgba(95, 80, 220, 0.18);
+    }
+    50% {
+      box-shadow:
+        inset 0 0 0 1px rgba(110, 231, 231, 0.24),
+        0 0 0 1px rgba(110, 231, 231, 0.40),
+        0 0 30px rgba(110, 231, 231, 0.45),
+        0 0 70px rgba(110, 231, 231, 0.25),
+        0 0 130px rgba(95, 80, 220, 0.22);
+    }
+  }
+  /* Hide the cyan top-edge halo — full perimeter glow comes from box-shadow */
+  body[data-state="received"] .chat-bar::before { opacity: 0; }
+  /* The traveling stroke segments are not used in received */
+  body[data-state="received"] .stroke-svg { opacity: 0; }
+
+  /* ---- Ambient motion (active state only) ---- */
+  body[data-state="active"] .chat-bar {
+    animation:
+      plasmaDrift 7s ease-in-out infinite,
+      haloPulse   4s ease-in-out infinite;
+  }
+  body[data-state="active"] .chat-bar::before {
+    animation: haloDrift 5s ease-in-out infinite;
+  }
+
+  /* Both blobs pan in opposite directions, crossing in the middle. With
+     bg-size 180% and hot at 50% of gradient, X=25% puts hot at 70% bar
+     width and X=75% puts it at 30%. So both blobs stay between 30%-70%. */
+  @keyframes plasmaDrift {
+    0%, 100% { background-position: 25% 100%, 75% 100%, 0 0; }
+    50%      { background-position: 75% 100%, 25% 100%, 0 0; }
+  }
+
+  /* Soft box-shadow breathing */
+  @keyframes haloPulse {
+    0%, 100% {
+      box-shadow:
+        inset 0 1px 0 rgba(180, 240, 255, 0.14),
+        0 0 0 1px rgba(110, 231, 231, 0.14),
+        0 -4px 28px rgba(110, 231, 231, 0.30),
+        0 14px 56px rgba(80, 60, 180, 0.45),
+        0 36px 120px rgba(70, 50, 170, 0.35);
+    }
+    50% {
+      box-shadow:
+        inset 0 1px 0 rgba(200, 250, 255, 0.22),
+        0 0 0 1px rgba(110, 231, 231, 0.24),
+        0 -6px 38px rgba(110, 231, 231, 0.55),
+        0 18px 72px rgba(110, 90, 220, 0.60),
+        0 44px 150px rgba(80, 60, 180, 0.45);
+    }
+  }
+
+  /* Cyan top-edge "hot spot" drifts left↔right */
+  @keyframes haloDrift {
+    0%, 100% { background-position: 0% 0%,   0 0; }
+    50%      { background-position: 100% 0%, 0 0; }
+  }
+
+  /* ---- Per-keystroke spark — each keystroke spawns its own .spark div
+     that fades in/out on its own life cycle, so they overlap instead of
+     replacing each other. Active state only. ---- */
+  .spark {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--bar-radius);
+    pointer-events: none;
+    background:
+      /* Tight bright core */
+      radial-gradient(ellipse 120px 75px at var(--sx, 50%) var(--sy, 105%),
+        rgba(210, 185, 255, 0.28) 0%,
+        rgba(170, 130, 250, 0.16) 32%,
+        transparent 65%),
+      /* Wide soft halo — stretches horizontally so adjacent sparks overlap
+         and merge into a continuous violet wash. */
+      radial-gradient(ellipse 320px 140px at var(--sx, 50%) var(--sy, 110%),
+        rgba(150, 110, 240, 0.16) 0%,
+        rgba(110, 75, 220, 0.08) 40%,
+        transparent 80%);
+    mix-blend-mode: screen;
+    opacity: 0;
+    z-index: 0;
+    animation: sparkLife 2.0s ease-out forwards;
+  }
+  @keyframes sparkLife {
+    0%   { opacity: 0; }
+    35%  { opacity: 0.75; }
+    100% { opacity: 0; }
+  }
+
+  /* ---- The traveling stroke around the chat bar ---- */
+  .stroke-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    border-radius: var(--bar-radius);
+    overflow: visible;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 2;
+  }
+  body[data-state="thinking"] .stroke-svg { opacity: 1; }
+
+  .stroke-svg .head {
+    fill: none;
+    stroke: url(#headGrad);
+    stroke-width: 1.2;
+    stroke-linecap: round;
+    filter: url(#strokeBloom);
+    opacity: 0.55;
+    mix-blend-mode: screen;
+  }
+  /* Two segments — same animation, second one offset by half the period */
+  body[data-state="thinking"] .stroke-svg .head-1 {
+    animation: traceDraw 3.2s linear infinite;
+  }
+  body[data-state="thinking"] .stroke-svg .head-2 {
+    animation: traceDraw 3.2s linear infinite;
+    animation-delay: -1.6s;
+  }
+  body[data-state="received"] .stroke-svg .head {
+    stroke-dasharray: 9999;
+    stroke-dashoffset: 0;
+    animation: traceFade 1.2s ease-out forwards;
+  }
+  @keyframes traceDraw {
+    /* Each segment is a soft bright arc that travels around the perimeter.
+       Long dash + soft gradient ends = a diffuse glow rather than a hard line. */
+    0%   { stroke-dasharray: 800 1400; stroke-dashoffset: 0;     }
+    100% { stroke-dasharray: 800 1400; stroke-dashoffset: -2200; }
+  }
+  @keyframes traceFade {
+    from { opacity: 0.85; }
+    to   { opacity: 0.30; }
+  }
+
+  /* ---- Input + buttons ---- */
+  .input {
+    flex: 1;
+    background: transparent;
+    border: 0; outline: 0;
+    color: var(--text);
+    font-size: 18px;
+    letter-spacing: -0.005em;
+    font-family: inherit;
+    height: 100%;
+    min-width: 0;
+  }
+  .input::placeholder { color: rgba(242, 238, 255, 0.45); }
+  body[data-state="idle"] .input::placeholder { color: rgba(242, 238, 255, 0.32); }
+
+  .icon-btn {
+    width: 36px; height: 36px;
+    flex-shrink: 0;
+    display: grid; place-items: center;
+    border-radius: 10px;
+    background: transparent;
+    border: 0;
+    color: rgba(242, 238, 255, 0.7);
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .icon-btn:hover { background: rgba(255,255,255,0.06); color: #fff; }
+  .icon-btn svg { width: 18px; height: 18px; }
+
+  .right-cluster { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .model-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    height: 34px; padding: 0 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: var(--text);
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .model-pill .dot { width: 14px; height: 14px; border-radius: 4px; background: linear-gradient(135deg, #9F8CFF, #6EE7E7); }
+
+  .send {
+    width: 38px; height: 38px;
+    border-radius: 999px;
+    border: 0;
+    background: linear-gradient(180deg, #8AF0F0 0%, #4FD1C5 100%);
+    color: #062322;
+    cursor: pointer;
+    display: grid; place-items: center;
+    box-shadow: 0 0 22px rgba(110, 231, 231, 0.55);
+    transition: transform 0.15s ease, box-shadow 0.3s ease;
+  }
+  .send:hover { transform: translateY(-1px); box-shadow: 0 0 28px rgba(110, 231, 231, 0.8); }
+  .send svg { width: 16px; height: 16px; }
+
+  /* ---- Floating message above the bar (received state) ---- */
+  .reply {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 32px);
+    transform: translateX(-50%) translateY(8px);
+    width: max-content;
+    max-width: 92%;
+    text-align: center;
+    font-size: 22px;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  body[data-state="received"] .reply {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ============================================================ */
+  /* Demo controls — fixed bottom bar, never overlaps content      */
+  /* ============================================================ */
+  .controls {
+    position: fixed;
+    bottom: 22px; left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 5;
+  }
+  .ctrl {
+    height: 30px;
+    padding: 0 12px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    color: var(--text-dim);
+    font-size: 11px;
+    font-family: inherit;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+  }
+  .ctrl:hover { color: var(--text); border-color: rgba(110,231,231,0.4); }
+  .ctrl[data-active="true"] {
+    color: var(--cyan);
+    border-color: rgba(110,231,231,0.5);
+    background: rgba(110,231,231,0.08);
+  }
+
+  .state-label {
+    position: fixed;
+    top: 20px; right: 24px;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    z-index: 10;
+  }
+  .state-label b { color: var(--cyan); font-weight: 500; letter-spacing: 0.16em; }
+</style>
+</head>
+<body data-state="idle">
+
+  <div class="backdrop"></div>
+  <div class="state-label">state · <b id="stateName">idle</b></div>
+
+  <div class="stage">
+    <div class="chat-wrap">
+
+      <div class="reply">I've generated three visual directions for you.</div>
+
+      <div class="chat-bar">
+        <button class="icon-btn" aria-label="add">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        </button>
+        <button class="icon-btn" aria-label="settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h13M4 12h10M4 18h16"/><circle cx="19" cy="6" r="2" fill="currentColor"/><circle cx="16" cy="12" r="2" fill="currentColor"/></svg>
+        </button>
+        <input class="input" id="input" placeholder="Describe your design" autocomplete="off" />
+        <div class="right-cluster">
+          <button class="icon-btn" aria-label="palette">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 0 20c1 0 2-1 2-2v-1a2 2 0 0 1 2-2h2a4 4 0 0 0 4-4 9 9 0 0 0-10-11Z"/></svg>
+          </button>
+          <button class="model-pill"><span class="dot"></span>3.1 Pro <span style="opacity:.6">▾</span></button>
+          <button class="icon-btn" aria-label="mic">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+          </button>
+          <button class="send" id="sendBtn" aria-label="send">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+          </button>
+        </div>
+
+        <!-- SVG overlay that traces the chat bar's own border (two segments) -->
+        <svg class="stroke-svg" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="headGrad" x1="0" y1="0" x2="1" y2="0.6">
+              <stop offset="0%"   stop-color="#A8FFF7" stop-opacity="0"/>
+              <stop offset="20%"  stop-color="#9EFAF0" stop-opacity="0.85"/>
+              <stop offset="50%"  stop-color="#6EE7E7" stop-opacity="1"/>
+              <stop offset="80%"  stop-color="#9C8AFF" stop-opacity="0.85"/>
+              <stop offset="100%" stop-color="#5230C0" stop-opacity="0"/>
+            </linearGradient>
+            <filter id="strokeBloom" x="-100%" y="-100%" width="300%" height="300%">
+              <feGaussianBlur stdDeviation="9" result="bigBlur"/>
+              <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="midBlur"/>
+              <feMerge>
+                <feMergeNode in="bigBlur"/>
+                <feMergeNode in="midBlur"/>
+              </feMerge>
+            </filter>
+          </defs>
+          <rect class="head head-1" id="headRect1" pathLength="2200"
+                x="1" y="1" width="100%" height="100%" rx="22" ry="22"/>
+          <rect class="head head-2" id="headRect2" pathLength="2200"
+                x="1" y="1" width="100%" height="100%" rx="22" ry="22"/>
+        </svg>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="ctrl" data-state-btn="idle">Idle</button>
+    <button class="ctrl" data-state-btn="active">Active</button>
+    <button class="ctrl" data-state-btn="thinking">Thinking</button>
+    <button class="ctrl" data-state-btn="received">Received</button>
+    <button class="ctrl" data-action="send">▸ Run full flow</button>
+  </div>
+
+<script>
+(() => {
+  const body = document.body;
+  const input = document.getElementById('input');
+  const sendBtn = document.getElementById('sendBtn');
+  const stateName = document.getElementById('stateName');
+  const ctrls = document.querySelectorAll('[data-state-btn]');
+  const headRects = [document.getElementById('headRect1'), document.getElementById('headRect2')];
+
+  function syncStrokeSize() {
+    const wrap = document.querySelector('.chat-bar');
+    const w = wrap.offsetWidth;
+    const h = wrap.offsetHeight;
+    headRects.forEach(r => {
+      r.setAttribute('x', 1);
+      r.setAttribute('y', 1);
+      r.setAttribute('width', w - 2);
+      r.setAttribute('height', h - 2);
+    });
+  }
+  window.addEventListener('resize', syncStrokeSize);
+  requestAnimationFrame(syncStrokeSize);
+
+  const setState = (s) => {
+    body.dataset.state = s;
+    stateName.textContent = s;
+    ctrls.forEach(b => b.dataset.active = (b.dataset.stateBtn === s));
+  };
+
+  ctrls.forEach(btn => btn.addEventListener('click', () => setState(btn.dataset.stateBtn)));
+
+  let timers = [];
+  const clearAll = () => { timers.forEach(clearTimeout); timers = []; };
+
+  function runFlow(text) {
+    clearAll();
+    if (text != null) input.value = text;
+    setState('thinking');
+    timers.push(setTimeout(() => setState('received'), 2600));
+    timers.push(setTimeout(() => { input.value = ''; setState('idle'); }, 5800));
+  }
+
+  sendBtn.addEventListener('click', () => runFlow(input.value || "I want to design a new landing page for our brand."));
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') runFlow(input.value || "I want to design a new landing page for our brand.");
+  });
+  input.addEventListener('focus', () => { if (body.dataset.state === 'idle') setState('active'); });
+  input.addEventListener('blur',  () => { if (body.dataset.state === 'active' && !input.value) setState('idle'); });
+
+  // Per-keystroke spark — spawn a fresh .spark div at a random spot on
+  // every keystroke. Each one fades on its own, so multiple overlap.
+  const bar = document.querySelector('.chat-bar');
+  const rand = (min, max) => `${(min + Math.random() * (max - min)).toFixed(1)}%`;
+  input.addEventListener('input', () => {
+    if (body.dataset.state !== 'active') return;
+    const spark = document.createElement('div');
+    spark.className = 'spark';
+    spark.style.setProperty('--sx', rand(8, 92));
+    spark.style.setProperty('--sy', rand(90, 115));
+    bar.appendChild(spark);
+    spark.addEventListener('animationend', () => spark.remove());
+  });
+
+  document.querySelectorAll('[data-action]').forEach(b => {
+    b.addEventListener('click', () => {
+      if (b.dataset.action === 'send') runFlow("I want to design a new landing page for our brand.");
+    });
+  });
+
+  setState('idle');
+})();
+</script>
+</body>
+</html>
