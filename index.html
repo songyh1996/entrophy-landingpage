@@ -2307,107 +2307,207 @@
   }
 
   /* ============================== PRICING SECTION ============================== */
-  .pricing-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-  .price-card {
+  .pricing-orbital {
     position: relative;
-    padding: 28px 22px;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.94);
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    box-shadow: var(--shadow-card);
+    max-width: 1180px;
+    margin: 56px auto 0;
+    padding: 96px 32px 80px;
+    isolation: isolate;
+  }
+  .pricing-orbital::before {
+    content: "";
+    position: absolute;
+    inset: 20% -10% 20% -10%;
+    background: var(--gradient-spectrum);
+    filter: blur(140px);
+    opacity: 0.16;
+    z-index: -2;
+    border-radius: 50%;
+  }
+  .pricing-orbital::after {
+    content: "";
+    position: absolute;
+    left: 5%;
+    right: 5%;
+    bottom: 38%;
+    height: 1px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(0,0,0,0.10) 18%,
+      rgba(0,0,0,0.10) 82%,
+      transparent 100%);
+    z-index: -1;
+  }
+  .tier-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: end;
+    gap: 24px;
+  }
+  .tier-block {
+    position: relative;
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    align-items: center;
+    text-align: center;
+    padding: 0 8px;
   }
-  .price-card:hover {
-    transform: translateY(-4px);
-    box-shadow: rgba(0, 0, 0, 0.10) 0px 8px 32px 0px;
-  }
-  .price-card.featured {
-    border-color: rgba(250, 61, 29, 0.30);
-    background: linear-gradient(180deg, rgba(255,247,245,0.97), rgba(255,250,248,0.97));
+  .tier-orb {
+    position: relative;
+    border-radius: 50%;
+    margin-bottom: 36px;
+    background: radial-gradient(circle at 35% 35%,
+      rgba(255, 255, 255, 0.95),
+      rgba(255, 255, 255, 0.55) 40%,
+      rgba(255, 255, 255, 0.10) 80%);
     box-shadow:
-      0 0 0 1px rgba(250, 61, 29, 0.10),
-      0 8px 32px rgba(250, 61, 29, 0.10);
+      inset 0 1px 2px rgba(255, 255, 255, 0.9),
+      inset 0 -16px 24px rgba(0, 0, 0, 0.04),
+      0 18px 50px rgba(0, 0, 0, 0.06);
+    backdrop-filter: blur(8px) saturate(120%);
+    -webkit-backdrop-filter: blur(8px) saturate(120%);
   }
-  .price-flag {
+  .tier-orb::before {
+    content: "";
     position: absolute;
-    top: -10px;
-    left: 22px;
-    padding: 3px 10px;
-    border-radius: 999px;
+    inset: 18%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%,
+      rgba(255, 220, 200, 0.50),
+      rgba(255, 230, 215, 0.18) 60%,
+      transparent 80%);
+  }
+  .tier-orb.size-sm  { width: 96px;  height: 96px;  }
+  .tier-orb.size-md  { width: 168px; height: 168px; }
+  .tier-orb.size-lg  { width: 132px; height: 132px; }
+  .tier-orb.featured::after {
+    content: "";
+    position: absolute;
+    inset: -28px;
+    border-radius: 50%;
     background: var(--gradient-spectrum);
-    color: var(--color-snow);
+    filter: blur(36px);
+    opacity: 0.50;
+    z-index: -1;
+    animation: orbHalo 6s ease-in-out infinite;
+  }
+  @keyframes orbHalo {
+    0%, 100% { opacity: 0.42; transform: scale(1); }
+    50%      { opacity: 0.62; transform: scale(1.05); }
+  }
+  .tier-orb.featured {
+    background:
+      radial-gradient(circle at 35% 30%,
+        rgba(255, 220, 200, 0.85),
+        rgba(255, 200, 180, 0.40) 45%,
+        rgba(255, 200, 200, 0.15) 80%);
+    box-shadow:
+      inset 0 2px 4px rgba(255, 255, 255, 1),
+      inset 0 -22px 32px rgba(250, 61, 29, 0.10),
+      0 24px 60px rgba(250, 61, 29, 0.18);
+  }
+  .tier-block.featured .tier-name {
+    color: var(--color-ink-black);
+  }
+  .tier-flag {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: rgba(250, 61, 29, 0.08);
+    color: #FA3D1D;
     font-size: 10px;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.12em;
     font-weight: 500;
+    white-space: nowrap;
   }
-  .price-tier {
+  .tier-name {
     font-family: var(--font-display);
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
-    letter-spacing: -0.03em;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--color-slate);
+    margin-bottom: 10px;
+  }
+  .tier-amount {
+    font-family: var(--font-display);
+    font-size: 64px;
+    font-weight: 400;
+    letter-spacing: -0.06em;
+    color: var(--color-ink-black);
+    line-height: 0.95;
+    margin-bottom: 4px;
+  }
+  .tier-amount .currency {
+    font-size: 28px;
+    vertical-align: top;
+    margin-right: 2px;
     color: var(--color-graphite);
   }
-  .price-amount {
-    font-family: var(--font-display);
-    font-size: 36px;
-    font-weight: 500;
-    letter-spacing: -0.05em;
-    color: var(--color-ink-black);
-    line-height: 1;
-  }
-  .price-amount .per {
+  .tier-amount .per {
     font-size: 14px;
     color: var(--color-slate);
     font-weight: 400;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em;
     margin-left: 4px;
   }
-  .price-feats {
+  .tier-feats {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    padding-top: 8px;
-    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    gap: 6px;
+    margin-top: 18px;
+    max-width: 240px;
   }
-  .price-feats li {
+  .tier-feats li {
     font-size: 13px;
     color: var(--color-graphite);
-    line-height: 1.4;
-    padding-left: 16px;
-    position: relative;
+    line-height: 1.45;
+    letter-spacing: -0.01em;
   }
-  .price-feats li::before {
-    content: "✓";
-    position: absolute;
-    left: 0;
-    color: #4ADE80;
-    font-size: 12px;
+  .tier-cta {
+    margin-top: 20px;
+    padding: 10px 22px;
+    border-radius: 999px;
+    background: var(--color-ink-black);
+    color: var(--color-snow);
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .tier-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+  }
+  .tier-cta.ghost {
+    background: transparent;
+    color: var(--color-graphite);
+    border: 1px solid rgba(0, 0, 0, 0.14);
   }
   .pricing-fine {
     text-align: center;
-    margin-top: 32px;
+    margin-top: 56px;
     font-size: 12px;
     color: var(--color-slate);
+    letter-spacing: -0.01em;
   }
 
   @media (max-width: 900px) {
-    .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+    .pricing-orbital { padding: 64px 24px 56px; }
+    .tier-row { grid-template-columns: 1fr; gap: 56px; }
+    .tier-orb.size-sm  { width: 80px;  height: 80px;  }
+    .tier-orb.size-md  { width: 120px; height: 120px; }
+    .tier-orb.size-lg  { width: 100px; height: 100px; }
+    .tier-amount { font-size: 52px; }
     .overnight-tally { gap: 12px; }
     .overnight-timeline { height: 280px; }
-  }
-  @media (max-width: 540px) {
-    .pricing-grid { grid-template-columns: 1fr; }
   }
 
   /* ============================== FEATURE CARDS ============================== */
@@ -3249,7 +3349,7 @@
             <div class="side-row"><span class="ico"></span>Roadmap</div>
             <div class="side-row"><span class="ico"></span>Docs</div>
             <div class="side-divider">Team</div>
-            <div class="side-row mini"><span class="agent-dot maya"></span>Maya · CoS</div>
+            <div class="side-row mini"><span class="agent-dot maya"></span>Maya · Lead</div>
             <div class="side-row mini"><span class="agent-dot alex"></span>Alex · Eng</div>
             <div class="side-row mini"><span class="agent-dot kai"></span>Kai · Design</div>
             <div class="side-row mini"><span class="agent-dot sam"></span>Sam · GTM</div>
@@ -3402,7 +3502,7 @@
       <div class="doc-stack-header">
         <div class="doc-stack-title">
           <span class="doc-stack-label">And while you talked —</span>
-          Your CoS fleshed out 7 docs across the Outfits feature.
+          Your AI lead fleshed out 7 docs across the Outfits feature.
         </div>
         <div class="doc-stack-progress">
           <span class="dots"><span></span><span></span><span></span></span>
@@ -3504,7 +3604,7 @@
   <!-- ============================== AUTO-SCALING TEAM ============================== -->
   <section class="section team-section" id="team">
     <div class="section-eyebrow">Auto-scaling team</div>
-    <h2 class="section-heading">Your CoS picks the team. The team picks the tasks.</h2>
+    <h2 class="section-heading">Your AI lead picks the team. The team picks the tasks.</h2>
     <p class="section-sub">
       Your chief of staff scans the project, hires the agents you need, and points them at your Kanban.
       They pull tasks, ship features, and never stop. You stay in vision.
@@ -3647,7 +3747,7 @@
     <h2 class="section-heading">Your Vision is the root. Everything else branches from it.</h2>
     <p class="section-sub">
       Specs, features, decisions, designs — all traceable back to one source of truth.
-      When a decision drifts from Vision, your CoS catches it before it ships.
+      When a decision drifts from Vision, your AI lead catches it before it ships.
       Even if it's yours.
     </p>
 
@@ -3721,7 +3821,7 @@
     <div class="graph-stage cascade-host">
       <div class="graph-trigger">
         <span class="agent-av kai" style="background: linear-gradient(135deg,#9CA3AF,#D1D5DB);"></span>
-        <span class="trigger-text">Lisa: <em>"Pivot to Korean skincare."</em></span>
+        <span class="trigger-text">Lisa: <em>"Pivot to short-form video."</em></span>
       </div>
 
       <svg class="graph-svg" viewBox="0 0 800 480" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
@@ -3975,7 +4075,7 @@
           </div>
 
           <div class="drafting">
-            <span class="label-text">Your CoS is updating 4 docs across the team</span>
+            <span class="label-text">Your AI lead is updating 4 docs across the team</span>
             <span class="dots"><span></span><span></span><span></span></span>
           </div>
 
@@ -4137,63 +4237,58 @@
 
   <!-- ============================== PRICING ============================== -->
   <section class="section pricing-section" id="pricing">
-    <div class="section-eyebrow">Pay for the company</div>
-    <h2 class="section-heading">Pay for the harness. Not the AI.</h2>
+    <div class="section-eyebrow">Pricing</div>
+    <h2 class="section-heading">Three orbits. One company.</h2>
     <p class="section-sub">
-      Anthropic gets the compute revenue. You pay for the orchestration that turns
-      one model into a team. Korean and English on every tier.
+      You pay for the orchestration. Anthropic keeps the compute revenue.
+      Cancel anytime. Korean and English on every tier.
     </p>
 
-    <div class="pricing-grid">
-      <article class="price-card">
-        <div class="price-tier">Free</div>
-        <div class="price-amount">$0<span class="per">/mo</span></div>
-        <ul class="price-feats">
-          <li>10 agent-hours/mo</li>
-          <li>1 project</li>
-          <li>MCP access</li>
-          <li>All agents unlocked</li>
-        </ul>
-      </article>
+    <div class="pricing-orbital">
+      <div class="tier-row">
+        <div class="tier-block">
+          <div class="tier-orb size-sm"></div>
+          <div class="tier-name">Free</div>
+          <div class="tier-amount"><span class="currency">$</span>0<span class="per">/mo</span></div>
+          <ul class="tier-feats">
+            <li>Try the team — full agent roster</li>
+            <li>5 agent-hours / month</li>
+            <li>1 project</li>
+          </ul>
+          <a href="#" class="tier-cta ghost">Start free</a>
+        </div>
 
-      <article class="price-card">
-        <div class="price-tier">Solo</div>
-        <div class="price-amount">$79<span class="per">/mo</span></div>
-        <ul class="price-feats">
-          <li>40 agent-hours/mo</li>
-          <li>1 project</li>
-          <li>MCP access</li>
-          <li>Priority queue</li>
-        </ul>
-      </article>
+        <div class="tier-block featured">
+          <div class="tier-orb size-md featured">
+            <span class="tier-flag">Most loved</span>
+          </div>
+          <div class="tier-name">Founder</div>
+          <div class="tier-amount"><span class="currency">$</span>29<span class="per">/mo</span></div>
+          <ul class="tier-feats">
+            <li>Build a real product solo</li>
+            <li>60 agent-hours / month</li>
+            <li>3 projects · Opus on big calls</li>
+          </ul>
+          <a href="#" class="tier-cta">Start Founder</a>
+        </div>
 
-      <article class="price-card featured">
-        <div class="price-flag">Most popular</div>
-        <div class="price-tier">Pro</div>
-        <div class="price-amount">$199<span class="per">/mo</span></div>
-        <ul class="price-feats">
-          <li>150 agent-hours/mo</li>
-          <li>5 projects</li>
-          <li>MCP + API access</li>
-          <li>Frontier model (Opus) on big calls</li>
-        </ul>
-      </article>
+        <div class="tier-block">
+          <div class="tier-orb size-lg"></div>
+          <div class="tier-name">Studio</div>
+          <div class="tier-amount"><span class="currency">$</span>79<span class="per">/mo</span></div>
+          <ul class="tier-feats">
+            <li>For shipping teams of teams</li>
+            <li>200 agent-hours / month</li>
+            <li>Unlimited projects · multi-seat</li>
+          </ul>
+          <a href="#" class="tier-cta ghost">Start Studio</a>
+        </div>
+      </div>
 
-      <article class="price-card">
-        <div class="price-tier">Scale</div>
-        <div class="price-amount">$499<span class="per">/mo</span></div>
-        <ul class="price-feats">
-          <li>500 agent-hours/mo</li>
-          <li>Unlimited projects</li>
-          <li>Multi-seat</li>
-          <li>SLA-backed</li>
-        </ul>
-      </article>
+      <p class="pricing-fine">
+        Annual = 20% off · Extra agent-hours bill at $0.40 each · Enterprise & SSO available on request
+      </p>
     </div>
-
-    <p class="pricing-fine">
-      +$30/mo per extra project · Annual = 20% off · Opus consumption counts 5× · Enterprise plans available
-    </p>
   </section>
 
   <!-- ============================== PRIVACY ============================== -->
