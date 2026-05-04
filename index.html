@@ -1761,18 +1761,16 @@
     .vision-arrow { display: none; }
   }
 
-  /* ============================== KNOWLEDGE GRAPH ============================== */
+  /* ============================== KNOWLEDGE GRAPH (live diff cascade) ============================== */
   .graph-section { padding: 100px 32px 120px; }
   .graph-stage {
     position: relative;
     max-width: 1180px;
     margin: 0 auto;
-    padding: 28px;
+    padding: 28px 28px 40px;
     border-radius: 28px;
-    background:
-      radial-gradient(ellipse 100% 100% at 50% 0%, rgba(255, 244, 232, 0.90), rgba(252, 248, 254, 0.88) 60%),
-      rgba(252, 250, 255, 0.92);
-    border: 1px solid rgba(0, 0, 0, 0.04);
+    background: rgba(255, 255, 255, 0.84);
+    border: 1px solid rgba(0, 0, 0, 0.05);
     box-shadow: 0 28px 80px rgba(0, 0, 0, 0.06);
     overflow: hidden;
   }
@@ -1781,36 +1779,12 @@
     position: absolute;
     inset: -100px;
     background:
-      radial-gradient(ellipse 32% 36% at 50% 18%, rgba(255, 196, 160, 0.32), transparent 70%),
-      radial-gradient(ellipse 22% 26% at 22% 88%, rgba(220, 180, 240, 0.18), transparent 70%),
-      radial-gradient(ellipse 22% 26% at 80% 88%, rgba(180, 200, 240, 0.18), transparent 70%);
+      radial-gradient(ellipse 28% 30% at 18% 12%, rgba(255, 196, 160, 0.18), transparent 70%),
+      radial-gradient(ellipse 22% 26% at 86% 92%, rgba(180, 200, 240, 0.14), transparent 70%);
     filter: blur(20px);
     pointer-events: none;
     z-index: 0;
     animation: showcaseDrift 22s ease-in-out infinite;
-  }
-  .graph-stage::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image:
-      radial-gradient(circle at 12% 18%, rgba(0,0,0,0.18) 0.6px, transparent 0.7px),
-      radial-gradient(circle at 78% 8%, rgba(0,0,0,0.16) 0.5px, transparent 0.6px),
-      radial-gradient(circle at 32% 72%, rgba(0,0,0,0.14) 0.6px, transparent 0.7px),
-      radial-gradient(circle at 88% 56%, rgba(0,0,0,0.18) 0.5px, transparent 0.6px),
-      radial-gradient(circle at 6% 60%, rgba(0,0,0,0.14) 0.5px, transparent 0.6px),
-      radial-gradient(circle at 64% 82%, rgba(0,0,0,0.16) 0.6px, transparent 0.7px),
-      radial-gradient(circle at 48% 38%, rgba(0,0,0,0.10) 0.5px, transparent 0.6px),
-      radial-gradient(circle at 92% 22%, rgba(0,0,0,0.12) 0.5px, transparent 0.6px);
-    background-size: 100% 100%;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.65;
-    animation: starTwinkle 11s ease-in-out infinite;
-  }
-  @keyframes starTwinkle {
-    0%, 100% { opacity: 0.55; }
-    50%      { opacity: 0.80; }
   }
   .graph-stage > * { position: relative; z-index: 1; }
 
@@ -1820,11 +1794,11 @@
     gap: 10px;
     padding: 9px 18px;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.72);
+    background: rgba(255, 255, 255, 0.78);
     backdrop-filter: blur(20px) saturate(140%);
     -webkit-backdrop-filter: blur(20px) saturate(140%);
     border: 1px solid rgba(0, 0, 0, 0.05);
-    margin: 0 0 4px 0;
+    margin: 0 0 24px 0;
     font-size: 13px;
     color: var(--color-ink-black);
     letter-spacing: -0.01em;
@@ -1838,121 +1812,239 @@
     18%      { box-shadow: 0 0 0 0 rgba(250, 61, 29, 0); border-color: rgba(0, 0, 0, 0.05); }
   }
 
-  .graph-svg {
-    width: 100%;
-    height: auto;
-    display: block;
-    margin-top: 8px;
-    overflow: visible;
+  /* Diff cascade — vertical tree of doc cards with inline edits */
+  .diff-tree {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 8px 0 24px;
   }
-  /* Edges — hairline by default, fiber-optic glow on cascade */
-  .graph-svg .edge {
-    fill: none;
-    stroke: rgba(0, 0, 0, 0.10);
-    stroke-width: 0.8;
-    stroke-linecap: round;
-  }
-  .graph-svg .edge.edge-w1 { animation: edgeFlash 9s ease-in-out infinite; }
-  .graph-svg .edge.edge-w2 { animation: edgeFlashW2 9s ease-in-out infinite; }
-  .graph-svg .edge-cross { stroke-dasharray: 2 5; }
-  @keyframes edgeFlash {
-    0%, 8%   { stroke: rgba(0, 0, 0, 0.10); stroke-width: 0.8; }
-    10%      { stroke: rgba(250, 110, 60, 0.65); stroke-width: 1.4; filter: drop-shadow(0 0 6px rgba(250, 110, 60, 0.50)); }
-    25%      { stroke: rgba(250, 110, 60, 0.18); stroke-width: 1.0; }
-    100%     { stroke: rgba(0, 0, 0, 0.10); stroke-width: 0.8; }
-  }
-  @keyframes edgeFlashW2 {
-    0%, 26%  { stroke: rgba(0, 0, 0, 0.10); stroke-width: 0.8; }
-    28%      { stroke: rgba(180, 150, 230, 0.60); stroke-width: 1.4; filter: drop-shadow(0 0 6px rgba(180, 150, 230, 0.45)); }
-    44%      { stroke: rgba(180, 150, 230, 0.18); stroke-width: 1.0; }
-    100%     { stroke: rgba(0, 0, 0, 0.10); stroke-width: 0.8; }
-  }
-
-  /* Orbital rings around the source node */
-  .graph-svg .orbit-ring {
-    fill: none;
-    stroke: rgba(0, 0, 0, 0.08);
-    stroke-width: 0.5;
-    stroke-dasharray: 1 6;
-    transform-box: fill-box;
-    transform-origin: center;
-    animation: orbitSpin 28s linear infinite;
-  }
-  .graph-svg .orbit-ring.slow { animation-duration: 44s; animation-direction: reverse; }
-  @keyframes orbitSpin {
-    0%   { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  .graph-svg .orbit-dot {
-    fill: rgba(250, 61, 29, 0.55);
-  }
-
-  .graph-svg .graph-node {
-    transform-box: fill-box;
-    transform-origin: center;
-  }
-  /* Soft glow halo behind every node */
-  .graph-svg .node-glow {
-    opacity: 0.55;
-    mix-blend-mode: multiply;
-  }
-  /* Cascade halo — flashes briefly when "hit" */
-  .graph-svg .node-halo {
-    fill: rgba(250, 110, 60, 0.32);
+  .diff-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    align-items: start;
+    gap: 14px;
     opacity: 0;
-    transform-box: fill-box;
-    transform-origin: center;
+    transform: translateY(4px);
+    animation: diffRowIn 0.45s ease-out forwards;
+    animation-play-state: paused;
+  }
+  .cascade-host.in-view .diff-row {
+    animation-play-state: running;
+  }
+  @keyframes diffRowIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  /* Cascade timing — wave by tier */
+  .diff-row.tier-0 { animation-delay: 0.10s; }
+  .diff-row.tier-1.t-1a { animation-delay: 0.45s; }
+  .diff-row.tier-1.t-1b { animation-delay: 0.55s; }
+  .diff-row.tier-2.t-2a { animation-delay: 0.95s; padding-left: 38px; }
+  .diff-row.tier-2.t-2b { animation-delay: 1.05s; padding-left: 38px; }
+  .diff-row.tier-2.t-2c { animation-delay: 1.15s; padding-left: 38px; }
+  .diff-row.tier-2.t-2d { animation-delay: 1.25s; padding-left: 38px; }
+  .diff-row.tier-2.t-2e { animation-delay: 1.35s; padding-left: 38px; }
+  .diff-row.tier-2.t-2f { animation-delay: 1.45s; padding-left: 38px; }
+  .diff-row.tier-1 { padding-left: 0; }
+
+  /* Tree connectors — vertical trunk + L-shaped connector for indented rows */
+  .diff-row.tier-2::before {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: -14px;
+    bottom: 50%;
+    width: 1px;
+    background: rgba(0, 0, 0, 0.10);
+  }
+  .diff-row.tier-2::after {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    width: 22px;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.10);
+    transform: translateY(-0.5px);
+  }
+  .diff-row.tier-2.t-2f::before { bottom: 50%; }
+
+  /* Icon column */
+  .diff-icon {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 10px;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    color: var(--color-graphite);
+    margin-top: 12px;
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s ease;
+  }
+  .diff-row.tier-0 .diff-icon {
+    background: linear-gradient(135deg, #FFE4B5, #FFB088);
+    border-color: rgba(250, 110, 60, 0.45);
+    color: #7A3A1A;
+    box-shadow: 0 0 0 4px rgba(250, 110, 60, 0.10), 0 4px 14px rgba(250, 110, 60, 0.20);
+  }
+  .diff-row.tier-1 .diff-icon {
+    background: rgba(255, 246, 240, 1);
+    border-color: rgba(250, 110, 60, 0.30);
+    color: #BA532E;
+  }
+  .diff-row.tier-2 .diff-icon {
+    background: rgba(252, 250, 255, 1);
+    border-color: rgba(120, 100, 180, 0.25);
+    color: #6A5896;
+    width: 16px;
+    height: 16px;
+    font-size: 9px;
+  }
+  /* Halo flash when row activates */
+  .diff-row::after-flash {
+    /* placeholder */
+  }
+  .diff-row .diff-icon::before {
+    content: "";
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    background: rgba(250, 110, 60, 0.40);
+    opacity: 0;
     transform: scale(0.6);
+    animation: iconHalo 0.9s ease-out forwards;
+    animation-delay: inherit;
+    animation-play-state: paused;
+    pointer-events: none;
   }
-  .graph-svg .node-main {
-    filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.05));
+  .cascade-host.in-view .diff-row .diff-icon::before {
+    animation-play-state: running;
   }
-  .graph-svg .node-source .node-halo {
-    fill: rgba(255, 180, 130, 0.45);
-    animation: haloHitSrc 9s ease-out infinite;
+  .diff-row.tier-0 .diff-icon::before { animation-delay: 0.10s; }
+  .diff-row.tier-1.t-1a .diff-icon::before { animation-delay: 0.45s; }
+  .diff-row.tier-1.t-1b .diff-icon::before { animation-delay: 0.55s; }
+  .diff-row.tier-2.t-2a .diff-icon::before { animation-delay: 0.95s; background: rgba(180, 150, 230, 0.40); }
+  .diff-row.tier-2.t-2b .diff-icon::before { animation-delay: 1.05s; background: rgba(180, 150, 230, 0.40); }
+  .diff-row.tier-2.t-2c .diff-icon::before { animation-delay: 1.15s; background: rgba(180, 150, 230, 0.40); }
+  .diff-row.tier-2.t-2d .diff-icon::before { animation-delay: 1.25s; background: rgba(180, 150, 230, 0.40); }
+  .diff-row.tier-2.t-2e .diff-icon::before { animation-delay: 1.35s; background: rgba(180, 150, 230, 0.40); }
+  .diff-row.tier-2.t-2f .diff-icon::before { animation-delay: 1.45s; background: rgba(180, 150, 230, 0.40); }
+  @keyframes iconHalo {
+    0%   { opacity: 0; transform: scale(0.6); }
+    30%  { opacity: 0.85; transform: scale(1); }
+    100% { opacity: 0; transform: scale(2); }
   }
-  .graph-svg .node-w1 .node-halo {
-    fill: rgba(250, 130, 90, 0.40);
-    animation: haloHitW1 9s ease-out infinite;
+
+  /* Doc card */
+  .diff-card {
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 12px;
+    padding: 12px 16px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
   }
-  .graph-svg .node-w2 .node-halo {
-    fill: rgba(180, 150, 230, 0.40);
-    animation: haloHitW2 9s ease-out infinite;
+  .diff-row.tier-0 .diff-card {
+    background: linear-gradient(180deg, rgba(255, 250, 244, 0.96), rgba(255, 246, 240, 0.92));
+    border-color: rgba(250, 110, 60, 0.20);
+    box-shadow: 0 4px 18px rgba(250, 110, 60, 0.08);
   }
-  @keyframes haloHitSrc {
-    0%, 7%   { opacity: 0; transform: scale(0.6); }
-    9%       { opacity: 0.90; transform: scale(0.85); }
-    16%      { opacity: 0; transform: scale(1.6); }
-    100%     { opacity: 0; transform: scale(0.6); }
+  .diff-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
   }
-  @keyframes haloHitW1 {
-    0%, 19%  { opacity: 0; transform: scale(0.6); }
-    21%      { opacity: 0.90; transform: scale(0.85); }
-    28%      { opacity: 0; transform: scale(1.6); }
-    100%     { opacity: 0; transform: scale(0.6); }
+  .doc-type {
+    font-family: var(--font-display);
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.10em;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.04);
+    color: var(--color-graphite);
   }
-  @keyframes haloHitW2 {
-    0%, 38%  { opacity: 0; transform: scale(0.6); }
-    40%      { opacity: 0.90; transform: scale(0.85); }
-    47%      { opacity: 0; transform: scale(1.6); }
-    100%     { opacity: 0; transform: scale(0.6); }
+  .diff-row.tier-0 .doc-type {
+    background: rgba(250, 110, 60, 0.10);
+    color: #BA532E;
   }
-  /* Constant ambient drift — barely perceptible breathing */
-  .graph-svg .node-main {
-    transform-box: fill-box;
-    transform-origin: center;
-    animation: nodeBreathe 7s ease-in-out infinite;
+  .doc-name {
+    font-family: 'JetBrains Mono', 'SF Mono', ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--color-ink-black);
+    letter-spacing: -0.01em;
   }
-  .graph-svg .node-w1 .node-main { animation-delay: -2.5s; }
-  .graph-svg .node-w2 .node-main { animation-delay: -5s; }
-  @keyframes nodeBreathe {
-    0%, 100% { transform: scale(1); }
-    50%      { transform: scale(1.03); }
+  .doc-mission {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-ink-black);
+    letter-spacing: -0.02em;
   }
-  /* Source-orb inner star — tiny, glowing, soft */
-  .graph-svg .source-core {
-    fill: #FFFFFF;
-    filter: drop-shadow(0 0 4px rgba(255, 200, 140, 0.95));
+  .diff-time {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', 'SF Mono', ui-monospace, monospace;
+    font-size: 10px;
+    color: var(--color-slate);
+    letter-spacing: 0.02em;
+    opacity: 0.7;
+  }
+  .diff-line {
+    font-size: 13px;
+    color: var(--color-graphite);
+    line-height: 1.55;
+    letter-spacing: -0.01em;
+  }
+  .diff-line + .diff-line { margin-top: 3px; }
+  .diff-line .label {
+    color: var(--color-slate);
+    font-size: 12px;
+    margin-right: 4px;
+  }
+  .diff-line s {
+    color: rgba(190, 60, 80, 0.85);
+    text-decoration: line-through;
+    text-decoration-color: rgba(190, 60, 80, 0.50);
+    background: rgba(255, 220, 220, 0.50);
+    padding: 0 3px;
+    border-radius: 2px;
+  }
+  .diff-line ins {
+    color: #1A6E3F;
+    background: rgba(180, 240, 200, 0.40);
+    padding: 0 3px;
+    border-radius: 2px;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .diff-line .arrow {
+    color: var(--color-slate);
+    margin: 0 4px;
+    opacity: 0.6;
+  }
+  .diff-line code {
+    font-family: 'JetBrains Mono', 'SF Mono', ui-monospace, monospace;
+    font-size: 12px;
+    background: rgba(0, 0, 0, 0.04);
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: var(--color-ink-black);
+  }
+
+  @media (max-width: 700px) {
+    .diff-row.tier-2 { padding-left: 28px; }
+    .diff-line { font-size: 12.5px; }
+    .doc-name { font-size: 11.5px; }
   }
 
   /* Result toast */
@@ -3767,191 +3859,121 @@
         <span class="trigger-text">Lisa: <em>"Pivot to short-form video."</em></span>
       </div>
 
-      <svg class="graph-svg" viewBox="0 0 800 480" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
-        <defs>
-          <radialGradient id="g-source" cx="36%" cy="32%" r="68%">
-            <stop offset="0%"  stop-color="#FFFFFF" stop-opacity="1"/>
-            <stop offset="38%" stop-color="#FFEFDF" stop-opacity="0.95"/>
-            <stop offset="78%" stop-color="#FFD2B2" stop-opacity="0.55"/>
-            <stop offset="100%" stop-color="#FFB890" stop-opacity="0.20"/>
-          </radialGradient>
-          <radialGradient id="g-mid" cx="36%" cy="32%" r="66%">
-            <stop offset="0%"  stop-color="#FFFFFF" stop-opacity="1"/>
-            <stop offset="42%" stop-color="#FFE6D8" stop-opacity="0.90"/>
-            <stop offset="100%" stop-color="#FFB498" stop-opacity="0.30"/>
-          </radialGradient>
-          <radialGradient id="g-leaf-a" cx="36%" cy="32%" r="66%">
-            <stop offset="0%"  stop-color="#FFFFFF" stop-opacity="1"/>
-            <stop offset="55%" stop-color="#FCE6DC" stop-opacity="0.85"/>
-            <stop offset="100%" stop-color="#E8C0AC" stop-opacity="0.30"/>
-          </radialGradient>
-          <radialGradient id="g-leaf-b" cx="36%" cy="32%" r="66%">
-            <stop offset="0%"  stop-color="#FFFFFF" stop-opacity="1"/>
-            <stop offset="55%" stop-color="#EFE6F4" stop-opacity="0.85"/>
-            <stop offset="100%" stop-color="#C8B8DC" stop-opacity="0.30"/>
-          </radialGradient>
-          <radialGradient id="g-leaf-c" cx="36%" cy="32%" r="66%">
-            <stop offset="0%"  stop-color="#FFFFFF" stop-opacity="1"/>
-            <stop offset="55%" stop-color="#E8EEF6" stop-opacity="0.85"/>
-            <stop offset="100%" stop-color="#B8C4E0" stop-opacity="0.30"/>
-          </radialGradient>
-          <radialGradient id="g-glow-warm" cx="50%" cy="50%" r="50%">
-            <stop offset="0%"  stop-color="#FFD0A8" stop-opacity="0.70"/>
-            <stop offset="60%" stop-color="#FFD0A8" stop-opacity="0.18"/>
-            <stop offset="100%" stop-color="#FFD0A8" stop-opacity="0"/>
-          </radialGradient>
-          <radialGradient id="g-glow-mid" cx="50%" cy="50%" r="50%">
-            <stop offset="0%"  stop-color="#FFC0A0" stop-opacity="0.55"/>
-            <stop offset="100%" stop-color="#FFC0A0" stop-opacity="0"/>
-          </radialGradient>
-          <radialGradient id="g-glow-leaf" cx="50%" cy="50%" r="50%">
-            <stop offset="0%"  stop-color="#E8DFF4" stop-opacity="0.50"/>
-            <stop offset="100%" stop-color="#E8DFF4" stop-opacity="0"/>
-          </radialGradient>
-          <filter id="pulseGlow" x="-200%" y="-200%" width="500%" height="500%">
-            <feGaussianBlur stdDeviation="2.5" result="blur"/>
-            <feMerge>
-              <feMergeNode in="blur"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
-        </defs>
+      <div class="diff-tree">
+        <!-- Source: Vision -->
+        <article class="diff-row tier-0">
+          <div class="diff-icon">★</div>
+          <div class="diff-card">
+            <div class="diff-head">
+              <span class="doc-type">Vision</span>
+              <span class="doc-name">vision.md</span>
+              <span class="diff-time">+0ms</span>
+            </div>
+            <div class="diff-line"><span class="label">Mission:</span>a place for sharing <s>photos</s> <ins>short-form video</ins></div>
+            <div class="diff-line"><span class="label">Format:</span><s>image posts</s> <span class="arrow">→</span> <ins>video clips, max 60s</ins></div>
+          </div>
+        </article>
 
-        <!-- Edges -->
-        <g class="edges">
-          <path class="edge edge-w1" d="M 400 60 Q 320 140 200 220"/>
-          <path class="edge edge-w1" d="M 400 60 Q 480 140 600 220"/>
-          <path class="edge edge-w2" d="M 200 220 Q 150 310 90 400"/>
-          <path class="edge edge-w2" d="M 200 220 Q 220 310 240 400"/>
-          <path class="edge edge-w2" d="M 200 220 Q 295 310 390 400"/>
-          <path class="edge edge-w2" d="M 600 220 Q 495 310 390 400"/>
-          <path class="edge edge-w2" d="M 600 220 Q 580 310 550 400"/>
-          <path class="edge edge-w2" d="M 600 220 Q 650 310 700 400"/>
-          <path class="edge edge-w2 edge-cross" d="M 200 220 Q 450 280 700 400"/>
-        </g>
+        <!-- Tier 1: PRDs (direct dependents of Vision) -->
+        <article class="diff-row tier-1 t-1a">
+          <div class="diff-icon">◇</div>
+          <div class="diff-card">
+            <div class="diff-head">
+              <span class="doc-type">PRD</span>
+              <span class="doc-name">comments.md</span>
+              <span class="diff-time">+220ms</span>
+            </div>
+            <div class="diff-line"><span class="label">Reactions on:</span><s>image posts</s> <span class="arrow">→</span> <ins>video clips</ins></div>
+            <div class="diff-line"><span class="label">Reply latency:</span><s>2s</s> <span class="arrow">→</span> <ins>100ms (live commenting)</ins></div>
+          </div>
+        </article>
 
-        <!-- Pulse dots traveling along edges -->
-        <g class="pulses">
-          <circle r="3.5" fill="#FA8E5E" opacity="0" filter="url(#pulseGlow)">
-            <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
-              values="0;0;1;1;0;0" keyTimes="0;0.10;0.11;0.22;0.25;1"/>
-            <animateMotion dur="9s" repeatCount="indefinite"
-              keyPoints="0;0;1;1" keyTimes="0;0.11;0.22;1"
-              path="M 400 60 Q 320 140 200 220"/>
-          </circle>
-          <circle r="3.5" fill="#FA8E5E" opacity="0" filter="url(#pulseGlow)">
-            <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
-              values="0;0;1;1;0;0" keyTimes="0;0.10;0.11;0.22;0.25;1"/>
-            <animateMotion dur="9s" repeatCount="indefinite"
-              keyPoints="0;0;1;1" keyTimes="0;0.11;0.22;1"
-              path="M 400 60 Q 480 140 600 220"/>
-          </circle>
-          <circle r="3" fill="#B49EE0" opacity="0" filter="url(#pulseGlow)">
-            <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
-              values="0;0;1;1;0;0" keyTimes="0;0.27;0.28;0.40;0.43;1"/>
-            <animateMotion dur="9s" repeatCount="indefinite"
-              keyPoints="0;0;1;1" keyTimes="0;0.28;0.40;1"
-              path="M 200 220 Q 150 310 90 400"/>
-          </circle>
-          <circle r="3" fill="#B49EE0" opacity="0" filter="url(#pulseGlow)">
-            <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
-              values="0;0;1;1;0;0" keyTimes="0;0.27;0.28;0.40;0.43;1"/>
-            <animateMotion dur="9s" repeatCount="indefinite"
-              keyPoints="0;0;1;1" keyTimes="0;0.28;0.40;1"
-              path="M 200 220 Q 220 310 240 400"/>
-          </circle>
-          <circle r="3" fill="#B49EE0" opacity="0" filter="url(#pulseGlow)">
-            <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
-              values="0;0;1;1;0;0" keyTimes="0;0.27;0.28;0.40;0.43;1"/>
-            <animateMotion dur="9s" repeatCount="indefinite"
-              keyPoints="0;0;1;1" keyTimes="0;0.28;0.40;1"
-              path="M 200 220 Q 295 310 390 400"/>
-          </circle>
-          <circle r="3" fill="#B49EE0" opacity="0" filter="url(#pulseGlow)">
-            <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
-              values="0;0;1;1;0;0" keyTimes="0;0.27;0.28;0.40;0.43;1"/>
-            <animateMotion dur="9s" repeatCount="indefinite"
-              keyPoints="0;0;1;1" keyTimes="0;0.28;0.40;1"
-              path="M 600 220 Q 495 310 390 400"/>
-          </circle>
-          <circle r="3" fill="#B49EE0" opacity="0" filter="url(#pulseGlow)">
-            <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
-              values="0;0;1;1;0;0" keyTimes="0;0.27;0.28;0.40;0.43;1"/>
-            <animateMotion dur="9s" repeatCount="indefinite"
-              keyPoints="0;0;1;1" keyTimes="0;0.28;0.40;1"
-              path="M 600 220 Q 580 310 550 400"/>
-          </circle>
-          <circle r="3" fill="#B49EE0" opacity="0" filter="url(#pulseGlow)">
-            <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
-              values="0;0;1;1;0;0" keyTimes="0;0.27;0.28;0.40;0.43;1"/>
-            <animateMotion dur="9s" repeatCount="indefinite"
-              keyPoints="0;0;1;1" keyTimes="0;0.28;0.40;1"
-              path="M 600 220 Q 650 310 700 400"/>
-          </circle>
-          <circle r="3" fill="#B49EE0" opacity="0" filter="url(#pulseGlow)">
-            <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
-              values="0;0;1;1;0;0" keyTimes="0;0.27;0.28;0.40;0.43;1"/>
-            <animateMotion dur="9s" repeatCount="indefinite"
-              keyPoints="0;0;1;1" keyTimes="0;0.28;0.40;1"
-              path="M 200 220 Q 450 280 700 400"/>
-          </circle>
-        </g>
+        <article class="diff-row tier-1 t-1b">
+          <div class="diff-icon">◇</div>
+          <div class="diff-card">
+            <div class="diff-head">
+              <span class="doc-type">PRD</span>
+              <span class="doc-name">profile.md</span>
+              <span class="diff-time">+240ms</span>
+            </div>
+            <div class="diff-line"><span class="label">Feed grid:</span><s>3-col photo grid</s> <span class="arrow">→</span> <ins>full-bleed video tiles</ins></div>
+          </div>
+        </article>
 
-        <!-- Nodes — abstract constellation -->
-        <g class="nodes">
-          <!-- Source orb with orbital rings -->
-          <g class="graph-node node-source" transform="translate(400,60)">
-            <circle class="orbit-ring" r="58"/>
-            <circle class="orbit-ring slow" r="84"/>
-            <circle class="node-glow" r="64" fill="url(#g-glow-warm)"/>
-            <circle class="node-halo" r="40"/>
-            <circle class="node-main" r="22" fill="url(#g-source)"/>
-            <circle class="source-core" r="3"/>
-            <!-- Orbiting micro-dot on outer ring -->
-            <circle class="orbit-dot" r="2.2">
-              <animateMotion dur="22s" repeatCount="indefinite"
-                path="M 84 0 A 84 84 0 1 1 -84 0 A 84 84 0 1 1 84 0"/>
-            </circle>
-          </g>
-          <!-- Wave 1 (PRDs) -->
-          <g class="graph-node node-w1" transform="translate(200,220)">
-            <circle class="node-glow" r="48" fill="url(#g-glow-mid)"/>
-            <circle class="node-halo" r="34"/>
-            <circle class="node-main" r="18" fill="url(#g-mid)"/>
-          </g>
-          <g class="graph-node node-w1" transform="translate(600,220)">
-            <circle class="node-glow" r="48" fill="url(#g-glow-mid)"/>
-            <circle class="node-halo" r="34"/>
-            <circle class="node-main" r="18" fill="url(#g-mid)"/>
-          </g>
-          <!-- Wave 2 (leaves) -->
-          <g class="graph-node node-w2" transform="translate(90,400)">
-            <circle class="node-glow" r="36" fill="url(#g-glow-leaf)"/>
-            <circle class="node-halo" r="26"/>
-            <circle class="node-main" r="13" fill="url(#g-leaf-a)"/>
-          </g>
-          <g class="graph-node node-w2" transform="translate(240,400)">
-            <circle class="node-glow" r="36" fill="url(#g-glow-leaf)"/>
-            <circle class="node-halo" r="26"/>
-            <circle class="node-main" r="13" fill="url(#g-leaf-b)"/>
-          </g>
-          <g class="graph-node node-w2" transform="translate(390,400)">
-            <circle class="node-glow" r="36" fill="url(#g-glow-leaf)"/>
-            <circle class="node-halo" r="26"/>
-            <circle class="node-main" r="13" fill="url(#g-leaf-c)"/>
-          </g>
-          <g class="graph-node node-w2" transform="translate(550,400)">
-            <circle class="node-glow" r="36" fill="url(#g-glow-leaf)"/>
-            <circle class="node-halo" r="26"/>
-            <circle class="node-main" r="13" fill="url(#g-leaf-b)"/>
-          </g>
-          <g class="graph-node node-w2" transform="translate(700,400)">
-            <circle class="node-glow" r="36" fill="url(#g-glow-leaf)"/>
-            <circle class="node-halo" r="26"/>
-            <circle class="node-main" r="13" fill="url(#g-leaf-a)"/>
-          </g>
-        </g>
-      </svg>
+        <!-- Tier 2: leaves (indirect dependents) -->
+        <article class="diff-row tier-2 t-2a">
+          <div class="diff-icon">○</div>
+          <div class="diff-card">
+            <div class="diff-head">
+              <span class="doc-type">ERD</span>
+              <span class="doc-name">posts.sql</span>
+              <span class="diff-time">+580ms</span>
+            </div>
+            <div class="diff-line"><s><code>image_url text</code></s> <span class="arrow">→</span> <ins><code>video_url text</code></ins></div>
+            <div class="diff-line"><ins>+ <code>duration_ms int</code>, <code>thumbnail_url text</code></ins></div>
+          </div>
+        </article>
+
+        <article class="diff-row tier-2 t-2b">
+          <div class="diff-icon">○</div>
+          <div class="diff-card">
+            <div class="diff-head">
+              <span class="doc-type">UI</span>
+              <span class="doc-name">feed.tsx</span>
+              <span class="diff-time">+620ms</span>
+            </div>
+            <div class="diff-line"><code><s>&lt;ImageGrid /&gt;</s></code> <span class="arrow">→</span> <code><ins>&lt;VideoGrid autoplay /&gt;</ins></code></div>
+          </div>
+        </article>
+
+        <article class="diff-row tier-2 t-2c">
+          <div class="diff-icon">○</div>
+          <div class="diff-card">
+            <div class="diff-head">
+              <span class="doc-type">Copy</span>
+              <span class="doc-name">onboarding.md</span>
+              <span class="diff-time">+640ms</span>
+            </div>
+            <div class="diff-line"><s>"Share your photos"</s> <span class="arrow">→</span> <ins>"Record your first clip"</ins></div>
+          </div>
+        </article>
+
+        <article class="diff-row tier-2 t-2d">
+          <div class="diff-icon">○</div>
+          <div class="diff-card">
+            <div class="diff-head">
+              <span class="doc-type">UI</span>
+              <span class="doc-name">profile.tsx</span>
+              <span class="diff-time">+660ms</span>
+            </div>
+            <div class="diff-line"><code><s>&lt;PhotoTile /&gt;</s></code> <span class="arrow">→</span> <code><ins>&lt;VideoTile loop muted /&gt;</ins></code></div>
+          </div>
+        </article>
+
+        <article class="diff-row tier-2 t-2e">
+          <div class="diff-icon">○</div>
+          <div class="diff-card">
+            <div class="diff-head">
+              <span class="doc-type">Metrics</span>
+              <span class="doc-name">dashboard.json</span>
+              <span class="diff-time">+700ms</span>
+            </div>
+            <div class="diff-line"><s>photo_uploads</s> <span class="arrow">→</span> <ins>video_views, avg_watch_time, completion_rate</ins></div>
+          </div>
+        </article>
+
+        <article class="diff-row tier-2 t-2f">
+          <div class="diff-icon">○</div>
+          <div class="diff-card">
+            <div class="diff-head">
+              <span class="doc-type">Test</span>
+              <span class="doc-name">feed.test.ts</span>
+              <span class="diff-time">+720ms</span>
+            </div>
+            <div class="diff-line">expect(<s>image.alt</s>).toEqual(...) <span class="arrow">→</span> expect(<ins>video.duration</ins>).toBeLessThan(60)</div>
+          </div>
+        </article>
+      </div>
 
       <div class="graph-result">
         <span class="graph-result-icon">✓</span>
