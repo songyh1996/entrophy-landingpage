@@ -743,6 +743,7 @@
     opacity: 0;
     transform: translateY(6px);
     animation: msgIn 0.5s ease-out forwards;
+    animation-play-state: paused;
   }
   .convo-msg.maya { background: rgba(255, 255, 255, 0.7); }
   .convo-msg:nth-of-type(1) { animation-delay: 0.0s; }
@@ -833,6 +834,7 @@
     opacity: 0;
     transform: translateY(6px);
     animation: rowIn 0.6s ease-out forwards;
+    animation-play-state: paused;
   }
   .vision-row:nth-of-type(2) { animation-delay: 0.6s; }
   .vision-row:nth-of-type(3) { animation-delay: 1.4s; }
@@ -848,6 +850,159 @@
   }
   .vision-value {
     color: var(--color-ink-black);
+  }
+
+  /* ============================== DOC STACK — fleshing out in parallel ============================== */
+  .doc-stack {
+    margin-top: 32px;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 24px;
+    border-radius: 20px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(252,252,254,0.92));
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: var(--shadow-card);
+  }
+  .doc-stack-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    margin-bottom: 16px;
+  }
+  .doc-stack-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.035em;
+    color: var(--color-ink-black);
+    line-height: 1.35;
+  }
+  .doc-stack-label {
+    color: var(--color-slate);
+    font-weight: 400;
+    margin-right: 4px;
+  }
+  .doc-stack-progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .doc-stack-progress .dots {
+    display: inline-flex;
+    gap: 3px;
+  }
+  .doc-stack-progress .dots span {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(250, 61, 29, 0.55);
+    animation: typingBounce 1.2s ease-in-out infinite;
+  }
+  .doc-stack-progress .dots span:nth-child(2) { animation-delay: 0.15s; }
+  .doc-stack-progress .dots span:nth-child(3) { animation-delay: 0.30s; }
+  .doc-stack-meta {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-slate);
+  }
+  .doc-stack-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .doc-stack-card {
+    padding: 14px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+    opacity: 0;
+    transform: translateY(8px);
+    animation: rowIn 0.5s ease-out forwards;
+    animation-play-state: paused;
+  }
+  .doc-stack-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(196, 162, 101, 0.25);
+  }
+  .doc-stack-card:nth-of-type(1) { animation-delay: 0.0s; }
+  .doc-stack-card:nth-of-type(2) { animation-delay: 0.18s; }
+  .doc-stack-card:nth-of-type(3) { animation-delay: 0.36s; }
+  .doc-stack-card:nth-of-type(4) { animation-delay: 0.54s; }
+  .doc-stack-card:nth-of-type(5) { animation-delay: 0.72s; }
+  .doc-stack-card:nth-of-type(6) { animation-delay: 0.90s; }
+  .doc-stack-head {
+    display: grid;
+    grid-template-columns: 22px 1fr auto;
+    gap: 10px;
+    align-items: center;
+  }
+  .doc-stack-head .doc-glyph {
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    background: var(--gradient-spectrum);
+    background-size: 200% 200%;
+    animation: avShimmer 8s ease-in-out infinite;
+  }
+  .doc-stack-name-block {
+    min-width: 0;
+  }
+  .doc-stack-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-ink-black);
+    line-height: 1.2;
+  }
+  .doc-stack-feature {
+    font-size: 11px;
+    color: var(--color-slate);
+    margin-top: 1px;
+  }
+  .doc-stack-status .agent-pulse {
+    width: 7px;
+    height: 7px;
+  }
+  .doc-stack-preview {
+    font-size: 12.5px;
+    color: var(--color-graphite);
+    line-height: 1.5;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.03);
+    border-left: 2px solid rgba(196, 162, 101, 0.30);
+  }
+  .doc-stack-preview code {
+    font-family: ui-monospace, "SF Mono", monospace;
+    font-size: 11.5px;
+    padding: 1px 4px;
+    border-radius: 3px;
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--color-ink-black);
+  }
+  .doc-stack-footer {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    text-align: center;
+    font-size: 12px;
+    color: var(--color-slate);
+  }
+
+  @media (max-width: 900px) {
+    .doc-stack-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 540px) {
+    .doc-stack-grid { grid-template-columns: 1fr; }
   }
 
   /* ============================== TEAM SECTION ============================== */
@@ -1205,6 +1360,7 @@
     opacity: 0;
     transform: translateY(4px);
     animation: msgIn 0.5s ease-out forwards;
+    animation-play-state: paused;
   }
   .meeting-line:nth-of-type(1) { animation-delay: 0.0s; }
   .meeting-line:nth-of-type(2) { animation-delay: 1.2s; }
@@ -1322,14 +1478,15 @@
   }
   .overnight-timeline {
     position: relative;
-    height: 220px;
+    height: 240px;
     padding: 16px 8px;
   }
   .timeline-strip {
     position: absolute;
-    inset: 30px 0 30px 0;
-    height: 4px;
-    border-radius: 4px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    border-radius: 3px;
     background: linear-gradient(90deg,
       #2D2A4A 0%,
       #4D3A6A 20%,
@@ -1338,39 +1495,46 @@
       #FFD580 85%,
       #FFF1C4 100%);
     top: 50%;
-    transform: translateY(-2px);
+    transform: translateY(-50%);
   }
   .timeline-event {
     position: absolute;
     left: var(--at);
-    transform: translateX(-50%);
+    width: 130px;
+    text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
-    text-align: center;
-    width: 140px;
+    gap: 3px;
     opacity: 0;
-    animation: msgIn 0.6s ease-out forwards;
+    transform: translate(-50%, 0);
   }
-  .timeline-event:nth-of-type(2) { animation-delay: 0.0s; top: 0; }
-  .timeline-event:nth-of-type(3) { animation-delay: 0.6s; bottom: 0; }
-  .timeline-event:nth-of-type(4) { animation-delay: 1.2s; top: 0; }
-  .timeline-event:nth-of-type(5) { animation-delay: 1.8s; bottom: 0; }
-  .timeline-event:nth-of-type(6) { animation-delay: 2.4s; top: 0; }
-  .timeline-event::before {
+  .timeline-event.up {
+    bottom: calc(50% + 14px);
+  }
+  .timeline-event.down {
+    top: calc(50% + 14px);
+  }
+  /* Dot anchored exactly on the strip line */
+  .timeline-event::after {
     content: "";
-    width: 8px;
-    height: 8px;
+    position: absolute;
+    left: 50%;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
     background: var(--color-ink-black);
     border: 2px solid rgba(255, 255, 255, 0.95);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.04);
+    transform: translateX(-50%);
   }
-  .timeline-event.success::before {
+  .timeline-event.up::after {
+    bottom: -19px;  /* sits on the strip below the content */
+  }
+  .timeline-event.down::after {
+    top: -19px;     /* sits on the strip above the content */
+  }
+  .timeline-event.success::after {
     background: #4ADE80;
   }
   .event-time {
@@ -1706,6 +1870,7 @@
     opacity: 0;
     transform: translateY(6px);
     animation: msgIn 0.6s ease-out forwards;
+    animation-play-state: paused;
   }
   .thread-msg.maya { background: rgba(255, 255, 255, 0.7); }
   .thread-msg:nth-of-type(2) { animation-delay: 0.1s; }
@@ -1725,6 +1890,34 @@
   @keyframes msgIn {
     to { opacity: 1; transform: translateY(0); }
   }
+  @keyframes timelineIn {
+    to { opacity: 1; transform: translate(-50%, 0); }
+  }
+
+  /* ===== Scroll-triggered cascade — animations only run when host is in view ===== */
+  .cascade-host.in-view .thread-msg,
+  .cascade-host.in-view .doc-update,
+  .cascade-host.in-view .drafting,
+  .cascade-host.in-view .auto-doc,
+  .cascade-host.in-view .convo-msg,
+  .cascade-host.in-view .vision-row,
+  .cascade-host.in-view .meeting-line,
+  .cascade-host.in-view .timeline-event,
+  .cascade-host.in-view .doc-stack-card {
+    animation-play-state: running, running;
+  }
+
+  /* Re-add the timeline-event entrance animation, gated on in-view */
+  .timeline-event {
+    animation: timelineIn 0.6s ease-out forwards;
+    animation-play-state: paused;
+  }
+  .timeline-event:nth-of-type(2) { animation-delay: 0.0s; }
+  .timeline-event:nth-of-type(3) { animation-delay: 0.6s; }
+  .timeline-event:nth-of-type(4) { animation-delay: 1.2s; }
+  .timeline-event:nth-of-type(5) { animation-delay: 1.8s; }
+  .timeline-event:nth-of-type(6) { animation-delay: 2.4s; }
+
   @keyframes freshPulse {
     0%, 80%, 100% { opacity: 0; }
     20%, 50%      { opacity: 1; }
@@ -1772,6 +1965,7 @@
     z-index: 1;
     opacity: 0;
     animation: msgIn 0.5s ease-out 1.9s forwards;
+    animation-play-state: paused;
   }
   .drafting .label-text { display: inline-flex; gap: 4px; align-items: center; }
   .drafting .dots { display: inline-flex; gap: 3px; margin-left: 4px; }
@@ -1804,6 +1998,7 @@
     opacity: 0;
     transform: translateY(10px);
     animation: docMaterialize 0.7s ease-out 2.4s forwards, docHalo 6s ease-in-out 3.2s infinite;
+    animation-play-state: paused, paused;
   }
   @keyframes docMaterialize {
     to { opacity: 1; transform: translateY(0); }
@@ -1873,6 +2068,7 @@
     opacity: 0;
     transform: translateY(6px);
     animation: rowIn 0.5s ease-out forwards;
+    animation-play-state: paused;
   }
   .doc-update:first-of-type { border-top: 0; padding-top: 2px; }
   .doc-update:nth-of-type(2) { animation-delay: 3.0s; }
@@ -2356,11 +2552,14 @@
   <!-- ============================== FIRST CONVERSATION ============================== -->
   <section class="section first-convo" id="first">
     <div class="section-eyebrow">First 90 seconds</div>
-    <h2 class="section-heading">Tell Maya what you want. Like you'd tell a smart friend.</h2>
-    <p class="section-sub">No prompts. No keywords. No syntax. Just talk — and watch your Vision write itself.</p>
+    <h2 class="section-heading">Just talk. Watch the whole spec write itself.</h2>
+    <p class="section-sub">
+      Vision. PRDs. Data models. Design specs. Copy. Metrics. Maya drafts every doc your project
+      needs — in parallel — while you have one conversation.
+    </p>
 
     <div class="convo-row">
-      <div class="convo-chat">
+      <div class="convo-chat cascade-host">
         <div class="convo-msg maya">
           <span class="agent-av maya"></span>
           <div class="convo-body"><span class="who">Maya</span>Welcome. What are you building?</div>
@@ -2387,7 +2586,7 @@
         </div>
       </div>
 
-      <div class="vision-card">
+      <div class="vision-card cascade-host">
         <div class="vision-head">
           <span class="vision-star">★</span>
           <span class="vision-title">Vision</span>
@@ -2413,6 +2612,109 @@
           <span class="vision-label">Non-goals</span>
           <span class="vision-value">Marketplace, social network, stylist AI</span>
         </div>
+      </div>
+    </div>
+
+    <!-- Doc stack — every detailed doc, fleshing out in parallel from the chat -->
+    <div class="doc-stack cascade-host">
+      <div class="doc-stack-header">
+        <div class="doc-stack-title">
+          <span class="doc-stack-label">And while you talked —</span>
+          Maya fleshed out 7 docs across the Outfits feature.
+        </div>
+        <div class="doc-stack-progress">
+          <span class="dots"><span></span><span></span><span></span></span>
+          <span class="doc-stack-meta">drafting in parallel</span>
+        </div>
+      </div>
+      <div class="doc-stack-grid">
+        <article class="doc-stack-card">
+          <div class="doc-stack-head">
+            <span class="doc-glyph"></span>
+            <div class="doc-stack-name-block">
+              <div class="doc-stack-name">PRD</div>
+              <div class="doc-stack-feature">Outfit Reminders</div>
+            </div>
+            <span class="doc-stack-status"><span class="agent-pulse"></span></span>
+          </div>
+          <div class="doc-stack-preview">
+            Daily nudge cadence (configurable). Save / dismiss state per item. Reset weekly.
+          </div>
+        </article>
+
+        <article class="doc-stack-card">
+          <div class="doc-stack-head">
+            <span class="doc-glyph"></span>
+            <div class="doc-stack-name-block">
+              <div class="doc-stack-name">ERD</div>
+              <div class="doc-stack-feature">Wardrobe data model</div>
+            </div>
+            <span class="doc-stack-status"><span class="agent-pulse"></span></span>
+          </div>
+          <div class="doc-stack-preview">
+            <code>Item</code>, <code>Outfit</code>, <code>Wear</code>, <code>Tag</code> with
+            relational keys. Local-first store.
+          </div>
+        </article>
+
+        <article class="doc-stack-card">
+          <div class="doc-stack-head">
+            <span class="doc-glyph"></span>
+            <div class="doc-stack-name-block">
+              <div class="doc-stack-name">User Flow</div>
+              <div class="doc-stack-feature">Daily reminder</div>
+            </div>
+            <span class="doc-stack-status"><span class="agent-pulse"></span></span>
+          </div>
+          <div class="doc-stack-preview">
+            06:30 push → outfit suggestion → tap into closet → 1-tap log "worn today."
+          </div>
+        </article>
+
+        <article class="doc-stack-card">
+          <div class="doc-stack-head">
+            <span class="doc-glyph"></span>
+            <div class="doc-stack-name-block">
+              <div class="doc-stack-name">UI Spec</div>
+              <div class="doc-stack-feature">Outfit card</div>
+            </div>
+            <span class="doc-stack-status"><span class="agent-pulse"></span></span>
+          </div>
+          <div class="doc-stack-preview">
+            3-item image grid. Save / dismiss buttons. "Last worn" badge. Long-press to edit.
+          </div>
+        </article>
+
+        <article class="doc-stack-card">
+          <div class="doc-stack-head">
+            <span class="doc-glyph"></span>
+            <div class="doc-stack-name-block">
+              <div class="doc-stack-name">Copy</div>
+              <div class="doc-stack-feature">Onboarding</div>
+            </div>
+            <span class="doc-stack-status"><span class="agent-pulse"></span></span>
+          </div>
+          <div class="doc-stack-preview">
+            "Your closet, remembered." · Day 1: "Snap your first 5 items." · Day 7: "Outfits ready."
+          </div>
+        </article>
+
+        <article class="doc-stack-card">
+          <div class="doc-stack-head">
+            <span class="doc-glyph"></span>
+            <div class="doc-stack-name-block">
+              <div class="doc-stack-name">Metrics</div>
+              <div class="doc-stack-feature">Activation</div>
+            </div>
+            <span class="doc-stack-status"><span class="agent-pulse"></span></span>
+          </div>
+          <div class="doc-stack-preview">
+            D1: 5+ items captured · W1: outfit recall rate · Monthly: % of clothes worn.
+          </div>
+        </article>
+      </div>
+      <div class="doc-stack-footer">
+        + Research (competitor scan) drafting · all 7 docs auto-saved as you converse
       </div>
     </div>
   </section>
@@ -2598,7 +2900,7 @@
           </ul>
         </div>
 
-        <div class="showcase-mock">
+        <div class="showcase-mock cascade-host">
           <div class="thread-header">
             <div class="thread-title">Should profile comments be threaded?</div>
             <div class="thread-meta">
@@ -2697,7 +2999,7 @@
       chips. Decisions logged. Step in — or stay out and read the summary.
     </p>
 
-    <div class="meeting-card">
+    <div class="meeting-card cascade-host">
       <div class="meeting-head">
         <div class="meeting-title-block">
           <div class="meeting-title">Deciding how teams share and view the map</div>
@@ -2741,20 +3043,21 @@
     </div>
   </section>
 
-  <!-- ============================== BUILT WHILE YOU SLEPT ============================== -->
+  <!-- ============================== PARALLEL AGENTS ============================== -->
   <section class="section overnight-section" id="overnight">
-    <div class="section-eyebrow">Morning standup</div>
-    <h2 class="section-heading">Close the laptop. Open it to a shipped feature.</h2>
+    <div class="section-eyebrow">Parallel agents</div>
+    <h2 class="section-heading">Step away. Come back to shipped features.</h2>
     <p class="section-sub">
-      Agents work overnight in your local repo. Real code, real commits, real dev server.
-      By 7am: features merged, tests green, the next version running in your browser.
+      Agents work in parallel in your local repo — real code, real commits,
+      real dev server. Step into a meeting, take a walk, focus on something else.
+      The team keeps shipping while you're away from the keyboard.
     </p>
 
     <div class="overnight-card">
       <div class="overnight-head">
         <div>
-          <div class="overnight-greeting">Good morning, Lisa.</div>
-          <div class="overnight-sub">Here's what shipped overnight.</div>
+          <div class="overnight-greeting">Welcome back, Lisa.</div>
+          <div class="overnight-sub">Here's what shipped while you were away.</div>
         </div>
         <div class="overnight-tally">
           <div class="tally-stat"><span class="tally-num">9</span><span class="tally-label">done</span></div>
@@ -2763,32 +3066,32 @@
         </div>
       </div>
 
-      <div class="overnight-timeline">
+      <div class="overnight-timeline cascade-host">
         <div class="timeline-strip"></div>
-        <div class="timeline-event" style="--at: 8%;">
-          <span class="event-time">11:42pm</span>
+        <div class="timeline-event up" style="--at: 10%;">
+          <span class="event-time">9:42am</span>
           <span class="event-agent alex">Alex</span>
           <span class="event-text">started auth flow</span>
         </div>
-        <div class="timeline-event" style="--at: 28%;">
-          <span class="event-time">1:18am</span>
+        <div class="timeline-event down" style="--at: 30%;">
+          <span class="event-time">11:18am</span>
           <span class="event-agent kai">Kai</span>
           <span class="event-text">3 commits on calendar UI</span>
         </div>
-        <div class="timeline-event" style="--at: 45%;">
-          <span class="event-time">3:04am</span>
+        <div class="timeline-event up" style="--at: 50%;">
+          <span class="event-time">1:04pm</span>
           <span class="event-agent sam">Sam</span>
           <span class="event-text">drafted onboarding copy</span>
         </div>
-        <div class="timeline-event success" style="--at: 65%;">
-          <span class="event-time">4:51am</span>
+        <div class="timeline-event down success" style="--at: 70%;">
+          <span class="event-time">2:51pm</span>
           <span class="event-agent alex">Alex</span>
           <span class="event-text">auth merged · dev server restarted ✓</span>
         </div>
-        <div class="timeline-event success" style="--at: 88%;">
-          <span class="event-time">6:33am</span>
+        <div class="timeline-event up success" style="--at: 90%;">
+          <span class="event-time">4:33pm</span>
           <span class="event-agent kai">Kai</span>
-          <span class="event-text">calendar component shipped to staging ✓</span>
+          <span class="event-text">calendar shipped to staging ✓</span>
         </div>
       </div>
 
@@ -3252,6 +3555,26 @@
       });
 
       apply(active);
+    })();
+  </script>
+
+  <!-- ============================== SCROLL-IN-VIEW TRIGGERS ============================== -->
+  <script>
+    (() => {
+      if (!('IntersectionObserver' in window)) {
+        document.querySelectorAll('.cascade-host').forEach(el => el.classList.add('in-view'));
+        return;
+      }
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+      document.querySelectorAll('.cascade-host').forEach(el => observer.observe(el));
     })();
   </script>
 
