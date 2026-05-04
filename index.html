@@ -1076,7 +1076,252 @@
     .doc-stack-grid { grid-template-columns: 1fr; }
   }
 
-  /* ============================== TEAM SECTION ============================== */
+  /* ============================== AUTO-SCALING TEAM ============================== */
+  .team-status-bar {
+    max-width: 1100px;
+    margin: 0 auto 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 16px 20px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: var(--shadow-card);
+  }
+  .status-block {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .status-block-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-slate);
+    font-weight: 500;
+    margin-right: 4px;
+  }
+  .status-block.joining .status-block-label {
+    color: #FA3D1D;
+  }
+  .status-roster {
+    display: inline-flex;
+    align-items: center;
+  }
+  .status-roster .agent-av {
+    width: 22px;
+    height: 22px;
+    margin-left: -6px;
+    border: 2px solid white;
+  }
+  .status-roster .agent-av:first-child { margin-left: 0; }
+  .status-text {
+    font-size: 13px;
+    color: var(--color-ink-black);
+  }
+  .status-text strong {
+    font-weight: 600;
+  }
+  .agent-av.joining {
+    width: 22px;
+    height: 22px;
+    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.55);
+    animation: liveDotPulse 1.6s ease-in-out infinite;
+  }
+
+  /* Kanban board */
+  .kanban {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+  }
+  .kanban-col {
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 16px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 14px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 440px;
+  }
+  .col-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 6px 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    margin-bottom: 4px;
+  }
+  .col-title {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    color: var(--color-ink-black);
+  }
+  .col-count {
+    font-size: 11px;
+    color: var(--color-slate);
+    background: rgba(0, 0, 0, 0.05);
+    padding: 1px 8px;
+    border-radius: 999px;
+  }
+  .col-active .col-title { color: #0358F7; }
+  .col-active .col-count { background: rgba(3, 88, 247, 0.10); color: #0358F7; }
+  .col-done .col-title { color: #16A34A; }
+  .col-done .col-count { background: rgba(74, 222, 128, 0.14); color: #16A34A; }
+
+  .kanban-task {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .kanban-task:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+  .kanban-task.next-up {
+    border-color: rgba(3, 88, 247, 0.30);
+    background: linear-gradient(180deg, rgba(240, 246, 255, 0.95), white);
+    animation: nextUpPulse 3s ease-in-out infinite;
+  }
+  @keyframes nextUpPulse {
+    0%, 100% { border-color: rgba(3, 88, 247, 0.20); }
+    50%      { border-color: rgba(3, 88, 247, 0.50); }
+  }
+  .kanban-task.faded {
+    opacity: 0.55;
+  }
+  .task-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-ink-black);
+    line-height: 1.35;
+  }
+  .task-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    font-size: 11px;
+    color: var(--color-slate);
+  }
+  .task-tag {
+    padding: 1px 7px;
+    border-radius: 999px;
+    font-weight: 500;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .task-tag.eng      { background: rgba(3, 88, 247, 0.10); color: #0358F7; }
+  .task-tag.design   { background: rgba(198, 121, 196, 0.12); color: #C679C4; }
+  .task-tag.copy     { background: rgba(255, 176, 5, 0.14); color: #B97E03; }
+  .task-tag.gtm      { background: rgba(74, 222, 128, 0.14); color: #16A34A; }
+  .task-tag.research { background: rgba(108, 117, 125, 0.14); color: #6c757d; }
+  .task-prio {
+    font-weight: 500;
+    color: var(--color-ash);
+    font-size: 10px;
+    margin-left: auto;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .task-progress {
+    height: 4px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    position: relative;
+  }
+  .task-progress-fill {
+    position: absolute;
+    inset: 0;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--color-ink-black), var(--color-ink-black));
+  }
+  .task-progress-fill.alex  { width: 73%; background: linear-gradient(90deg, #0358F7, #6E84FF); animation: progressNudge 5s ease-in-out infinite; }
+  .task-progress-fill.kai   { width: 52%; background: linear-gradient(90deg, #C679C4, #FD02F5); animation: progressNudge 6s ease-in-out infinite reverse; }
+  .task-progress-fill.maya  { width: 88%; background: linear-gradient(90deg, #FA3D1D, #FFB005); animation: progressNudge 4s ease-in-out infinite; }
+  .task-pct {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    margin-left: auto;
+    font-size: 10.5px;
+  }
+  .task-pct.alex-pct  { color: #0358F7; }
+  .task-pct.kai-pct   { color: #C679C4; }
+  .task-pct.maya-pct  { color: #FA3D1D; }
+  .agent-av.tiny {
+    width: 16px;
+    height: 16px;
+  }
+  .task-agent-name {
+    font-weight: 500;
+    color: var(--color-ink-black);
+    font-size: 11px;
+  }
+  .task-stamp {
+    margin-left: auto;
+    color: #16A34A;
+    font-weight: 500;
+  }
+  .kanban-task.done .task-title {
+    color: var(--color-graphite);
+    text-decoration: line-through;
+    text-decoration-color: rgba(0, 0, 0, 0.20);
+  }
+
+  /* Stats band */
+  .team-stats {
+    max-width: 1100px;
+    margin: 32px auto 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    padding: 20px 24px;
+    border-radius: 16px;
+    background: linear-gradient(180deg, rgba(255,247,245,0.85), rgba(252,250,255,0.85));
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  .team-stats .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .team-stats .stat-num {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    color: var(--color-ink-black);
+    line-height: 1;
+  }
+  .team-stats .stat-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-slate);
+  }
+
+  @media (max-width: 900px) {
+    .kanban { grid-template-columns: 1fr; }
+    .kanban-col { min-height: 0; }
+    .team-status-bar { grid-template-columns: 1fr; }
+    .team-stats { grid-template-columns: repeat(2, 1fr); }
+  }
+
   .team-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -2800,76 +3045,143 @@
     </div>
   </section>
 
-  <!-- ============================== MEET YOUR TEAM ============================== -->
+  <!-- ============================== AUTO-SCALING TEAM ============================== -->
   <section class="section team-section" id="team">
-    <div class="section-eyebrow">Your AI company</div>
-    <h2 class="section-heading">The team you couldn't afford. At the price of a Netflix subscription.</h2>
-    <p class="section-sub">Four agents. Real roles. Each with a job to do — and the tools to do it.</p>
+    <div class="section-eyebrow">Auto-scaling team</div>
+    <h2 class="section-heading">Maya picks the team. The team picks the tasks.</h2>
+    <p class="section-sub">
+      She scans your project, hires the agents you need, and points them at your Kanban.
+      They pull tasks, ship features, and never stop. You stay in vision.
+    </p>
 
-    <div class="team-grid">
-      <article class="team-card">
-        <div class="team-head">
+    <div class="team-status-bar">
+      <div class="status-block">
+        <span class="status-block-label">Active now</span>
+        <span class="status-roster">
           <span class="agent-av maya"></span>
-          <div>
-            <div class="team-name">Maya</div>
-            <div class="team-role">Chief of Staff</div>
-          </div>
-          <span class="team-status thinking"><span class="agent-pulse"></span>thinking</span>
-        </div>
-        <div class="team-quote">"I'd bring Alex and Kai for this."</div>
-        <p class="team-body">
-          Asks the questions a senior PM would. Pushes back when something's off.
-          Keeps every decision aligned with Vision.
-        </p>
-      </article>
-
-      <article class="team-card">
-        <div class="team-head">
           <span class="agent-av alex"></span>
-          <div>
-            <div class="team-name">Alex</div>
-            <div class="team-role">Engineer</div>
-          </div>
-          <span class="team-status shipping"><span class="agent-pulse"></span>shipping</span>
-        </div>
-        <div class="team-quote">"+3 days. Schema change for <code>parent_id</code> plus the indent UI."</div>
-        <p class="team-body">
-          Writes real code in your local repo. Spawns a dev server when the merge
-          lands. Wakes you up to a running app.
-        </p>
-      </article>
-
-      <article class="team-card">
-        <div class="team-head">
           <span class="agent-av kai"></span>
-          <div>
-            <div class="team-name">Kai</div>
-            <div class="team-role">Designer</div>
-          </div>
-          <span class="team-status designing"><span class="agent-pulse"></span>designing</span>
-        </div>
-        <div class="team-quote">"I'd argue for a side-panel — the map is the primary surface."</div>
-        <p class="team-body">
-          Designs the interface. Generates the components. Iterates with Maya
-          in meetings until the flow feels right.
-        </p>
-      </article>
+        </span>
+        <span class="status-text">Maya · Alex · Kai working in parallel</span>
+      </div>
+      <div class="status-block joining">
+        <span class="status-block-label">Joining now</span>
+        <span class="agent-av sam joining"></span>
+        <span class="status-text"><strong>Sam</strong> hired — GTM tasks crossed 5 in backlog</span>
+      </div>
+    </div>
 
-      <article class="team-card">
-        <div class="team-head">
-          <span class="agent-av sam"></span>
-          <div>
-            <div class="team-name">Sam</div>
-            <div class="team-role">Marketer</div>
-          </div>
-          <span class="team-status researching"><span class="agent-pulse"></span>researching</span>
+    <div class="kanban cascade-host">
+      <div class="kanban-col">
+        <div class="col-head">
+          <span class="col-title">Backlog</span>
+          <span class="col-count">8</span>
         </div>
-        <div class="team-quote">"Pulled the top 6 competitors — here's the gap."</div>
-        <p class="team-body">
-          Writes the copy. Researches competitors. Plans the launch. Hands you
-          a Product Hunt page when you're ready.
-        </p>
-      </article>
+        <article class="kanban-task">
+          <div class="task-title">Add reactions to messages</div>
+          <div class="task-meta"><span class="task-tag eng">Eng</span><span class="task-prio">P1</span></div>
+        </article>
+        <article class="kanban-task next-up">
+          <div class="task-title">Profile cover photos</div>
+          <div class="task-meta"><span class="task-tag design">Design</span><span class="task-prio">P1</span></div>
+        </article>
+        <article class="kanban-task">
+          <div class="task-title">Story expiration TTL</div>
+          <div class="task-meta"><span class="task-tag eng">Eng</span><span class="task-prio">P2</span></div>
+        </article>
+        <article class="kanban-task">
+          <div class="task-title">Mute &amp; snooze conversations</div>
+          <div class="task-meta"><span class="task-tag eng">Eng</span><span class="task-prio">P2</span></div>
+        </article>
+        <article class="kanban-task">
+          <div class="task-title">Onboarding tutorial v2</div>
+          <div class="task-meta"><span class="task-tag design">Design</span><span class="task-tag copy">Copy</span></div>
+        </article>
+        <article class="kanban-task">
+          <div class="task-title">Analytics dashboard</div>
+          <div class="task-meta"><span class="task-tag eng">Eng</span><span class="task-tag gtm">GTM</span></div>
+        </article>
+        <article class="kanban-task faded">
+          <div class="task-title">Push notification A/B copy</div>
+          <div class="task-meta"><span class="task-tag gtm">GTM</span></div>
+        </article>
+        <article class="kanban-task faded">
+          <div class="task-title">Friend recommendation algorithm</div>
+          <div class="task-meta"><span class="task-tag eng">Eng</span><span class="task-tag research">Research</span></div>
+        </article>
+      </div>
+
+      <div class="kanban-col col-active">
+        <div class="col-head">
+          <span class="col-title">In progress</span>
+          <span class="col-count">3</span>
+        </div>
+        <article class="kanban-task working">
+          <div class="task-title">Threaded comments — schema</div>
+          <div class="task-progress"><span class="task-progress-fill alex"></span></div>
+          <div class="task-meta">
+            <span class="agent-av alex tiny"></span>
+            <span class="task-agent-name">Alex</span>
+            <span class="task-pct alex-pct">73%</span>
+          </div>
+        </article>
+        <article class="kanban-task working">
+          <div class="task-title">Friends grid v2 — Frame 3 of 4</div>
+          <div class="task-progress"><span class="task-progress-fill kai"></span></div>
+          <div class="task-meta">
+            <span class="agent-av kai tiny"></span>
+            <span class="task-agent-name">Kai</span>
+            <span class="task-pct kai-pct">52%</span>
+          </div>
+        </article>
+        <article class="kanban-task working">
+          <div class="task-title">Tomorrow's roadmap call · prep</div>
+          <div class="task-progress"><span class="task-progress-fill maya"></span></div>
+          <div class="task-meta">
+            <span class="agent-av maya tiny"></span>
+            <span class="task-agent-name">Maya</span>
+            <span class="task-pct maya-pct">88%</span>
+          </div>
+        </article>
+      </div>
+
+      <div class="kanban-col col-done">
+        <div class="col-head">
+          <span class="col-title">Done · today</span>
+          <span class="col-count">12</span>
+        </div>
+        <article class="kanban-task done">
+          <div class="task-title">DM notifications shipped</div>
+          <div class="task-meta"><span class="agent-av alex tiny"></span><span class="task-agent-name">Alex</span><span class="task-stamp">2h ago ✓</span></div>
+        </article>
+        <article class="kanban-task done">
+          <div class="task-title">Profile redesign merged</div>
+          <div class="task-meta"><span class="agent-av kai tiny"></span><span class="task-agent-name">Kai</span><span class="task-stamp">3h ago ✓</span></div>
+        </article>
+        <article class="kanban-task done">
+          <div class="task-title">Search filters live</div>
+          <div class="task-meta"><span class="agent-av alex tiny"></span><span class="task-agent-name">Alex</span><span class="task-stamp">4h ago ✓</span></div>
+        </article>
+        <article class="kanban-task done">
+          <div class="task-title">Onboarding copy v3</div>
+          <div class="task-meta"><span class="agent-av sam tiny"></span><span class="task-agent-name">Sam</span><span class="task-stamp">5h ago ✓</span></div>
+        </article>
+        <article class="kanban-task done">
+          <div class="task-title">Comment depth limit · spec</div>
+          <div class="task-meta"><span class="agent-av maya tiny"></span><span class="task-agent-name">Maya</span><span class="task-stamp">6h ago ✓</span></div>
+        </article>
+        <article class="kanban-task done faded">
+          <div class="task-title">Dark mode tokens locked</div>
+          <div class="task-meta"><span class="agent-av kai tiny"></span><span class="task-agent-name">Kai</span><span class="task-stamp">8h ago ✓</span></div>
+        </article>
+      </div>
+    </div>
+
+    <div class="team-stats">
+      <div class="stat"><span class="stat-num">47</span><span class="stat-label">tasks shipped this week</span></div>
+      <div class="stat"><span class="stat-num">8</span><span class="stat-label">specs locked</span></div>
+      <div class="stat"><span class="stat-num">23</span><span class="stat-label">design iterations</span></div>
+      <div class="stat"><span class="stat-num">24/7</span><span class="stat-label">queue runs</span></div>
     </div>
   </section>
 
