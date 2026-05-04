@@ -702,6 +702,247 @@
     margin: 0 auto 64px;
   }
 
+  /* Section sub — small body under the heading */
+  .section-sub {
+    text-align: center;
+    font-size: 17px;
+    color: var(--color-graphite);
+    max-width: 640px;
+    margin: -40px auto 56px;
+    line-height: 1.5;
+    letter-spacing: -0.025em;
+  }
+
+  /* ============================== FIRST CONVERSATION ============================== */
+  .first-convo .convo-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    align-items: start;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .convo-chat {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 24px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px) saturate(120%);
+    -webkit-backdrop-filter: blur(20px) saturate(120%);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  .convo-msg {
+    display: flex;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.025);
+    align-items: flex-start;
+    opacity: 0;
+    transform: translateY(6px);
+    animation: msgIn 0.5s ease-out forwards;
+  }
+  .convo-msg.maya { background: rgba(255, 255, 255, 0.7); }
+  .convo-msg:nth-of-type(1) { animation-delay: 0.0s; }
+  .convo-msg:nth-of-type(2) { animation-delay: 0.7s; }
+  .convo-msg:nth-of-type(3) { animation-delay: 1.4s; }
+  .convo-msg:nth-of-type(4) { animation-delay: 2.1s; }
+  .convo-msg:nth-of-type(5) { animation-delay: 2.8s; }
+  .convo-msg:nth-of-type(6) { animation-delay: 3.5s; }
+  .convo-pebble {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--color-pebble);
+    flex-shrink: 0;
+  }
+  .convo-body {
+    font-size: 14px;
+    color: var(--color-ink-black);
+    line-height: 1.4;
+  }
+  .convo-body .who {
+    font-weight: 500;
+    margin-right: 6px;
+  }
+
+  /* Vision card — sections crystallize as conversation progresses */
+  .vision-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px;
+    border-radius: 20px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(252,252,254,0.95));
+    border: 1px solid rgba(196, 162, 101, 0.18);
+    box-shadow:
+      0 0 0 1px rgba(196, 162, 101, 0.10),
+      0 8px 32px rgba(196, 162, 101, 0.10),
+      0 24px 80px rgba(0, 0, 0, 0.04);
+    animation: visionHalo 6s ease-in-out infinite;
+  }
+  @keyframes visionHalo {
+    0%, 100% {
+      box-shadow:
+        0 0 0 1px rgba(196, 162, 101, 0.10),
+        0 8px 32px rgba(196, 162, 101, 0.10),
+        0 24px 80px rgba(0, 0, 0, 0.04);
+    }
+    50% {
+      box-shadow:
+        0 0 0 1px rgba(196, 162, 101, 0.20),
+        0 12px 44px rgba(196, 162, 101, 0.16),
+        0 32px 100px rgba(0, 0, 0, 0.06);
+    }
+  }
+  .vision-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  }
+  .vision-star {
+    color: #C4A265;
+    font-size: 16px;
+    animation: starPulse 3.5s ease-in-out infinite;
+  }
+  .vision-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.035em;
+    color: var(--color-ink-black);
+  }
+  .vision-meta {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--color-slate);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .vision-row {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 12px;
+    padding: 6px 0;
+    font-size: 14px;
+    line-height: 1.45;
+    opacity: 0;
+    transform: translateY(6px);
+    animation: rowIn 0.6s ease-out forwards;
+  }
+  .vision-row:nth-of-type(2) { animation-delay: 0.6s; }
+  .vision-row:nth-of-type(3) { animation-delay: 1.4s; }
+  .vision-row:nth-of-type(4) { animation-delay: 2.4s; }
+  .vision-row:nth-of-type(5) { animation-delay: 3.4s; }
+  .vision-row:nth-of-type(6) { animation-delay: 4.2s; }
+  .vision-label {
+    color: var(--color-slate);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding-top: 2px;
+  }
+  .vision-value {
+    color: var(--color-ink-black);
+  }
+
+  /* ============================== TEAM SECTION ============================== */
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  .team-card {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(24px) saturate(120%);
+    -webkit-backdrop-filter: blur(24px) saturate(120%);
+    border-radius: 24px;
+    padding: 28px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: var(--shadow-card);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .team-card:hover {
+    transform: translateY(-4px);
+    box-shadow: rgba(0, 0, 0, 0.10) 0px 8px 32px 0px;
+  }
+  .team-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .team-head .agent-av {
+    width: 36px;
+    height: 36px;
+  }
+  .team-name {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    color: var(--color-ink-black);
+    line-height: 1.1;
+  }
+  .team-role {
+    font-size: 12px;
+    color: var(--color-slate);
+    margin-top: 2px;
+  }
+  .team-status {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--color-graphite);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-style: normal;
+    animation: statusBreathe 3s ease-in-out infinite;
+  }
+  .team-status .agent-pulse {
+    width: 6px;
+    height: 6px;
+  }
+  .team-quote {
+    font-style: italic;
+    color: var(--color-graphite);
+    font-size: 15px;
+    line-height: 1.5;
+    padding: 10px 14px;
+    border-left: 2px solid #C4A265;
+    background: rgba(196, 162, 101, 0.05);
+    border-radius: 0 10px 10px 0;
+  }
+  .team-quote code {
+    font-family: ui-monospace, "SF Mono", monospace;
+    font-size: 13px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    background: rgba(0, 0, 0, 0.05);
+    font-style: normal;
+  }
+  .team-body {
+    font-size: 15px;
+    color: var(--color-graphite);
+    line-height: 1.5;
+    letter-spacing: -0.02em;
+  }
+
+  @media (max-width: 900px) {
+    .first-convo .convo-row { grid-template-columns: 1fr; }
+    .team-grid { grid-template-columns: 1fr; }
+  }
+
   /* ============================== FEATURE CARDS ============================== */
   .feature-grid {
     display: grid;
@@ -1535,51 +1776,138 @@
 
   <div class="spectrum-strip"></div>
 
-  <!-- ============================== WHY ENTROPHY ============================== -->
-  <section class="section" id="why">
-    <div class="section-eyebrow">Why Entrophy</div>
-    <h2 class="section-heading">Talk like you. Run it like a CEO.</h2>
+  <!-- ============================== FIRST CONVERSATION ============================== -->
+  <section class="section first-convo" id="first">
+    <div class="section-eyebrow">First 90 seconds</div>
+    <h2 class="section-heading">Tell Maya what you want. Like you'd tell a smart friend.</h2>
+    <p class="section-sub">No prompts. No keywords. No syntax. Just talk — and watch your Vision write itself.</p>
 
-    <div class="feature-grid">
-      <article class="card">
-        <div class="feat-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-          </svg>
+    <div class="convo-row">
+      <div class="convo-chat">
+        <div class="convo-msg maya">
+          <span class="agent-av maya"></span>
+          <div class="convo-body"><span class="who">Maya</span>Welcome. What are you building?</div>
         </div>
-        <h3>Plain English. No jargon.</h3>
-        <p>
-          Describe what you want like you'd describe it to a teammate. No prompts,
-          no keywords, no syntax. The team takes it from there.
+        <div class="convo-msg you">
+          <span class="convo-pebble"></span>
+          <div class="convo-body"><span class="who">Lisa</span>A closet app for outfits.</div>
+        </div>
+        <div class="convo-msg maya">
+          <span class="agent-av maya"></span>
+          <div class="convo-body"><span class="who">Maya</span>Got it. Who's this for?</div>
+        </div>
+        <div class="convo-msg you">
+          <span class="convo-pebble"></span>
+          <div class="convo-body"><span class="who">Lisa</span>Just me at first.</div>
+        </div>
+        <div class="convo-msg maya">
+          <span class="agent-av maya"></span>
+          <div class="convo-body"><span class="who">Maya</span>Just you, or could small teams adopt later?</div>
+        </div>
+        <div class="convo-msg you">
+          <span class="convo-pebble"></span>
+          <div class="convo-body"><span class="who">Lisa</span>Solo for now.</div>
+        </div>
+      </div>
+
+      <div class="vision-card">
+        <div class="vision-head">
+          <span class="vision-star">★</span>
+          <span class="vision-title">Vision</span>
+          <span class="vision-meta">drafting · auto-saved</span>
+        </div>
+        <div class="vision-row">
+          <span class="vision-label">Mission</span>
+          <span class="vision-value">Help people remember and re-wear what they already own.</span>
+        </div>
+        <div class="vision-row">
+          <span class="vision-label">Users</span>
+          <span class="vision-value">Solo founders with a full closet who feel they "have nothing to wear."</span>
+        </div>
+        <div class="vision-row">
+          <span class="vision-label">Outcomes</span>
+          <span class="vision-value">Recall outfits in &lt;30s · &gt;40% of clothes worn monthly</span>
+        </div>
+        <div class="vision-row">
+          <span class="vision-label">Principles</span>
+          <span class="vision-value">Privacy by default · No social pressure</span>
+        </div>
+        <div class="vision-row">
+          <span class="vision-label">Non-goals</span>
+          <span class="vision-value">Marketplace, social network, stylist AI</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== MEET YOUR TEAM ============================== -->
+  <section class="section team-section" id="team">
+    <div class="section-eyebrow">Your AI company</div>
+    <h2 class="section-heading">The team you couldn't afford. At the price of a Netflix subscription.</h2>
+    <p class="section-sub">Four agents. Real roles. Each with a job to do — and the tools to do it.</p>
+
+    <div class="team-grid">
+      <article class="team-card">
+        <div class="team-head">
+          <span class="agent-av maya"></span>
+          <div>
+            <div class="team-name">Maya</div>
+            <div class="team-role">Chief of Staff</div>
+          </div>
+          <span class="team-status thinking"><span class="agent-pulse"></span>thinking</span>
+        </div>
+        <div class="team-quote">"I'd bring Alex and Kai for this."</div>
+        <p class="team-body">
+          Asks the questions a senior PM would. Pushes back when something's off.
+          Keeps every decision aligned with Vision.
         </p>
       </article>
 
-      <article class="card">
-        <div class="feat-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 7a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H7l-4 3z"/>
-            <path d="M9 16v1a2 2 0 0 0 2 2h7l3 3v-9a2 2 0 0 0-2-2h-3"/>
-          </svg>
+      <article class="team-card">
+        <div class="team-head">
+          <span class="agent-av alex"></span>
+          <div>
+            <div class="team-name">Alex</div>
+            <div class="team-role">Engineer</div>
+          </div>
+          <span class="team-status shipping"><span class="agent-pulse"></span>shipping</span>
         </div>
-        <h3>Agents that debate.</h3>
-        <p>
-          Specs aren't generated — they're argued. PM pushes back on engineer.
-          Engineer cross-checks the spec. You see the tradeoffs, approve the call,
-          and the doc writes itself.
+        <div class="team-quote">"+3 days. Schema change for <code>parent_id</code> plus the indent UI."</div>
+        <p class="team-body">
+          Writes real code in your local repo. Spawns a dev server when the merge
+          lands. Wakes you up to a running app.
         </p>
       </article>
 
-      <article class="card">
-        <div class="feat-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"/>
-            <polyline points="12,7 12,12 15,15"/>
-          </svg>
+      <article class="team-card">
+        <div class="team-head">
+          <span class="agent-av kai"></span>
+          <div>
+            <div class="team-name">Kai</div>
+            <div class="team-role">Designer</div>
+          </div>
+          <span class="team-status designing"><span class="agent-pulse"></span>designing</span>
         </div>
-        <h3>Builds while you sleep.</h3>
-        <p>
-          Once aligned, the team codes, tests, ships, and improves — 24/7. By the
-          time you wake up, the next version is already live. You stay the CEO.
+        <div class="team-quote">"I'd argue for a side-panel — the map is the primary surface."</div>
+        <p class="team-body">
+          Designs the interface. Generates the components. Iterates with Maya
+          in meetings until the flow feels right.
+        </p>
+      </article>
+
+      <article class="team-card">
+        <div class="team-head">
+          <span class="agent-av sam"></span>
+          <div>
+            <div class="team-name">Sam</div>
+            <div class="team-role">Marketer</div>
+          </div>
+          <span class="team-status researching"><span class="agent-pulse"></span>researching</span>
+        </div>
+        <div class="team-quote">"Pulled the top 6 competitors — here's the gap."</div>
+        <p class="team-body">
+          Writes the copy. Researches competitors. Plans the launch. Hands you
+          a Product Hunt page when you're ready.
         </p>
       </article>
     </div>
