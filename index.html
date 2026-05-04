@@ -203,6 +203,23 @@
     padding: 0 18px;
   }
   .btn-ghost:hover { background: rgba(0, 0, 0, 0.04); }
+  .btn.large {
+    height: 56px;
+    padding: 0 36px;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    border-radius: 999px;
+  }
+  .btn-primary.large {
+    background: var(--color-ink-black);
+    color: var(--color-snow);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.08);
+  }
+  .btn-primary.large:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.24), 0 2px 6px rgba(0, 0, 0, 0.10);
+  }
 
   /* ============================== HERO ============================== */
   .hero {
@@ -3335,8 +3352,7 @@
     </p>
 
     <div class="cta-row">
-      <a class="btn btn-primary" href="demo/corner-home-mono.html">Try the demo</a>
-      <a class="btn-ghost" href="#team">Meet the team →</a>
+      <a class="btn btn-primary large" href="demo/corner-home-mono.html">Try the demo</a>
     </div>
 
     <!-- Hero product mock — agent ticker + Maya chat bar -->
