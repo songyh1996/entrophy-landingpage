@@ -1583,6 +1583,240 @@
     .vision-arrow { display: none; }
   }
 
+  /* ============================== KNOWLEDGE GRAPH ============================== */
+  .graph-section { padding: 100px 32px 120px; }
+  .graph-stage {
+    position: relative;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.86);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+  }
+  .graph-stage::before {
+    content: "";
+    position: absolute;
+    inset: -40px;
+    background:
+      radial-gradient(ellipse 50% 60% at 50% 0%, rgba(196, 162, 101, 0.10), transparent 60%),
+      radial-gradient(ellipse 50% 60% at 30% 100%, rgba(3, 88, 247, 0.06), transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+    animation: showcaseDrift 18s ease-in-out infinite;
+  }
+  .graph-stage > * { position: relative; z-index: 1; }
+
+  .graph-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    margin: 0 0 12px 0;
+    font-size: 13px;
+    color: var(--color-ink-black);
+    animation: triggerHighlight 9s ease-in-out infinite;
+  }
+  .graph-trigger em { color: #FA3D1D; font-style: italic; font-weight: 500; }
+  .graph-trigger .agent-av { width: 18px; height: 18px; }
+  @keyframes triggerHighlight {
+    0%, 8%   { box-shadow: 0 0 0 0 rgba(250, 61, 29, 0); border-color: rgba(0, 0, 0, 0.06); }
+    10%      { box-shadow: 0 0 0 4px rgba(250, 61, 29, 0.16); border-color: rgba(250, 61, 29, 0.40); }
+    18%      { box-shadow: 0 0 0 0 rgba(250, 61, 29, 0); border-color: rgba(0, 0, 0, 0.06); }
+  }
+
+  .graph-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin-top: 8px;
+  }
+  .graph-svg .edge {
+    fill: none;
+    stroke: rgba(0, 0, 0, 0.12);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+  }
+  .graph-svg .edge.edge-w1 { animation: edgeFlash 9s ease-in-out infinite; }
+  .graph-svg .edge.edge-w2 { animation: edgeFlash 9s ease-in-out infinite; animation-delay: 0s; }
+  .graph-svg .edge-cross { stroke-dasharray: 4 4; stroke-opacity: 0.6; }
+  @keyframes edgeFlash {
+    0%, 8%   { stroke: rgba(0, 0, 0, 0.12); stroke-width: 1.5; }
+    10%      { stroke: rgba(250, 61, 29, 0.55); stroke-width: 2.2; }
+    25%      { stroke: rgba(250, 61, 29, 0.20); stroke-width: 1.8; }
+    100%     { stroke: rgba(0, 0, 0, 0.12); stroke-width: 1.5; }
+  }
+  .graph-svg .edge.edge-w2 {
+    animation: edgeFlashW2 9s ease-in-out infinite;
+  }
+  @keyframes edgeFlashW2 {
+    0%, 26%  { stroke: rgba(0, 0, 0, 0.12); stroke-width: 1.5; }
+    28%      { stroke: rgba(3, 88, 247, 0.55); stroke-width: 2.2; }
+    44%      { stroke: rgba(3, 88, 247, 0.18); stroke-width: 1.8; }
+    100%     { stroke: rgba(0, 0, 0, 0.12); stroke-width: 1.5; }
+  }
+
+  .graph-svg .graph-node {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .graph-svg .node-halo {
+    fill: rgba(250, 61, 29, 0.30);
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: scale(0.6);
+  }
+  .graph-svg .node-main {
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.10));
+  }
+  .graph-svg .node-icon {
+    font-family: var(--font-display);
+    font-size: 18px;
+    fill: white;
+    font-weight: 600;
+  }
+  .graph-svg .node-label {
+    font-family: var(--font-display);
+    font-size: 11px;
+    fill: var(--color-ink-black);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+  .graph-svg .node-label.small { font-size: 9px; }
+  .graph-svg .node-sub {
+    font-size: 9.5px;
+    fill: var(--color-slate);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Node halo hits — staggered by wave */
+  .graph-svg .node-source .node-halo {
+    fill: rgba(250, 61, 29, 0.45);
+    animation: haloHitSrc 9s ease-out infinite;
+  }
+  .graph-svg .node-w1 .node-halo {
+    fill: rgba(250, 61, 29, 0.40);
+    animation: haloHitW1 9s ease-out infinite;
+  }
+  .graph-svg .node-w2 .node-halo {
+    fill: rgba(3, 88, 247, 0.40);
+    animation: haloHitW2 9s ease-out infinite;
+  }
+  @keyframes haloHitSrc {
+    0%, 7%   { opacity: 0; transform: scale(0.6); }
+    9%       { opacity: 0.85; transform: scale(0.85); }
+    16%      { opacity: 0; transform: scale(1.5); }
+    100%     { opacity: 0; transform: scale(0.6); }
+  }
+  @keyframes haloHitW1 {
+    0%, 19%  { opacity: 0; transform: scale(0.6); }
+    21%      { opacity: 0.85; transform: scale(0.85); }
+    28%      { opacity: 0; transform: scale(1.5); }
+    100%     { opacity: 0; transform: scale(0.6); }
+  }
+  @keyframes haloHitW2 {
+    0%, 38%  { opacity: 0; transform: scale(0.6); }
+    40%      { opacity: 0.85; transform: scale(0.85); }
+    47%      { opacity: 0; transform: scale(1.5); }
+    100%     { opacity: 0; transform: scale(0.6); }
+  }
+  /* Constant subtle ambient pulse on main circles */
+  .graph-svg .node-main {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: nodeBreathe 6s ease-in-out infinite;
+  }
+  .graph-svg .node-w1 .node-main { animation-delay: -2s; }
+  .graph-svg .node-w2 .node-main { animation-delay: -4s; }
+  @keyframes nodeBreathe {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.04); }
+  }
+
+  /* Result toast */
+  .graph-result {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translate(-50%, 8px);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.97);
+    border: 1px solid rgba(74, 222, 128, 0.30);
+    box-shadow: 0 6px 24px rgba(74, 222, 128, 0.18);
+    color: var(--color-ink-black);
+    font-size: 13px;
+    opacity: 0;
+    z-index: 2;
+    animation: resultAppear 9s ease-in-out infinite;
+  }
+  .graph-result strong { font-weight: 600; }
+  .graph-result-icon {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #16A34A;
+    color: white;
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  @keyframes resultAppear {
+    0%, 47%  { opacity: 0; transform: translate(-50%, 14px); }
+    52%      { opacity: 1; transform: translate(-50%, 0); }
+    82%      { opacity: 1; transform: translate(-50%, 0); }
+    90%      { opacity: 0; transform: translate(-50%, 0); }
+    100%     { opacity: 0; transform: translate(-50%, 14px); }
+  }
+
+  /* Stats band */
+  .graph-stats {
+    max-width: 1100px;
+    margin: 28px auto 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    padding: 20px 24px;
+    border-radius: 16px;
+    background: linear-gradient(180deg, rgba(252,250,255,0.85), rgba(255,247,245,0.85));
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  .graph-stats .g-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .g-stat-num {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    color: var(--color-ink-black);
+    line-height: 1;
+  }
+  .g-stat-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-slate);
+    text-align: center;
+  }
+  @media (max-width: 700px) {
+    .graph-stats { grid-template-columns: repeat(2, 1fr); }
+  }
+
   /* ============================== DEBATE SECTION ============================== */
   .meeting-card {
     max-width: 900px;
@@ -2762,7 +2996,7 @@
       <nav class="nav">
         <a href="#team">Team</a>
         <a href="#vision">Vision</a>
-        <a href="#product">Propagation</a>
+        <a href="#graph">Graph</a>
         <a href="#debate">Meetings</a>
         <a href="#pricing">Pricing</a>
         <a href="#voices">Voices</a>
@@ -3250,6 +3484,191 @@
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ============================== KNOWLEDGE GRAPH ============================== -->
+  <section class="section graph-section" id="graph">
+    <div class="section-eyebrow">Knowledge graph</div>
+    <h2 class="section-heading">Every doc connected. Every change propagates.</h2>
+    <p class="section-sub">
+      Vision, PRDs, data models, design specs — interlocked in a live dependency graph.
+      Edit one, and the system traces every doc that touches it, then rewrites them in order.
+      Drift is impossible.
+    </p>
+
+    <div class="graph-stage cascade-host">
+      <div class="graph-trigger">
+        <span class="agent-av kai" style="background: linear-gradient(135deg,#9CA3AF,#D1D5DB);"></span>
+        <span class="trigger-text">Lisa: <em>"Pivot to Korean skincare."</em></span>
+      </div>
+
+      <svg class="graph-svg" viewBox="0 0 800 480" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <radialGradient id="g-vision" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#FFE0A0"/>
+            <stop offset="100%" stop-color="#C4A265"/>
+          </radialGradient>
+          <radialGradient id="g-prd" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#FFB099"/>
+            <stop offset="100%" stop-color="#FA3D1D"/>
+          </radialGradient>
+          <radialGradient id="g-leaf" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#A0C0FF"/>
+            <stop offset="100%" stop-color="#0358F7"/>
+          </radialGradient>
+          <radialGradient id="g-leaf-purple" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#E0B0E0"/>
+            <stop offset="100%" stop-color="#C679C4"/>
+          </radialGradient>
+          <radialGradient id="g-leaf-green" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#A0E8B5"/>
+            <stop offset="100%" stop-color="#16A34A"/>
+          </radialGradient>
+        </defs>
+
+        <!-- Edges -->
+        <g class="edges">
+          <path class="edge edge-w1" d="M 400 60 Q 320 140 200 220"/>
+          <path class="edge edge-w1" d="M 400 60 Q 480 140 600 220"/>
+          <path class="edge edge-w2" d="M 200 220 Q 150 310 90 400"/>
+          <path class="edge edge-w2" d="M 200 220 Q 220 310 240 400"/>
+          <path class="edge edge-w2" d="M 200 220 Q 295 310 390 400"/>
+          <path class="edge edge-w2" d="M 600 220 Q 495 310 390 400"/>
+          <path class="edge edge-w2" d="M 600 220 Q 580 310 550 400"/>
+          <path class="edge edge-w2" d="M 600 220 Q 650 310 700 400"/>
+          <path class="edge edge-w2 edge-cross" d="M 200 220 Q 450 280 700 400"/>
+        </g>
+
+        <!-- Pulse dots traveling along edges -->
+        <g class="pulses">
+          <circle r="5" fill="#FA3D1D" opacity="0">
+            <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
+              values="0;0;1;1;0;0" keyTimes="0;0.10;0.11;0.22;0.25;1"/>
+            <animateMotion dur="9s" repeatCount="indefinite"
+              keyPoints="0;0;1;1" keyTimes="0;0.11;0.22;1"
+              path="M 400 60 Q 320 140 200 220"/>
+          </circle>
+          <circle r="5" fill="#FA3D1D" opacity="0">
+            <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
+              values="0;0;1;1;0;0" keyTimes="0;0.10;0.11;0.22;0.25;1"/>
+            <animateMotion dur="9s" repeatCount="indefinite"
+              keyPoints="0;0;1;1" keyTimes="0;0.11;0.22;1"
+              path="M 400 60 Q 480 140 600 220"/>
+          </circle>
+          <circle r="5" fill="#0358F7" opacity="0">
+            <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
+              values="0;0;1;1;0;0" keyTimes="0;0.27;0.28;0.40;0.43;1"/>
+            <animateMotion dur="9s" repeatCount="indefinite"
+              keyPoints="0;0;1;1" keyTimes="0;0.28;0.40;1"
+              path="M 200 220 Q 150 310 90 400"/>
+          </circle>
+          <circle r="5" fill="#0358F7" opacity="0">
+            <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
+              values="0;0;1;1;0;0" keyTimes="0;0.27;0.28;0.40;0.43;1"/>
+            <animateMotion dur="9s" repeatCount="indefinite"
+              keyPoints="0;0;1;1" keyTimes="0;0.28;0.40;1"
+              path="M 200 220 Q 220 310 240 400"/>
+          </circle>
+          <circle r="5" fill="#0358F7" opacity="0">
+            <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
+              values="0;0;1;1;0;0" keyTimes="0;0.27;0.28;0.40;0.43;1"/>
+            <animateMotion dur="9s" repeatCount="indefinite"
+              keyPoints="0;0;1;1" keyTimes="0;0.28;0.40;1"
+              path="M 200 220 Q 295 310 390 400"/>
+          </circle>
+          <circle r="5" fill="#0358F7" opacity="0">
+            <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
+              values="0;0;1;1;0;0" keyTimes="0;0.27;0.28;0.40;0.43;1"/>
+            <animateMotion dur="9s" repeatCount="indefinite"
+              keyPoints="0;0;1;1" keyTimes="0;0.28;0.40;1"
+              path="M 600 220 Q 495 310 390 400"/>
+          </circle>
+          <circle r="5" fill="#0358F7" opacity="0">
+            <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
+              values="0;0;1;1;0;0" keyTimes="0;0.27;0.28;0.40;0.43;1"/>
+            <animateMotion dur="9s" repeatCount="indefinite"
+              keyPoints="0;0;1;1" keyTimes="0;0.28;0.40;1"
+              path="M 600 220 Q 580 310 550 400"/>
+          </circle>
+          <circle r="5" fill="#0358F7" opacity="0">
+            <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
+              values="0;0;1;1;0;0" keyTimes="0;0.27;0.28;0.40;0.43;1"/>
+            <animateMotion dur="9s" repeatCount="indefinite"
+              keyPoints="0;0;1;1" keyTimes="0;0.28;0.40;1"
+              path="M 600 220 Q 650 310 700 400"/>
+          </circle>
+          <circle r="5" fill="#0358F7" opacity="0">
+            <animate attributeName="opacity" dur="9s" repeatCount="indefinite"
+              values="0;0;1;1;0;0" keyTimes="0;0.27;0.28;0.40;0.43;1"/>
+            <animateMotion dur="9s" repeatCount="indefinite"
+              keyPoints="0;0;1;1" keyTimes="0;0.28;0.40;1"
+              path="M 200 220 Q 450 280 700 400"/>
+          </circle>
+        </g>
+
+        <!-- Nodes -->
+        <g class="nodes">
+          <!-- Vision (source) -->
+          <g class="graph-node node-source" transform="translate(400,60)">
+            <circle class="node-halo" r="36"/>
+            <circle class="node-main" r="22" fill="url(#g-vision)"/>
+            <text class="node-icon" text-anchor="middle" dy=".3em">★</text>
+            <text class="node-label" text-anchor="middle" dy="42">Vision</text>
+          </g>
+          <!-- Wave 1 -->
+          <g class="graph-node node-w1" transform="translate(200,220)">
+            <circle class="node-halo" r="32"/>
+            <circle class="node-main" r="20" fill="url(#g-prd)"/>
+            <text class="node-label" text-anchor="middle" dy=".3em" fill="white">PRD</text>
+            <text class="node-sub" text-anchor="middle" dy="38">Comments</text>
+          </g>
+          <g class="graph-node node-w1" transform="translate(600,220)">
+            <circle class="node-halo" r="32"/>
+            <circle class="node-main" r="20" fill="url(#g-prd)"/>
+            <text class="node-label" text-anchor="middle" dy=".3em" fill="white">PRD</text>
+            <text class="node-sub" text-anchor="middle" dy="38">Profile</text>
+          </g>
+          <!-- Wave 2 (leaves) -->
+          <g class="graph-node node-w2" transform="translate(90,400)">
+            <circle class="node-halo" r="28"/>
+            <circle class="node-main" r="17" fill="url(#g-leaf)"/>
+            <text class="node-label small" text-anchor="middle" dy=".3em" fill="white">ERD</text>
+          </g>
+          <g class="graph-node node-w2" transform="translate(240,400)">
+            <circle class="node-halo" r="28"/>
+            <circle class="node-main" r="17" fill="url(#g-leaf-purple)"/>
+            <text class="node-label small" text-anchor="middle" dy=".3em" fill="white">UI</text>
+          </g>
+          <g class="graph-node node-w2" transform="translate(390,400)">
+            <circle class="node-halo" r="28"/>
+            <circle class="node-main" r="17" fill="url(#g-leaf-green)"/>
+            <text class="node-label small" text-anchor="middle" dy=".3em" fill="white">Copy</text>
+          </g>
+          <g class="graph-node node-w2" transform="translate(550,400)">
+            <circle class="node-halo" r="28"/>
+            <circle class="node-main" r="17" fill="url(#g-leaf-purple)"/>
+            <text class="node-label small" text-anchor="middle" dy=".3em" fill="white">UI</text>
+          </g>
+          <g class="graph-node node-w2" transform="translate(700,400)">
+            <circle class="node-halo" r="28"/>
+            <circle class="node-main" r="17" fill="url(#g-leaf-green)"/>
+            <text class="node-label small" text-anchor="middle" dy=".3em" fill="white">Metrics</text>
+          </g>
+        </g>
+      </svg>
+
+      <div class="graph-result">
+        <span class="graph-result-icon">✓</span>
+        <span><strong>9 docs propagated</strong> · 6 direct + 3 indirect · 1.2s end-to-end</span>
+      </div>
+    </div>
+
+    <div class="graph-stats">
+      <div class="g-stat"><span class="g-stat-num">500+</span><span class="g-stat-label">docs in your graph</span></div>
+      <div class="g-stat"><span class="g-stat-num">0</span><span class="g-stat-label">manual updates</span></div>
+      <div class="g-stat"><span class="g-stat-num">1.2s</span><span class="g-stat-label">end-to-end propagation</span></div>
+      <div class="g-stat"><span class="g-stat-num">100%</span><span class="g-stat-label">coherent across docs</span></div>
     </div>
   </section>
 
