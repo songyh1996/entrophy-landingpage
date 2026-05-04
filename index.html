@@ -458,6 +458,212 @@
     line-height: 1.5;
   }
 
+  /* Sidebar — Vision pinned + agent roster */
+  .mock-side .side-row.vision {
+    background: linear-gradient(90deg, rgba(196,162,101,0.16), rgba(196,162,101,0));
+    color: var(--color-ink-black);
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .mock-side .side-row.vision .star {
+    background: transparent;
+    color: #C4A265;
+    font-size: 13px;
+    display: grid;
+    place-items: center;
+    width: 14px;
+    animation: starPulse 3.5s ease-in-out infinite;
+  }
+  @keyframes starPulse {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50%      { opacity: 1; transform: scale(1.12); }
+  }
+  .mock-side .side-row .badge {
+    margin-left: auto;
+    background: rgba(250, 61, 29, 0.16);
+    color: #FA3D1D;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 999px;
+    font-weight: 500;
+  }
+  .mock-side .side-divider {
+    margin-top: 10px;
+    padding: 4px 8px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-slate);
+  }
+  .mock-side .side-row.mini {
+    padding: 4px 8px;
+    font-size: 12px;
+    color: var(--color-graphite);
+  }
+  .agent-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .agent-dot.maya  { background: linear-gradient(135deg, #FA3D1D, #FFB005); }
+  .agent-dot.alex  { background: linear-gradient(135deg, #0358F7, #6E84FF); }
+  .agent-dot.kai   { background: linear-gradient(135deg, #C679C4, #FD02F5); }
+  .agent-dot.sam   { background: linear-gradient(135deg, #4ADE80, #22C55E); }
+
+  /* Mock-main — greeting + ticker + chat bar */
+  .mock-greeting {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    color: var(--color-ink-black);
+  }
+  .mock-sub {
+    font-size: 13px;
+    color: var(--color-slate);
+    margin-top: -8px;
+  }
+
+  /* Agent ticker */
+  .ticker {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+  }
+  .ticker-row {
+    display: grid;
+    grid-template-columns: 28px 60px 1fr auto;
+    gap: 10px;
+    align-items: center;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.025);
+    font-size: 13px;
+  }
+  .agent-av {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background-size: 200% 200%;
+    animation: avShimmer 6s ease-in-out infinite;
+  }
+  .agent-av.small { width: 18px; height: 18px; }
+  .agent-av.maya  { background: linear-gradient(135deg, #FA3D1D, #FFB005); }
+  .agent-av.alex  { background: linear-gradient(135deg, #0358F7, #6E84FF); }
+  .agent-av.kai   { background: linear-gradient(135deg, #C679C4, #FD02F5); }
+  .agent-av.sam   { background: linear-gradient(135deg, #4ADE80, #22C55E); }
+  .agent-name {
+    font-weight: 500;
+    color: var(--color-ink-black);
+  }
+  .agent-status {
+    color: var(--color-graphite);
+    font-style: italic;
+  }
+  .agent-status.thinking,
+  .agent-status.designing,
+  .agent-status.researching {
+    animation: statusBreathe 3s ease-in-out infinite;
+  }
+  @keyframes statusBreathe {
+    0%, 100% { opacity: 0.65; }
+    50%      { opacity: 1; }
+  }
+  .agent-pulse {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4ADE80;
+    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.6);
+    animation: liveDotPulse 2s ease-in-out infinite;
+  }
+  .agent-progress {
+    width: 80px;
+    height: 4px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    position: relative;
+  }
+  .agent-progress-fill {
+    position: absolute;
+    inset: 0;
+    width: 0%;
+    background: linear-gradient(90deg, #0358F7, #6E84FF);
+    border-radius: 4px;
+    animation: progressFill 4s ease-in-out infinite;
+  }
+  @keyframes progressFill {
+    0%   { width: 12%; }
+    50%  { width: 78%; }
+    100% { width: 100%; opacity: 0.4; }
+  }
+
+  /* Mock chat bar — Maya typing in real time */
+  .mock-chat-bar {
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow:
+      0 0 0 1px rgba(250, 61, 29, 0.06),
+      0 4px 18px rgba(0, 0, 0, 0.04);
+  }
+  .mock-chat-text {
+    flex: 1;
+    font-size: 14px;
+    color: var(--color-ink-black);
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .mock-chat-text .caret {
+    display: inline-block;
+    width: 1px;
+    height: 14px;
+    background: var(--color-ink-black);
+    margin-left: 2px;
+    vertical-align: middle;
+    animation: caretBlink 1s steps(1) infinite;
+  }
+  @keyframes caretBlink {
+    50% { opacity: 0; }
+  }
+  .mock-send {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--color-ink-black);
+    color: var(--color-snow);
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  /* Secondary CTA — ghost */
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 14px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-ink-black);
+    text-decoration: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .btn-ghost:hover {
+    opacity: 0.7;
+    transform: translateX(2px);
+  }
+
   /* ============================== SPECTRUM STRIP ============================== */
   .spectrum-strip {
     width: 100%;
@@ -686,10 +892,10 @@
     animation: msgIn 0.6s ease-out forwards;
   }
   .thread-msg.maya { background: rgba(255, 255, 255, 0.7); }
-  .thread-msg:nth-of-type(1) { animation-delay: 0.1s; }
-  .thread-msg:nth-of-type(2) { animation-delay: 0.5s; }
-  .thread-msg:nth-of-type(3) { animation-delay: 0.9s; }
-  .thread-msg:nth-of-type(4) { animation-delay: 1.3s; }
+  .thread-msg:nth-of-type(2) { animation-delay: 0.1s; }
+  .thread-msg:nth-of-type(3) { animation-delay: 0.5s; }
+  .thread-msg:nth-of-type(4) { animation-delay: 0.9s; }
+  .thread-msg:nth-of-type(5) { animation-delay: 1.3s; }
   .thread-msg.fresh::after {
     content: "";
     position: absolute;
@@ -853,10 +1059,10 @@
     animation: rowIn 0.5s ease-out forwards;
   }
   .doc-update:first-of-type { border-top: 0; padding-top: 2px; }
-  .doc-update:nth-of-type(1) { animation-delay: 3.0s; }
-  .doc-update:nth-of-type(2) { animation-delay: 3.4s; }
-  .doc-update:nth-of-type(3) { animation-delay: 3.8s; }
-  .doc-update:nth-of-type(4) { animation-delay: 4.2s; }
+  .doc-update:nth-of-type(2) { animation-delay: 3.0s; }
+  .doc-update:nth-of-type(3) { animation-delay: 3.4s; }
+  .doc-update:nth-of-type(4) { animation-delay: 3.8s; }
+  .doc-update:nth-of-type(5) { animation-delay: 4.2s; }
   @keyframes rowIn {
     to { opacity: 1; transform: translateY(0); }
   }
@@ -1248,20 +1454,19 @@
       Entrophy v0.1 · Now in private beta
     </div>
 
-    <h1>Production software. By <em>anyone</em>.</h1>
+    <h1>Run your own AI <em>company</em>.</h1>
 
     <p class="lede">
-      Other AI tools generate apps from a single prompt. Entrophy operates like
-      a real product team — drafting specs with you, surfacing tradeoffs,
-      building continuously to deployment. For the first time, anyone can ship
-      real software. Even if you've never written code.
+      You're the CEO. Maya runs your team. Alex codes. Kai designs. Sam markets.
+      They debate, document, and ship — 24/7. You stay in vision.
     </p>
 
     <div class="cta-row">
-      <a class="btn btn-primary" href="demo/corner-home-mono.html">Try demo</a>
+      <a class="btn btn-primary" href="demo/corner-home-mono.html">Try the demo</a>
+      <a class="btn-ghost" href="#team">Meet the team →</a>
     </div>
 
-    <!-- Hero product mock -->
+    <!-- Hero product mock — agent ticker + Maya chat bar -->
     <div class="hero-mock">
       <div class="browser-mock">
         <div class="browser-bar">
@@ -1270,32 +1475,58 @@
             <span class="dot"></span>
             <span class="dot"></span>
           </div>
-          <div class="url">entrophy.app/maya/threads</div>
+          <div class="url">entrophy.app/closet-app/home</div>
         </div>
         <div class="browser-body">
           <aside class="mock-side">
+            <div class="side-row vision"><span class="ico star">★</span>Vision</div>
             <div class="side-row active"><span class="ico"></span>Home</div>
-            <div class="side-row"><span class="ico"></span>Threads</div>
-            <div class="side-row"><span class="ico"></span>Library</div>
-            <div class="side-row"><span class="ico"></span>People</div>
-            <div class="side-row"><span class="ico"></span>Maya</div>
+            <div class="side-row"><span class="ico"></span>Meetings <span class="badge">2</span></div>
+            <div class="side-row"><span class="ico"></span>Board</div>
+            <div class="side-row"><span class="ico"></span>Roadmap</div>
+            <div class="side-row"><span class="ico"></span>Docs</div>
+            <div class="side-divider">Team</div>
+            <div class="side-row mini"><span class="agent-dot maya"></span>Maya · CoS</div>
+            <div class="side-row mini"><span class="agent-dot alex"></span>Alex · Eng</div>
+            <div class="side-row mini"><span class="agent-dot kai"></span>Kai · Design</div>
+            <div class="side-row mini"><span class="agent-dot sam"></span>Sam · GTM</div>
           </aside>
           <div class="mock-main">
-            <h3>This morning's thread</h3>
-            <div class="mock-thread">
-              <div class="av"></div>
-              <div class="body">
-                <div class="who">Maya · 2 min ago</div>
-                <div class="what">
-                  Three competitors launched social-shopping in 14 days.
-                  I cross-checked your Q2 roadmap — pulling launch in to May 18
-                  hits ~80% of the value at half the schedule risk.
-                </div>
+            <div class="mock-greeting">Good morning, Lisa.</div>
+            <div class="mock-sub">Your team shipped 3 features overnight.</div>
+
+            <div class="ticker">
+              <div class="ticker-row">
+                <span class="agent-av maya"></span>
+                <span class="agent-name">Maya</span>
+                <span class="agent-status thinking">drafting morning standup</span>
+                <span class="agent-pulse"></span>
+              </div>
+              <div class="ticker-row">
+                <span class="agent-av alex"></span>
+                <span class="agent-name">Alex</span>
+                <span class="agent-status shipping">shipping auth flow</span>
+                <span class="agent-progress"><span class="agent-progress-fill"></span></span>
+              </div>
+              <div class="ticker-row">
+                <span class="agent-av kai"></span>
+                <span class="agent-name">Kai</span>
+                <span class="agent-status designing">iterating on calendar UI</span>
+                <span class="agent-pulse"></span>
+              </div>
+              <div class="ticker-row">
+                <span class="agent-av sam"></span>
+                <span class="agent-name">Sam</span>
+                <span class="agent-status researching">competitor scan</span>
+                <span class="agent-pulse"></span>
               </div>
             </div>
-            <div class="mock-line l"></div>
-            <div class="mock-line m"></div>
-            <div class="mock-line s"></div>
+
+            <div class="mock-chat-bar">
+              <span class="agent-av maya small"></span>
+              <span class="mock-chat-text">Welcome. What are you building?<span class="caret"></span></span>
+              <span class="mock-send">↑</span>
+            </div>
           </div>
         </div>
       </div>
