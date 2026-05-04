@@ -1298,9 +1298,7 @@
     font-weight: 500;
     margin-right: 4px;
   }
-  .status-block.joining .status-block-label {
-    color: #FA3D1D;
-  }
+  /* JOINING NOW label stays neutral — color reserved for agent identity */
   .status-roster {
     display: inline-flex;
     align-items: center;
@@ -1366,10 +1364,7 @@
     padding: 1px 8px;
     border-radius: 999px;
   }
-  .col-active .col-title { color: #0358F7; }
-  .col-active .col-count { background: rgba(3, 88, 247, 0.10); color: #0358F7; }
-  .col-done .col-title { color: #16A34A; }
-  .col-done .col-count { background: rgba(74, 222, 128, 0.14); color: #16A34A; }
+  /* Column headers stay neutral — color is reserved for agent identity only */
 
   .kanban-task {
     background: white;
@@ -1386,13 +1381,13 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   }
   .kanban-task.next-up {
-    border-color: rgba(3, 88, 247, 0.30);
-    background: linear-gradient(180deg, rgba(240, 246, 255, 0.95), white);
+    border-color: rgba(0, 0, 0, 0.16);
+    background: linear-gradient(180deg, rgba(248, 248, 250, 0.95), white);
     animation: nextUpPulse 3s ease-in-out infinite;
   }
   @keyframes nextUpPulse {
-    0%, 100% { border-color: rgba(3, 88, 247, 0.20); }
-    50%      { border-color: rgba(3, 88, 247, 0.50); }
+    0%, 100% { border-color: rgba(0, 0, 0, 0.10); }
+    50%      { border-color: rgba(0, 0, 0, 0.22); }
   }
   .kanban-task.faded {
     opacity: 0.55;
@@ -1419,11 +1414,14 @@
     text-transform: uppercase;
     letter-spacing: 0.04em;
   }
-  .task-tag.eng      { background: rgba(3, 88, 247, 0.10); color: #0358F7; }
-  .task-tag.design   { background: rgba(198, 121, 196, 0.12); color: #C679C4; }
-  .task-tag.copy     { background: rgba(255, 176, 5, 0.14); color: #B97E03; }
-  .task-tag.gtm      { background: rgba(74, 222, 128, 0.14); color: #16A34A; }
-  .task-tag.research { background: rgba(108, 117, 125, 0.14); color: #6c757d; }
+  .task-tag.eng,
+  .task-tag.design,
+  .task-tag.copy,
+  .task-tag.gtm,
+  .task-tag.research {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--color-slate);
+  }
   .task-prio {
     font-weight: 500;
     color: var(--color-ash);
@@ -1445,18 +1443,16 @@
     border-radius: 4px;
     background: linear-gradient(90deg, var(--color-ink-black), var(--color-ink-black));
   }
-  .task-progress-fill.alex  { width: 73%; background: linear-gradient(90deg, #0358F7, #6E84FF); animation: progressNudge 5s ease-in-out infinite; }
-  .task-progress-fill.kai   { width: 52%; background: linear-gradient(90deg, #C679C4, #FD02F5); animation: progressNudge 6s ease-in-out infinite reverse; }
-  .task-progress-fill.maya  { width: 88%; background: linear-gradient(90deg, #FA3D1D, #FFB005); animation: progressNudge 4s ease-in-out infinite; }
+  .task-progress-fill.alex  { width: 73%; background: var(--color-graphite); animation: progressNudge 5s ease-in-out infinite; }
+  .task-progress-fill.kai   { width: 52%; background: var(--color-graphite); animation: progressNudge 6s ease-in-out infinite reverse; }
+  .task-progress-fill.maya  { width: 88%; background: var(--color-graphite); animation: progressNudge 4s ease-in-out infinite; }
   .task-pct {
     font-weight: 600;
     font-variant-numeric: tabular-nums;
     margin-left: auto;
     font-size: 10.5px;
+    color: var(--color-graphite);
   }
-  .task-pct.alex-pct  { color: #0358F7; }
-  .task-pct.kai-pct   { color: #C679C4; }
-  .task-pct.maya-pct  { color: #FA3D1D; }
   .agent-av.tiny {
     width: 16px;
     height: 16px;
@@ -1468,7 +1464,7 @@
   }
   .task-stamp {
     margin-left: auto;
-    color: #16A34A;
+    color: var(--color-slate);
     font-weight: 500;
   }
   .kanban-task.done .task-title {
@@ -1486,7 +1482,9 @@
     gap: 12px;
     padding: 20px 24px;
     border-radius: 16px;
-    background: linear-gradient(180deg, rgba(255,247,245,0.85), rgba(252,250,255,0.85));
+    background: rgba(255, 255, 255, 0.62);
+    backdrop-filter: blur(20px) saturate(120%);
+    -webkit-backdrop-filter: blur(20px) saturate(120%);
     border: 1px solid rgba(0, 0, 0, 0.05);
   }
   .team-stats .stat {
