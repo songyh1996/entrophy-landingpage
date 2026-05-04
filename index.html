@@ -943,6 +943,175 @@
     .team-grid { grid-template-columns: 1fr; }
   }
 
+  /* ============================== VISION SECTION ============================== */
+  .vision-demo {
+    display: grid;
+    grid-template-columns: 1fr 56px 1fr;
+    gap: 24px;
+    align-items: center;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .vision-pinned {
+    /* inherits .vision-card from First Conversation */
+  }
+  .vision-pinned .vision-value strong {
+    color: #C4A265;
+    font-weight: 600;
+  }
+  .vision-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: var(--color-slate);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .vision-arrow .arrow-line {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(196, 162, 101, 0.5), rgba(250, 61, 29, 0.4));
+    position: relative;
+  }
+  .vision-arrow .arrow-line::after {
+    content: "→";
+    position: absolute;
+    right: -4px;
+    top: -10px;
+    color: rgba(250, 61, 29, 0.65);
+    font-size: 16px;
+  }
+  .vision-arrow .arrow-label {
+    color: rgba(250, 61, 29, 0.85);
+    font-weight: 500;
+  }
+
+  .vision-challenge {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .challenge-input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: rgba(0, 0, 0, 0.025);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  .challenge-input .convo-pebble {
+    width: 18px;
+    height: 18px;
+  }
+  .challenge-text {
+    font-size: 14px;
+    color: var(--color-ink-black);
+    font-style: italic;
+  }
+  .challenge-card {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 18px 20px;
+    border-radius: 16px;
+    background: linear-gradient(180deg, rgba(255,247,245,0.97), rgba(255,250,248,0.97));
+    border: 1px solid rgba(250, 61, 29, 0.20);
+    box-shadow:
+      0 0 0 1px rgba(250, 61, 29, 0.08),
+      0 8px 32px rgba(250, 61, 29, 0.10);
+    animation: challengePulse 4s ease-in-out infinite;
+  }
+  @keyframes challengePulse {
+    0%, 100% {
+      box-shadow:
+        0 0 0 1px rgba(250, 61, 29, 0.08),
+        0 8px 32px rgba(250, 61, 29, 0.10);
+    }
+    50% {
+      box-shadow:
+        0 0 0 1px rgba(250, 61, 29, 0.18),
+        0 12px 44px rgba(250, 61, 29, 0.18);
+    }
+  }
+  .challenge-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .challenge-head .agent-av {
+    width: 28px;
+    height: 28px;
+  }
+  .challenge-title {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    color: var(--color-ink-black);
+    line-height: 1.2;
+  }
+  .challenge-sub {
+    font-size: 12px;
+    color: var(--color-slate);
+    margin-top: 2px;
+  }
+  .challenge-cite {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: rgba(250, 61, 29, 0.06);
+    border-left: 2px solid rgba(250, 61, 29, 0.4);
+  }
+  .cite-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: rgba(250, 61, 29, 0.85);
+    font-weight: 500;
+  }
+  .cite-text {
+    font-size: 13px;
+    color: var(--color-ink-black);
+    font-style: italic;
+  }
+  .challenge-paths {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .challenge-btn {
+    padding: 8px 14px;
+    border: 1px solid rgba(0, 0, 0, 0.10);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--color-ink-black);
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+  .challenge-btn:hover {
+    background: var(--color-ink-black);
+    color: var(--color-snow);
+  }
+  .challenge-btn.ghost {
+    background: transparent;
+    color: var(--color-graphite);
+    border-color: rgba(0, 0, 0, 0.06);
+  }
+
+  @media (max-width: 900px) {
+    .vision-demo { grid-template-columns: 1fr; }
+    .vision-arrow { display: none; }
+  }
+
   /* ============================== FEATURE CARDS ============================== */
   .feature-grid {
     display: grid;
@@ -1913,16 +2082,85 @@
     </div>
   </section>
 
-  <!-- ============================== SHOWCASE ============================== -->
+  <!-- ============================== VISION IS SACRED ============================== -->
+  <section class="section vision-section" id="vision">
+    <div class="section-eyebrow">The answersheet</div>
+    <h2 class="section-heading">Your Vision. Above even you.</h2>
+    <p class="section-sub">
+      Every decision gets questioned against Vision — including yours. AI that
+      drifts on you for six months and ships a different product? Not here. Maya
+      catches the conflict before you commit.
+    </p>
+
+    <div class="vision-demo">
+      <div class="vision-card vision-pinned">
+        <div class="vision-head">
+          <span class="vision-star">★</span>
+          <span class="vision-title">Vision · pinned</span>
+          <span class="vision-meta">⌘V from anywhere</span>
+        </div>
+        <div class="vision-row">
+          <span class="vision-label">Mission</span>
+          <span class="vision-value">Help people remember and re-wear what they already own.</span>
+        </div>
+        <div class="vision-row">
+          <span class="vision-label">Outcomes</span>
+          <span class="vision-value">Recall outfits in &lt;30s · &gt;40% of clothes worn monthly</span>
+        </div>
+        <div class="vision-row">
+          <span class="vision-label">Principles</span>
+          <span class="vision-value">Privacy by default · No social pressure</span>
+        </div>
+        <div class="vision-row">
+          <span class="vision-label">Non-goals</span>
+          <span class="vision-value"><strong>Marketplace</strong>, social network, stylist AI</span>
+        </div>
+      </div>
+
+      <div class="vision-arrow">
+        <span class="arrow-line"></span>
+        <span class="arrow-label">conflict detected</span>
+      </div>
+
+      <div class="vision-challenge">
+        <div class="challenge-input">
+          <span class="convo-pebble"></span>
+          <span class="challenge-text">"Add a marketplace for users to sell clothes."</span>
+        </div>
+
+        <div class="challenge-card">
+          <div class="challenge-head">
+            <span class="agent-av maya"></span>
+            <div>
+              <div class="challenge-title">Maya found a tension with Vision.</div>
+              <div class="challenge-sub">Before saving this decision —</div>
+            </div>
+          </div>
+          <div class="challenge-cite">
+            <span class="cite-label">Vision §Non-goals</span>
+            <span class="cite-text">"Marketplace, social network, stylist AI"</span>
+          </div>
+          <div class="challenge-paths">
+            <button class="challenge-btn">Update the decision</button>
+            <button class="challenge-btn">Amend Vision</button>
+            <button class="challenge-btn ghost">Override — type a reason</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== SHOWCASE — propagation demo ============================== -->
   <section class="showcase" id="product">
     <div class="showcase-frame">
       <div class="showcase-row">
         <div class="showcase-text">
-          <div class="section-eyebrow" style="text-align:left;margin-bottom:14px;">Your AI cofounder</div>
-          <h2>Asks the right questions. Documents everything.</h2>
+          <div class="section-eyebrow" style="text-align:left;margin-bottom:14px;">Cross-doc propagation</div>
+          <h2>You say it once. Every doc updates.</h2>
           <p>
-            The only tool where an AI buddy probes your thinking like a cofounder —
-            and turns every answer into a structured product doc. Automatically.
+            Other tools generate. Corner <em>propagates</em>. One conversation —
+            and every spec, every plan, every metric realigns. Across docs.
+            Across features. Coherently. In seconds.
           </p>
           <ul class="showcase-list">
             <li>
@@ -1931,7 +2169,7 @@
                   <polyline points="2,6 5,9 10,3"/>
                 </svg>
               </span>
-              Surfaces tradeoffs and blind spots — like a thoughtful cofounder
+              One decision rewrites every affected doc — automatically
             </li>
             <li>
               <span class="check">
@@ -1939,7 +2177,7 @@
                   <polyline points="2,6 5,9 10,3"/>
                 </svg>
               </span>
-              Every conversation becomes a living, organized doc
+              Per-doc revert if you change your mind
             </li>
             <li>
               <span class="check">
@@ -1947,7 +2185,7 @@
                   <polyline points="2,6 5,9 10,3"/>
                 </svg>
               </span>
-              Decisions, specs, rationale — never lost, always findable
+              In Notion, this would be a week of doc-chasing
             </li>
           </ul>
         </div>
