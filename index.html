@@ -580,7 +580,44 @@
     box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.6);
     animation: liveDotPulse 2s ease-in-out infinite;
   }
-  .agent-progress {
+  /* Per-agent ticker artifacts — each shows what they're producing right now */
+  .ticker-art {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 500;
+    white-space: nowrap;
+    font-style: normal;
+  }
+  .ticker-art.chip-decision {
+    background: rgba(250, 61, 29, 0.10);
+    color: #FA3D1D;
+  }
+  .ticker-art.chip-frames {
+    background: rgba(198, 121, 196, 0.12);
+    color: #C679C4;
+  }
+  .ticker-art.chip-done {
+    background: rgba(74, 222, 128, 0.14);
+    color: #16A34A;
+  }
+  .progress-art {
+    background: transparent;
+    padding: 0;
+    color: var(--color-graphite);
+    font-size: 11px;
+  }
+  .ticker-progress-pct {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: #0358F7;
+    min-width: 28px;
+    text-align: right;
+  }
+  .ticker-progress-bar {
     width: 80px;
     height: 4px;
     border-radius: 4px;
@@ -588,18 +625,52 @@
     overflow: hidden;
     position: relative;
   }
-  .agent-progress-fill {
+  .ticker-progress-fill {
     position: absolute;
     inset: 0;
-    width: 0%;
+    width: 73%;
     background: linear-gradient(90deg, #0358F7, #6E84FF);
     border-radius: 4px;
-    animation: progressFill 4s ease-in-out infinite;
+    animation: progressNudge 5s ease-in-out infinite;
   }
-  @keyframes progressFill {
-    0%   { width: 12%; }
-    50%  { width: 78%; }
-    100% { width: 100%; opacity: 0.4; }
+  @keyframes progressNudge {
+    0%, 100% { width: 70%; }
+    50%      { width: 80%; }
+  }
+
+  /* Project chip — sidebar header */
+  .project-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 8px 14px 8px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  .project-glyph {
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+    background: linear-gradient(135deg, #FA3D1D, #C679C4);
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+  .project-name {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    color: var(--color-ink-black);
+    line-height: 1.1;
+  }
+  .project-meta {
+    font-size: 10px;
+    color: var(--color-slate);
+    margin-top: 2px;
   }
 
   /* Mock chat bar — Maya typing in real time */
@@ -2489,10 +2560,17 @@
             <span class="dot"></span>
             <span class="dot"></span>
           </div>
-          <div class="url">entrophy.app/closet-app/home</div>
+          <div class="url">entrophy.app/threads/home</div>
         </div>
         <div class="browser-body">
           <aside class="mock-side">
+            <div class="project-chip">
+              <span class="project-glyph">T</span>
+              <div>
+                <div class="project-name">Threads</div>
+                <div class="project-meta">Social · v2.3</div>
+              </div>
+            </div>
             <div class="side-row vision"><span class="ico star">★</span>Vision</div>
             <div class="side-row active"><span class="ico"></span>Home</div>
             <div class="side-row"><span class="ico"></span>Meetings <span class="badge">2</span></div>
@@ -2507,32 +2585,35 @@
           </aside>
           <div class="mock-main">
             <div class="mock-greeting">Good morning, Lisa.</div>
-            <div class="mock-sub">Your team shipped 3 features overnight.</div>
+            <div class="mock-sub">Threads v2 shipped to staging while you were away. Here's where the team is now.</div>
 
             <div class="ticker">
               <div class="ticker-row">
                 <span class="agent-av maya"></span>
                 <span class="agent-name">Maya</span>
-                <span class="agent-status thinking">drafting morning standup</span>
-                <span class="agent-pulse"></span>
+                <span class="agent-status thinking">drafting tomorrow's roadmap call</span>
+                <span class="ticker-art chip-decision">Decision · 2 of 5</span>
               </div>
               <div class="ticker-row">
                 <span class="agent-av alex"></span>
                 <span class="agent-name">Alex</span>
-                <span class="agent-status shipping">shipping auth flow</span>
-                <span class="agent-progress"><span class="agent-progress-fill"></span></span>
+                <span class="agent-status shipping">shipping threaded comments</span>
+                <span class="ticker-art progress-art">
+                  <span class="ticker-progress-pct">73%</span>
+                  <span class="ticker-progress-bar"><span class="ticker-progress-fill"></span></span>
+                </span>
               </div>
               <div class="ticker-row">
                 <span class="agent-av kai"></span>
                 <span class="agent-name">Kai</span>
-                <span class="agent-status designing">iterating on calendar UI</span>
-                <span class="agent-pulse"></span>
+                <span class="agent-status designing">iterating on Friends grid</span>
+                <span class="ticker-art chip-frames">4 frames · v2.3</span>
               </div>
               <div class="ticker-row">
                 <span class="agent-av sam"></span>
                 <span class="agent-name">Sam</span>
-                <span class="agent-status researching">competitor scan</span>
-                <span class="agent-pulse"></span>
+                <span class="agent-status">positioning scan complete</span>
+                <span class="ticker-art chip-done">✓ 12 competitors · 2m</span>
               </div>
             </div>
 
