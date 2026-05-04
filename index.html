@@ -3193,6 +3193,251 @@
     .footer-bottom { flex-direction: column; gap: 12px; }
   }
 
+  /* ===== Phone-sized layout — ≤640px ===== */
+  @media (max-width: 640px) {
+    /* Header */
+    .header { height: 56px; }
+    .header-inner { padding: 0 16px; gap: 12px; }
+    .brand-mark .logo-dot { width: 16px; height: 16px; }
+    .brand-mark .logo-text { font-size: 16px; }
+    .btn { height: 38px; padding: 0 16px; font-size: 13px; }
+    .btn.large { height: 50px; font-size: 14px; padding: 0 26px; }
+
+    /* Hero */
+    .hero { padding: 96px 20px 64px; min-height: 0; }
+    .eyebrow { font-size: 12px; padding: 0 12px; height: 30px; margin-bottom: 24px; }
+    .hero h1 {
+      font-size: clamp(36px, 11vw, 54px);
+      letter-spacing: -0.045em;
+      margin-bottom: 20px;
+    }
+    .hero .lede { font-size: 15px; margin-bottom: 32px; }
+    .hero-mock { margin-top: 48px; }
+    .hero-mock::before { inset: -28px -12px -16px; border-radius: 32px; }
+    .browser-mock { border-radius: 14px; }
+    .browser-bar { padding: 10px 12px; }
+    .browser-bar .url { font-size: 11px; height: 22px; margin-left: 10px; }
+    .browser-bar .dot { width: 8px; height: 8px; }
+
+    /* Status strip — tighter, wraps; uptime gets its own row */
+    .status-strip {
+      gap: 8px 14px;
+      padding: 8px 12px;
+      font-size: 11px;
+    }
+    .status-strip .strip-label { font-size: 9.5px; }
+    .status-strip .strip-num { font-size: 12px; }
+    .status-strip .strip-spacer { display: none; }
+    .status-strip .strip-uptime { width: 100%; order: 99; }
+
+    /* Mock body */
+    .mock-main { padding: 16px 14px; gap: 12px; }
+
+    /* Ticker rows — keep agent-name and progress, truncate status */
+    .ticker-row {
+      grid-template-columns: 22px 50px minmax(0, 1fr) auto;
+      gap: 8px;
+      padding: 8px 10px;
+      font-size: 12px;
+    }
+    .agent-name { font-size: 11.5px; }
+    .agent-status {
+      font-size: 11px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .ticker-progress-bar { width: 48px; }
+    .ticker-progress-pct { font-size: 11px; min-width: 24px; }
+
+    /* Live feed */
+    .live-feed { padding: 10px 12px; }
+    .feed-row { font-size: 11.5px; padding: 5px 0; }
+    .feed-time { width: 24px; font-size: 10px; }
+    .feed-meta { display: none; }
+
+    /* Mock chat bar */
+    .mock-chat-bar { padding: 10px 12px; }
+    .mock-chat-text { font-size: 13px; }
+
+    /* Section scaffolding */
+    .section { padding: 64px 20px; }
+    .section-heading {
+      font-size: clamp(28px, 7vw, 40px);
+      margin-bottom: 36px;
+      letter-spacing: -0.045em;
+    }
+    .section-sub { font-size: 14px; margin: -24px auto 36px; }
+    .section-eyebrow { font-size: 12px; margin-bottom: 14px; }
+
+    /* First conversation */
+    .convo-chat, .vision-card { padding: 18px; border-radius: 16px; }
+    .convo-msg { padding: 8px 10px; }
+    .convo-body { font-size: 13px; }
+    .vision-row { grid-template-columns: 80px 1fr; gap: 10px; font-size: 13px; }
+    .vision-label { font-size: 10px; }
+    .doc-stack { padding: 18px; border-radius: 16px; }
+    .doc-stack-header { gap: 10px; padding-bottom: 12px; margin-bottom: 12px; }
+    .doc-stack-title { font-size: 15px; }
+    .doc-stack-card { padding: 12px; }
+
+    /* Auto-scaling team */
+    .team-status-bar { padding: 14px 16px; gap: 10px; }
+    .kanban-col { padding: 12px 10px; }
+    .kanban-task { padding: 10px; }
+    .team-stats { padding: 16px 12px; gap: 8px; }
+    .team-stats .stat-num { font-size: 22px; }
+    .team-stats .stat-label { font-size: 10px; letter-spacing: 0.04em; }
+    .team-grid { gap: 14px; }
+    .team-card { padding: 22px; border-radius: 18px; }
+    .team-name { font-size: 18px; }
+
+    /* Vision section */
+    .vision-pinned { padding: 18px; }
+    .challenge-card { padding: 16px; border-radius: 14px; }
+    .challenge-paths { gap: 6px; }
+    .challenge-btn { padding: 8px 12px; font-size: 11.5px; }
+    .challenge-input { padding: 12px 14px; }
+
+    /* Knowledge graph */
+    .graph-section { padding: 64px 20px 80px; }
+    .graph-stage { padding: 18px 16px 24px; border-radius: 20px; }
+    .graph-trigger { font-size: 12px; padding: 8px 14px; }
+    .diff-card { padding: 10px 12px; border-radius: 10px; }
+    .diff-line { font-size: 12px; line-height: 1.5; }
+    .doc-name { font-size: 11px; }
+    .diff-time { font-size: 9.5px; }
+    .diff-row.tier-2 { padding-left: 24px !important; }
+    .diff-row.tier-2::after { width: 14px; }
+    .graph-result { font-size: 12px; padding: 8px 14px; }
+
+    /* Showcase */
+    .showcase { padding: 32px 20px 64px; }
+    .showcase-frame { padding: 28px 18px; border-radius: 22px; }
+    .showcase-mock { padding: 18px; min-height: 0; }
+    .thread-msg { padding: 8px; }
+    .thread-msg .body { font-size: 12.5px; }
+    .thread-title { font-size: 16px; }
+    .auto-doc { padding: 12px 14px; }
+    .doc-update { grid-template-columns: 22px 1fr auto; gap: 8px; padding: 6px 0; }
+    .doc-update .doc-name { font-size: 12.5px; }
+    .doc-update .doc-change { font-size: 11px; }
+    .doc-update .doc-status { font-size: 9.5px; }
+
+    /* Debate */
+    .meeting-card { padding: 22px 20px; border-radius: 20px; }
+    .meeting-title { font-size: 18px; }
+    .meeting-line {
+      grid-template-columns: 1fr;
+      gap: 2px;
+      padding: 6px 0;
+    }
+    .meeting-name { text-align: left; font-size: 12px; }
+    .meeting-text { font-size: 13.5px; }
+    .meeting-watch { display: none; }
+    .meeting-input { padding: 10px 14px; }
+
+    /* Overnight — convert horizontal timeline to a vertical rail */
+    .overnight-card { padding: 22px 20px; border-radius: 20px; }
+    .overnight-head { flex-direction: column; gap: 16px; }
+    .overnight-greeting { font-size: 22px; }
+    .overnight-tally { width: 100%; gap: 0; justify-content: space-between; }
+    .tally-stat { min-width: 0; }
+    .tally-num { font-size: 26px; }
+    .overnight-timeline {
+      position: relative;
+      height: auto;
+      padding: 8px 0 8px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .overnight-timeline .timeline-strip {
+      position: absolute;
+      left: 6px;
+      top: 8px;
+      bottom: 8px;
+      right: auto;
+      width: 2px;
+      height: auto;
+      border-radius: 2px;
+      background: linear-gradient(180deg,
+        #2D2A4A 0%,
+        #4D3A6A 20%,
+        #6D4A7A 40%,
+        #FFB005 65%,
+        #FFD580 85%,
+        #FFF1C4 100%);
+      transform: none;
+    }
+    .timeline-event {
+      position: relative;
+      left: auto;
+      top: auto;
+      bottom: auto;
+      width: auto;
+      text-align: left;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      transform: none;
+      opacity: 1;
+    }
+    .timeline-event.up,
+    .timeline-event.down { top: auto; bottom: auto; }
+    .timeline-event::after {
+      left: -22px;
+      top: 6px;
+      bottom: auto;
+      width: 8px;
+      height: 8px;
+      transform: none;
+    }
+    .timeline-event.up::after,
+    .timeline-event.down::after { top: 6px; bottom: auto; }
+    .event-text { font-size: 12.5px; }
+    .event-time { font-size: 10px; }
+    .overnight-cta { gap: 12px; padding-top: 12px; }
+    .overnight-note { font-size: 11.5px; }
+
+    /* Pricing */
+    .pricing-grid { max-width: 100%; gap: 14px; }
+    .price-card { padding: 22px 18px; border-radius: 16px; }
+    .price-amount { font-size: 30px; }
+    .price-feats li { font-size: 12.5px; }
+
+    /* Privacy */
+    .privacy { padding: 56px 20px; }
+    .privacy p { font-size: 15px; }
+
+    /* Footer */
+    .footer { grid-template-columns: 1fr 1fr; padding: 56px 20px 32px; gap: 28px 20px; }
+    .footer h4 { font-size: 13px; margin-bottom: 10px; }
+    .footer a, .footer .brand-block .tagline { font-size: 13px; }
+    .footer-bottom { font-size: 12px; gap: 8px; margin-top: 24px; padding-top: 20px; }
+
+    /* Font FAB — smaller, label collapses */
+    .font-fab { bottom: 12px; right: 12px; }
+    .font-fab-button { height: 38px; padding: 0 14px 0 12px; font-size: 12px; }
+    .font-fab-button .glyph { font-size: 16px; }
+    .font-fab-button .label { display: none; }
+    .font-fab-menu { min-width: 200px; }
+  }
+
+  /* ===== Very narrow phones — ≤400px ===== */
+  @media (max-width: 400px) {
+    .header-inner { gap: 8px; }
+    .btn { padding: 0 12px; font-size: 12.5px; }
+    .hero h1 { font-size: 32px; letter-spacing: -0.04em; }
+    .hero .lede { font-size: 14px; }
+    .footer { grid-template-columns: 1fr; }
+    .vision-row { grid-template-columns: 1fr; gap: 2px; }
+    .ticker-row { grid-template-columns: 22px minmax(0, 1fr) auto; }
+    .ticker-row .agent-name { display: none; }
+    .meeting-roster { display: none; }
+  }
+
   /* Tight tracking is calibrated for Karla. Other fonts use native default. */
   html:not(.font-karla) body,
   html:not(.font-karla) .brand-mark .logo-text,
