@@ -841,47 +841,72 @@
     background: #10b981;
     animation: liveDotPulse 2s ease-in-out infinite;
   }
-  .auto-doc-row {
+  .doc-update {
     display: grid;
-    grid-template-columns: 88px 1fr;
+    grid-template-columns: 26px 1fr auto;
     gap: 10px;
-    padding: 6px 0;
-    font-size: 13px;
+    align-items: center;
+    padding: 8px 0;
     border-top: 1px solid rgba(0, 0, 0, 0.04);
     opacity: 0;
     transform: translateY(6px);
     animation: rowIn 0.5s ease-out forwards;
   }
-  .auto-doc-row:first-of-type { border-top: 0; padding-top: 2px; }
-  .auto-doc-row:nth-of-type(1) { animation-delay: 3.0s; }
-  .auto-doc-row:nth-of-type(2) { animation-delay: 3.4s; }
-  .auto-doc-row:nth-of-type(3) { animation-delay: 3.8s; }
-  .auto-doc-row:nth-of-type(4) { animation-delay: 4.2s; }
+  .doc-update:first-of-type { border-top: 0; padding-top: 2px; }
+  .doc-update:nth-of-type(1) { animation-delay: 3.0s; }
+  .doc-update:nth-of-type(2) { animation-delay: 3.4s; }
+  .doc-update:nth-of-type(3) { animation-delay: 3.8s; }
+  .doc-update:nth-of-type(4) { animation-delay: 4.2s; }
   @keyframes rowIn {
     to { opacity: 1; transform: translateY(0); }
   }
-  .auto-doc-row .label {
+  .doc-update .doc-glyph {
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    background: var(--gradient-spectrum);
+    background-size: 200% 200%;
+    flex-shrink: 0;
+    animation: avShimmer 8s ease-in-out infinite;
+  }
+  .doc-update .doc-info {
+    min-width: 0;
+  }
+  .doc-update .doc-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-ink-black);
+    line-height: 1.3;
+  }
+  .doc-update .doc-change {
+    font-size: 11.5px;
     color: var(--color-slate);
-    font-size: 11px;
+    line-height: 1.4;
+    margin-top: 1px;
+  }
+  .doc-update .doc-change code {
+    font-family: var(--font-mono, ui-monospace, "SF Mono", monospace);
+    font-size: 10.5px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    background: rgba(0, 0, 0, 0.04);
+    color: var(--color-ink-black);
+  }
+  .doc-update .doc-status {
+    font-size: 10.5px;
+    color: #10b981;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    padding-top: 2px;
-  }
-  .auto-doc-row .value {
-    color: var(--color-ink-black);
-    line-height: 1.45;
-  }
-  .auto-doc-row .value strong { font-weight: 500; }
-  .auto-doc-row .check-pill {
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    padding: 1px 7px;
-    border-radius: 999px;
-    background: rgba(16, 185, 129, 0.10);
-    color: #10b981;
-    font-size: 11px;
-    margin-left: 6px;
+  }
+  .doc-update .doc-status::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #10b981;
   }
 
   /* ============================== TESTIMONIALS ============================== */
@@ -1370,7 +1395,7 @@
 
         <div class="showcase-mock">
           <div class="thread-header">
-            <div class="thread-title">Pull launch in to May 18?</div>
+            <div class="thread-title">Should profile comments be threaded?</div>
             <div class="thread-meta">
               <span class="live-dot"></span>
               Live · 4 voices
@@ -1380,7 +1405,7 @@
             <div class="av maya"></div>
             <div class="body">
               <span class="name">Maya</span>
-              Quick check — Feed + Payments alone hits ~80% of launch value across the last three sprints. Worth pulling Closet?
+              Looked at the data — 76% of beta users prefer threaded. Flat conversations die after 2 replies, especially Gen Z.
               <span class="ts">2h ago</span>
             </div>
           </div>
@@ -1388,53 +1413,69 @@
             <div class="av you"></div>
             <div class="body">
               <span class="name">Lisa</span>
-              What's the risk of skipping Closet?
+              What does threaded cost us?
               <span class="ts">1h ago</span>
             </div>
           </div>
           <div class="thread-msg maya">
             <div class="av maya"></div>
             <div class="body">
-              <span class="name">Maya</span>
-              ~12% of beta cohort flagged it as essential — mostly power users. Everyone else cared about Feed.
+              <span class="name">Alex</span>
+              +3 days. Schema change for parent_id, plus the indent + collapse UI.
               <span class="ts">1h ago</span>
             </div>
           </div>
           <div class="thread-msg fresh">
             <div class="av you"></div>
             <div class="body">
-              <span class="name">Alex</span>
-              Sounds right. Approving A — ship May 18.
+              <span class="name">Lisa</span>
+              Worth it. Let's ship threaded.
               <span class="ts">just now</span>
             </div>
           </div>
 
           <div class="drafting">
-            <span class="label-text">Maya is drafting the decision doc</span>
+            <span class="label-text">Maya is updating 4 docs across the team</span>
             <span class="dots"><span></span><span></span><span></span></span>
           </div>
 
           <div class="auto-doc">
             <div class="auto-doc-header">
               <span class="doc-icon"></span>
-              <span class="doc-title">Decision · Pull launch in</span>
+              <span class="doc-title">4 docs updated</span>
               <span class="saved">auto-saved</span>
             </div>
-            <div class="auto-doc-row">
-              <span class="label">Decision</span>
-              <span class="value"><strong>Ship May 18</strong> — Feed + Payments only<span class="check-pill">approved</span></span>
+            <div class="doc-update">
+              <span class="doc-glyph"></span>
+              <div class="doc-info">
+                <div class="doc-name">Comment Spec</div>
+                <div class="doc-change">Threading enabled · max depth 3</div>
+              </div>
+              <span class="doc-status">updated</span>
             </div>
-            <div class="auto-doc-row">
-              <span class="label">Why</span>
-              <span class="value">Hits ~80% of launch value with two-thirds the scope.</span>
+            <div class="doc-update">
+              <span class="doc-glyph"></span>
+              <div class="doc-info">
+                <div class="doc-name">Design Spec</div>
+                <div class="doc-change">Indent + connector lines · collapse after 2</div>
+              </div>
+              <span class="doc-status">updated</span>
             </div>
-            <div class="auto-doc-row">
-              <span class="label">Tradeoff</span>
-              <span class="value">Closet deferred — 12% of beta (power users) flagged essential.</span>
+            <div class="doc-update">
+              <span class="doc-glyph"></span>
+              <div class="doc-info">
+                <div class="doc-name">Engineering Plan</div>
+                <div class="doc-change"><code>parent_id</code> schema · +3 days</div>
+              </div>
+              <span class="doc-status">updated</span>
             </div>
-            <div class="auto-doc-row">
-              <span class="label">Owner</span>
-              <span class="value">Alex · approved just now</span>
+            <div class="doc-update">
+              <span class="doc-glyph"></span>
+              <div class="doc-info">
+                <div class="doc-name">Roadmap</div>
+                <div class="doc-change">Notifications shifted −2 days</div>
+              </div>
+              <span class="doc-status">updated</span>
             </div>
           </div>
         </div>
