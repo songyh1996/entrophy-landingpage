@@ -2444,9 +2444,9 @@
   /* ============================== PRICING SECTION ============================== */
   .pricing-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    max-width: 1100px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    max-width: 980px;
     margin: 0 auto;
   }
   .price-card {
@@ -2537,12 +2537,9 @@
   }
 
   @media (max-width: 900px) {
-    .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+    .pricing-grid { grid-template-columns: 1fr; max-width: 480px; }
     .overnight-tally { gap: 12px; }
     .overnight-timeline { height: 280px; }
-  }
-  @media (max-width: 540px) {
-    .pricing-grid { grid-template-columns: 1fr; }
   }
 
   /* ============================== FEATURE CARDS ============================== */
@@ -4233,11 +4230,11 @@
 
   <!-- ============================== PRICING ============================== -->
   <section class="section pricing-section" id="pricing">
-    <div class="section-eyebrow">Pay for the company</div>
-    <h2 class="section-heading">Pay for the harness. Not the AI.</h2>
+    <div class="section-eyebrow">Pricing</div>
+    <h2 class="section-heading">One subscription. A whole team.</h2>
     <p class="section-sub">
-      Anthropic gets the compute revenue. You pay for the orchestration that turns
-      one model into a team. Korean and English on every tier.
+      The cost of a software tool. The output of a full company.
+      Cancel anytime.
     </p>
 
     <div class="pricing-grid">
@@ -4245,50 +4242,38 @@
         <div class="price-tier">Free</div>
         <div class="price-amount">$0<span class="per">/mo</span></div>
         <ul class="price-feats">
-          <li>10 agent-hours/mo</li>
+          <li>Try the full team</li>
+          <li>10 agent-hours / month</li>
           <li>1 project</li>
-          <li>MCP access</li>
-          <li>All agents unlocked</li>
-        </ul>
-      </article>
-
-      <article class="price-card">
-        <div class="price-tier">Solo</div>
-        <div class="price-amount">$79<span class="per">/mo</span></div>
-        <ul class="price-feats">
-          <li>40 agent-hours/mo</li>
-          <li>1 project</li>
-          <li>MCP access</li>
-          <li>Priority queue</li>
         </ul>
       </article>
 
       <article class="price-card featured">
         <div class="price-flag">Most popular</div>
         <div class="price-tier">Pro</div>
-        <div class="price-amount">$199<span class="per">/mo</span></div>
+        <div class="price-amount">$29<span class="per">/mo</span></div>
         <ul class="price-feats">
-          <li>150 agent-hours/mo</li>
-          <li>5 projects</li>
-          <li>MCP + API access</li>
-          <li>Frontier model (Opus) on big calls</li>
+          <li>Build real products solo</li>
+          <li>80 agent-hours / month</li>
+          <li>3 projects</li>
+          <li>Frontier model on big calls</li>
         </ul>
       </article>
 
       <article class="price-card">
-        <div class="price-tier">Scale</div>
-        <div class="price-amount">$499<span class="per">/mo</span></div>
+        <div class="price-tier">Team</div>
+        <div class="price-amount">$99<span class="per">/mo</span></div>
         <ul class="price-feats">
-          <li>500 agent-hours/mo</li>
+          <li>For shipping teams</li>
+          <li>300 agent-hours / month</li>
           <li>Unlimited projects</li>
-          <li>Multi-seat</li>
-          <li>SLA-backed</li>
+          <li>Multi-seat collaboration</li>
         </ul>
       </article>
     </div>
 
     <p class="pricing-fine">
-      +$30/mo per extra project · Annual = 20% off · Opus consumption counts 5× · Enterprise plans available
+      Annual = 20% off · Enterprise plans available
     </p>
   </section>
 
