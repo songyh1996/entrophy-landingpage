@@ -523,10 +523,18 @@
     border-radius: 50%;
     flex-shrink: 0;
   }
-  .agent-dot.maya  { background: linear-gradient(135deg, #FA3D1D, #FFB005); }
-  .agent-dot.alex  { background: linear-gradient(135deg, #0358F7, #6E84FF); }
-  .agent-dot.kai   { background: linear-gradient(135deg, #C679C4, #FD02F5); }
-  .agent-dot.sam   { background: linear-gradient(135deg, #4ADE80, #22C55E); }
+  .agent-dot {
+    background-size: 220% 220%;
+    animation: avatarShimmer 7s ease-in-out infinite;
+  }
+  .agent-dot.maya { background-image: linear-gradient(135deg, #EFD6C0, #D8AE92, #C09678, #D8AE92); }
+  .agent-dot.alex { background-image: linear-gradient(135deg, #C8D2DC, #9FB0BE, #84979F, #9FB0BE); animation-duration: 8s; animation-direction: alternate; }
+  .agent-dot.kai  { background-image: linear-gradient(135deg, #D8C6DA, #B49DB6, #957D97, #B49DB6); animation-duration: 6s; animation-direction: reverse; }
+  .agent-dot.sam  { background-image: linear-gradient(135deg, #C4D2C0, #A2B79E, #859881, #A2B79E); animation-duration: 7.5s; }
+  @keyframes avatarShimmer {
+    0%, 100% { background-position: 0% 30%; }
+    50%      { background-position: 100% 70%; }
+  }
 
   /* Mock-main — greeting + ticker + chat bar */
   .mock-greeting {
@@ -568,10 +576,10 @@
     animation: avShimmer 6s ease-in-out infinite;
   }
   .agent-av.small { width: 18px; height: 18px; }
-  .agent-av.maya  { background: linear-gradient(135deg, #FA3D1D, #FFB005); }
-  .agent-av.alex  { background: linear-gradient(135deg, #0358F7, #6E84FF); }
-  .agent-av.kai   { background: linear-gradient(135deg, #C679C4, #FD02F5); }
-  .agent-av.sam   { background: linear-gradient(135deg, #4ADE80, #22C55E); }
+  .agent-av.maya  { background-image: linear-gradient(135deg, #EFD6C0, #D8AE92, #C09678, #D8AE92); animation: avatarShimmer 7s ease-in-out infinite; }
+  .agent-av.alex  { background-image: linear-gradient(135deg, #C8D2DC, #9FB0BE, #84979F, #9FB0BE); animation: avatarShimmer 8s ease-in-out infinite alternate; }
+  .agent-av.kai   { background-image: linear-gradient(135deg, #D8C6DA, #B49DB6, #957D97, #B49DB6); animation: avatarShimmer 6s ease-in-out infinite reverse; }
+  .agent-av.sam   { background-image: linear-gradient(135deg, #C4D2C0, #A2B79E, #859881, #A2B79E); animation: avatarShimmer 7.5s ease-in-out infinite; }
   .agent-name {
     font-weight: 500;
     color: var(--color-ink-black);
@@ -1298,7 +1306,9 @@
     font-weight: 500;
     margin-right: 4px;
   }
-  /* JOINING NOW label stays neutral — color reserved for agent identity */
+  .status-block.joining .status-block-label {
+    color: #FA3D1D;
+  }
   .status-roster {
     display: inline-flex;
     align-items: center;
@@ -1364,7 +1374,10 @@
     padding: 1px 8px;
     border-radius: 999px;
   }
-  /* Column headers stay neutral — color is reserved for agent identity only */
+  .col-active .col-title { color: #0358F7; }
+  .col-active .col-count { background: rgba(3, 88, 247, 0.10); color: #0358F7; }
+  .col-done .col-title { color: #16A34A; }
+  .col-done .col-count { background: rgba(74, 222, 128, 0.14); color: #16A34A; }
 
   .kanban-task {
     background: white;
@@ -1381,13 +1394,13 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   }
   .kanban-task.next-up {
-    border-color: rgba(0, 0, 0, 0.16);
-    background: linear-gradient(180deg, rgba(248, 248, 250, 0.95), white);
+    border-color: rgba(3, 88, 247, 0.30);
+    background: linear-gradient(180deg, rgba(240, 246, 255, 0.95), white);
     animation: nextUpPulse 3s ease-in-out infinite;
   }
   @keyframes nextUpPulse {
-    0%, 100% { border-color: rgba(0, 0, 0, 0.10); }
-    50%      { border-color: rgba(0, 0, 0, 0.22); }
+    0%, 100% { border-color: rgba(3, 88, 247, 0.20); }
+    50%      { border-color: rgba(3, 88, 247, 0.50); }
   }
   .kanban-task.faded {
     opacity: 0.55;
@@ -1414,14 +1427,11 @@
     text-transform: uppercase;
     letter-spacing: 0.04em;
   }
-  .task-tag.eng,
-  .task-tag.design,
-  .task-tag.copy,
-  .task-tag.gtm,
-  .task-tag.research {
-    background: rgba(0, 0, 0, 0.05);
-    color: var(--color-slate);
-  }
+  .task-tag.eng      { background: rgba(3, 88, 247, 0.10); color: #0358F7; }
+  .task-tag.design   { background: rgba(198, 121, 196, 0.12); color: #C679C4; }
+  .task-tag.copy     { background: rgba(255, 176, 5, 0.14); color: #B97E03; }
+  .task-tag.gtm      { background: rgba(74, 222, 128, 0.14); color: #16A34A; }
+  .task-tag.research { background: rgba(108, 117, 125, 0.14); color: #6c757d; }
   .task-prio {
     font-weight: 500;
     color: var(--color-ash);
@@ -1443,16 +1453,18 @@
     border-radius: 4px;
     background: linear-gradient(90deg, var(--color-ink-black), var(--color-ink-black));
   }
-  .task-progress-fill.alex  { width: 73%; background: var(--color-graphite); animation: progressNudge 5s ease-in-out infinite; }
-  .task-progress-fill.kai   { width: 52%; background: var(--color-graphite); animation: progressNudge 6s ease-in-out infinite reverse; }
-  .task-progress-fill.maya  { width: 88%; background: var(--color-graphite); animation: progressNudge 4s ease-in-out infinite; }
+  .task-progress-fill.alex  { width: 73%; background: linear-gradient(90deg, #0358F7, #6E84FF); animation: progressNudge 5s ease-in-out infinite; }
+  .task-progress-fill.kai   { width: 52%; background: linear-gradient(90deg, #C679C4, #FD02F5); animation: progressNudge 6s ease-in-out infinite reverse; }
+  .task-progress-fill.maya  { width: 88%; background: linear-gradient(90deg, #FA3D1D, #FFB005); animation: progressNudge 4s ease-in-out infinite; }
   .task-pct {
     font-weight: 600;
     font-variant-numeric: tabular-nums;
     margin-left: auto;
     font-size: 10.5px;
-    color: var(--color-graphite);
   }
+  .task-pct.alex-pct  { color: #0358F7; }
+  .task-pct.kai-pct   { color: #C679C4; }
+  .task-pct.maya-pct  { color: #FA3D1D; }
   .agent-av.tiny {
     width: 16px;
     height: 16px;
@@ -1464,7 +1476,7 @@
   }
   .task-stamp {
     margin-left: auto;
-    color: var(--color-slate);
+    color: #16A34A;
     font-weight: 500;
   }
   .kanban-task.done .task-title {
@@ -1482,9 +1494,7 @@
     gap: 12px;
     padding: 20px 24px;
     border-radius: 16px;
-    background: rgba(255, 255, 255, 0.62);
-    backdrop-filter: blur(20px) saturate(120%);
-    -webkit-backdrop-filter: blur(20px) saturate(120%);
+    background: linear-gradient(180deg, rgba(255,247,245,0.85), rgba(252,250,255,0.85));
     border: 1px solid rgba(0, 0, 0, 0.05);
   }
   .team-stats .stat {
