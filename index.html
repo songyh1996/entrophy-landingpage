@@ -638,6 +638,184 @@
     50%      { width: 80%; }
   }
 
+  /* System metrics strip — perpetual machine signal */
+  .status-strip {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    padding: 10px 16px;
+    background: rgba(0, 0, 0, 0.025);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    font-size: 12px;
+    color: var(--color-graphite);
+    overflow: hidden;
+    flex-wrap: wrap;
+  }
+  .strip-stat {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .strip-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #4ADE80;
+  }
+  .strip-dot.green  { background: #4ADE80; animation: liveDotPulse 1.8s ease-in-out infinite; }
+  .strip-dot.blue   { background: #0358F7; animation: liveDotPulse 2.2s ease-in-out infinite 0.4s; }
+  .strip-dot.purple { background: #C679C4; animation: liveDotPulse 2.0s ease-in-out infinite 0.8s; }
+  .strip-dot.gold   { background: #FFB005; animation: liveDotPulse 2.4s ease-in-out infinite 1.2s; }
+  .strip-dot.rose   { background: #FA3D1D; animation: liveDotPulse 2.6s ease-in-out infinite 1.6s; }
+  .strip-num {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--color-ink-black);
+    font-variant-numeric: tabular-nums;
+    font-size: 13px;
+  }
+  .strip-label {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 10.5px;
+    color: var(--color-slate);
+  }
+  .strip-spacer { flex: 1; }
+  .strip-uptime {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #16A34A;
+    font-weight: 500;
+  }
+  .strip-pulse {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #4ADE80;
+    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.55);
+    animation: liveDotPulse 1.6s ease-in-out infinite;
+  }
+  .strip-uptime-text {
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* Live activity feed */
+  .live-feed {
+    margin-top: 4px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .feed-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  }
+  .feed-title {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--color-ink-black);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .feed-pulse {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #4ADE80;
+    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.55);
+    animation: liveDotPulse 1.4s ease-in-out infinite;
+  }
+  .feed-meta {
+    margin-left: auto;
+    font-size: 10.5px;
+    color: var(--color-slate);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .feed-window {
+    height: 96px;
+    overflow: hidden;
+    position: relative;
+    mask-image: linear-gradient(180deg, black 0%, black 70%, transparent 100%);
+    -webkit-mask-image: linear-gradient(180deg, black 0%, black 70%, transparent 100%);
+  }
+  .feed-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    animation: feedScroll 36s linear infinite;
+  }
+  @keyframes feedScroll {
+    0%   { transform: translateY(0); }
+    100% { transform: translateY(-50%); }
+  }
+  .feed-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--color-ink-black);
+  }
+  .feed-time {
+    width: 28px;
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-slate);
+    font-size: 10.5px;
+    text-align: right;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .feed-text { flex: 1; min-width: 0; }
+  .feed-text code {
+    font-family: ui-monospace, "SF Mono", monospace;
+    font-size: 10.5px;
+    padding: 0 4px;
+    border-radius: 3px;
+    background: rgba(0, 0, 0, 0.05);
+  }
+  .feed-text em { color: #FA3D1D; font-style: italic; }
+  .feed-row .agent-av.tiny {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* Per-agent progress fills (additional colors for ticker rows) */
+  .ticker-progress-fill.maya-fill {
+    width: 88%;
+    background: linear-gradient(90deg, #FA3D1D, #FFB005);
+    animation: progressNudge 4.2s ease-in-out infinite;
+  }
+  .ticker-progress-fill.kai-fill {
+    width: 52%;
+    background: linear-gradient(90deg, #C679C4, #FD02F5);
+    animation: progressNudge 5.5s ease-in-out infinite reverse;
+  }
+  .ticker-progress-fill.sam-fill {
+    width: 36%;
+    background: linear-gradient(90deg, #4ADE80, #22C55E);
+    animation: progressNudge 6.5s ease-in-out infinite;
+  }
+  .ticker-progress-pct + .ticker-progress-bar { /* placeholder for spacing */ }
+
+  /* Per-agent percentage colors */
+  .ticker-row:nth-child(1) .ticker-progress-pct { color: #FA3D1D; }
+  .ticker-row:nth-child(2) .ticker-progress-pct { color: #0358F7; }
+  .ticker-row:nth-child(3) .ticker-progress-pct { color: #C679C4; }
+  .ticker-row:nth-child(4) .ticker-progress-pct { color: #16A34A; }
+
   /* Project chip — sidebar header */
   .project-chip {
     display: flex;
@@ -3041,6 +3219,21 @@
           </div>
           <div class="url">entrophy.app/threads/home</div>
         </div>
+
+        <!-- System metrics strip — perpetual machine signal -->
+        <div class="status-strip">
+          <span class="strip-stat"><span class="strip-dot green"></span><span class="strip-num">47</span><span class="strip-label">shipped today</span></span>
+          <span class="strip-stat"><span class="strip-dot blue"></span><span class="strip-num">3</span><span class="strip-label">streams active</span></span>
+          <span class="strip-stat"><span class="strip-dot purple"></span><span class="strip-num">156</span><span class="strip-label">docs synced</span></span>
+          <span class="strip-stat"><span class="strip-dot gold"></span><span class="strip-num">23</span><span class="strip-label">decisions today</span></span>
+          <span class="strip-stat"><span class="strip-dot rose"></span><span class="strip-num">0</span><span class="strip-label">drift</span></span>
+          <span class="strip-spacer"></span>
+          <span class="strip-uptime">
+            <span class="strip-pulse"></span>
+            <span class="strip-uptime-text">Always on</span>
+          </span>
+        </div>
+
         <div class="browser-body">
           <aside class="mock-side">
             <div class="project-chip">
@@ -3063,15 +3256,15 @@
             <div class="side-row mini"><span class="agent-dot sam"></span>Sam · GTM</div>
           </aside>
           <div class="mock-main">
-            <div class="mock-greeting">Good morning, Lisa.</div>
-            <div class="mock-sub">Threads v2 shipped to staging while you were away. Here's where the team is now.</div>
-
             <div class="ticker">
               <div class="ticker-row">
                 <span class="agent-av maya"></span>
                 <span class="agent-name">Maya</span>
                 <span class="agent-status thinking">drafting tomorrow's roadmap call</span>
-                <span class="ticker-art chip-decision">Decision · 2 of 5</span>
+                <span class="ticker-art progress-art">
+                  <span class="ticker-progress-pct">88%</span>
+                  <span class="ticker-progress-bar"><span class="ticker-progress-fill maya-fill"></span></span>
+                </span>
               </div>
               <div class="ticker-row">
                 <span class="agent-av alex"></span>
@@ -3085,14 +3278,43 @@
               <div class="ticker-row">
                 <span class="agent-av kai"></span>
                 <span class="agent-name">Kai</span>
-                <span class="agent-status designing">iterating on Friends grid</span>
-                <span class="ticker-art chip-frames">4 frames · v2.3</span>
+                <span class="agent-status designing">Friends grid · Frame 3 of 4</span>
+                <span class="ticker-art progress-art">
+                  <span class="ticker-progress-pct">52%</span>
+                  <span class="ticker-progress-bar"><span class="ticker-progress-fill kai-fill"></span></span>
+                </span>
               </div>
               <div class="ticker-row">
                 <span class="agent-av sam"></span>
                 <span class="agent-name">Sam</span>
-                <span class="agent-status">positioning scan complete</span>
-                <span class="ticker-art chip-done">✓ 12 competitors · 2m</span>
+                <span class="agent-status">scanning 12 competitors</span>
+                <span class="ticker-art progress-art">
+                  <span class="ticker-progress-pct">36%</span>
+                  <span class="ticker-progress-bar"><span class="ticker-progress-fill sam-fill"></span></span>
+                </span>
+              </div>
+            </div>
+
+            <!-- Live activity feed — perpetual machine narrative -->
+            <div class="live-feed">
+              <div class="feed-header">
+                <span class="feed-title">Live activity</span>
+                <span class="feed-pulse"></span>
+                <span class="feed-meta">streaming · 412 events today</span>
+              </div>
+              <div class="feed-window">
+                <div class="feed-list">
+                  <div class="feed-row"><span class="feed-time">2s</span><span class="agent-av alex tiny"></span><span class="feed-text">Alex pushed <code>73f3a4</code> to <code>main</code></span></div>
+                  <div class="feed-row"><span class="feed-time">7s</span><span class="agent-av maya tiny"></span><span class="feed-text">Maya proposed: <em>"Lock comment depth at 3"</em></span></div>
+                  <div class="feed-row"><span class="feed-time">14s</span><span class="agent-av kai tiny"></span><span class="feed-text">Kai exported Frame 3 of 4 · Friends grid</span></div>
+                  <div class="feed-row"><span class="feed-time">28s</span><span class="agent-av sam tiny"></span><span class="feed-text">Sam added 5 competitors to scan</span></div>
+                  <div class="feed-row"><span class="feed-time">42s</span><span class="agent-av alex tiny"></span><span class="feed-text">Alex merged <code>feat/auth-flow</code> → main · 2 docs auto-synced</span></div>
+                  <div class="feed-row"><span class="feed-time">1m</span><span class="agent-av maya tiny"></span><span class="feed-text">Maya rejected: <em>"add marketplace"</em> — Vision conflict</span></div>
+                  <div class="feed-row"><span class="feed-time">2m</span><span class="agent-av kai tiny"></span><span class="feed-text">Kai shipped Profile redesign · 4 docs propagated</span></div>
+                  <div class="feed-row"><span class="feed-time">3m</span><span class="agent-av sam tiny"></span><span class="feed-text">Sam drafted onboarding copy v3</span></div>
+                  <div class="feed-row"><span class="feed-time">2s</span><span class="agent-av alex tiny"></span><span class="feed-text">Alex pushed <code>73f3a4</code> to <code>main</code></span></div>
+                  <div class="feed-row"><span class="feed-time">7s</span><span class="agent-av maya tiny"></span><span class="feed-text">Maya proposed: <em>"Lock comment depth at 3"</em></span></div>
+                </div>
               </div>
             </div>
 
